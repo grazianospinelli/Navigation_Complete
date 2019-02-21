@@ -605,6 +605,9 @@ nella welcome page di VSCode click su "Clone Git Repository.."
 Copiare l'URL e specificare la cartella locale
 Click su Open Repository.
 
+Per forzare le modifiche sul repository remoto, da terminale:
+
+git push https://github.com/grazianospinelli/Navigation_Complete.git --force
 
 ___________________________________________________________________
 
