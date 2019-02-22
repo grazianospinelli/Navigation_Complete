@@ -609,6 +609,11 @@ Per forzare le modifiche sul repository remoto, da terminale:
 
 git push https://github.com/grazianospinelli/Navigation_Complete.git --force
 
+Dopo il Force Push per recuperare da un altra copia locale le modifiche sul repository:
+
+git fetch
+git reset origin/master --hard
+
 ___________________________________________________________________
 
 UTILIZZARE FILE VETTORIALI IN REACT NATIVE

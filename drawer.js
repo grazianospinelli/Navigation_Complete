@@ -46,6 +46,9 @@ const Drawer = createDrawerNavigator({
     },
     iconContainerStyle: {
       opacity: 5
+    },
+    itemStyle :{
+      height : 50,
     }
   },
   initialRouteName: 'Profile',

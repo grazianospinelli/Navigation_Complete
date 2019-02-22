@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'black',
         color: Colors.primary,
-        flex: 1,    // Con questo compriamo tutto il Drawer di nero
+        flex: 1,    // Con questo copriamo tutto il Drawer di nero
     },
     drawerImage: {
         marginLeft: 30,
