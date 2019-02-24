@@ -116,14 +116,16 @@ export default class login extends Component {
 			})
 			.then((response) => response.json())
 			.then((responseJson)=>{
-				if(responseJson == "ok"){
-					// redirect to profile page
-					alert("Login effettuato con successo");
-					onSignIn(this.upperEmail,this.md5Password);
-					this.props.navigation.navigate("Drawer");
-
+				if(responseJson == "KO"){
+					alert("Dettagli Errati o Errore di Connessione");
 				}else{
-					alert("Forniti Dettagli Errati");
+					alert("Login effettuato con successo");
+					const UUID = responseJson;
+					alert(UUID);
+					onSignIn(this.upperEmail,this.md5Password,UUID);
+					// redirect to profile page
+					this.props.navigation.navigate("Drawer");
+					
 				}
 			})
 			.catch((error)=>{
