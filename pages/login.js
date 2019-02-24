@@ -35,7 +35,6 @@ export default class login extends Component {
 	// 		style={{margin:10,backgroundColor:'orange',padding:10}}>
 	// 		<Text style={{color:'#ffffff'}}>Home</Text>
 	// 	  </TouchableOpacity>
-		
 	// });  
 	
 	componentDidMount = async () => {

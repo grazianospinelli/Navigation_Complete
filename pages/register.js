@@ -7,6 +7,7 @@ import {
   ImageBackground
 } from 'react-native';
 import md5 from 'md5';
+import uuid from 'react-native-uuid';
 import firebase from 'react-native-firebase';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import IP from '../config/IP';
@@ -100,14 +101,17 @@ export default class register extends Component {
 		const upperEmail = userEmail.toUpperCase();
 		
   		if (!emailWarn && !passWarn && !nameWarn) {
+
+			const myuuid = uuid.v4();
 				
 			fetch(`${IP}/register.php`, {
-				method: 'post',
+				method: 'POST',
 				header:{
 					'Accept': 'application/json',
 					'Content-type': 'application/json'
 				},
 				body:JSON.stringify({
+					uuid: myuuid,
 					name: userName,
 					email: upperEmail,
 					password: md5Password
@@ -122,6 +126,7 @@ export default class register extends Component {
 				method: 'POST',
 				headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
 				body: JSON.stringify({
+					uuid: myuuid,
 					token: userToken,
 					email: upperEmail})
 				})

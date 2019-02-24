@@ -49,6 +49,8 @@ const Drawer = createDrawerNavigator({
     },
     itemStyle :{
       height : 50,
+      borderBottomWidth: 1,      
+      borderBottomColor: Colors.secondary
     }
   },
   initialRouteName: 'Profile',

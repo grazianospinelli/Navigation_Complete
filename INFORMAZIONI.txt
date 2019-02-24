@@ -674,8 +674,25 @@ Nel caso di problemi con le licenze di Android SDK,
 quando risulta che alcune delle licenze non sono accettate, si può eseguire il comando:
 > $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
+___________________________________________________________________
 
+npm install react-native-uuid
 
+import uuid from 'react-native-uuid';
+
+Then create some ids ...
+
+// Generate a v1 (time-based) id
+uuid.v1(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a'
+ 
+// Generate a v4 (random) id
+uuid.v4(); // -> '110ec58a-a0f2-4ac4-8393-c866d813b8d1'
+
+se da errore in fase di bundling:
+Error: Unable to resolve module `buffer`
+
+Installare il modulo buffer pure:
+npm install buffer --save
 
 
 
