@@ -7,7 +7,7 @@ import {
   ImageBackground
 } from 'react-native';
 import md5 from 'md5';
-import uuid from 'react-native-uuid';
+import uuidv4 from 'uuid/v4';
 import firebase from 'react-native-firebase';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import IP from '../config/IP';
@@ -102,7 +102,7 @@ export default class register extends Component {
 		
   		if (!emailWarn && !passWarn && !nameWarn) {
 
-			const myuuid = uuid.v4();
+			const myuuid = uuidv4();
 				
 			fetch(`${IP}/register.php`, {
 				method: 'POST',
