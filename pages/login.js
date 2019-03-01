@@ -114,25 +114,22 @@ export default class login extends Component {
 				})
 				
 			})
-			.then((response) => response.json()
-						// .json() funziona come una promise quindi ha i suoi .then
-						// .then(data => ({ data, status: response.status }))
-						//.then((responseJson) => { alert(responseJson.status, responseJson.data.name); })
-			)
+			.then((response) => response.json())
 			.then((responseJson)=>{
-				if(responseJson == "KO"){
-					alert("Dettagli Errati o Errore di Connessione");
-				}else{
-					alert("Login effettuato con successo");
-					const UUID = responseJson;
-					alert(UUID.uuid+UUID.name);
-					onSignIn(this.upperEmail,this.md5Password,UUID);
-					// redirect to profile page
-					this.props.navigation.navigate("Drawer");
-					
-				}
+					if(responseJson == "KO"){
+						alert("Dettagli Errati o Errore di Connessione");
+					}else{
+						alert("Login effettuato con successo");
+						const UUID = responseJson.uuid;
+						const userName = responseJson.name;
+						// alert(UUID+' '+userName);
+						onSignIn(this.upperEmail,this.md5Password,UUID,userName);
+						// redirect to profile page
+						this.props.navigation.navigate("Drawer");
+						
+					}
 			})
-			.catch((error)=>{console.error(error)});
+			.catch((error)=>{alert(error); throw error;});
 			
 		}
 				

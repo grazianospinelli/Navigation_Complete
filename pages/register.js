@@ -99,7 +99,7 @@ export default class register extends Component {
 		
 		const md5Password = md5(userPassword);
 		const upperEmail = userEmail.toUpperCase();
-		
+				
   		if (!emailWarn && !passWarn && !nameWarn) {
 
 			const myuuid = uuidv4();
