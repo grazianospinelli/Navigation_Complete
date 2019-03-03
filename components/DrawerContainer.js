@@ -28,12 +28,12 @@ export default class DrawerContainer extends Component {
                         <View style={{flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.6)'}}>
                             <Image 
                                 style={styles.drawerImage}
-                                source={require('./images/extrastafflogo.png')}
-                                resizeMode='contain'
+                                source={require('./images/staffextralogo.png')}
+                                resizeMode='cover'
                             />
-                            <Text style={styles.greet} numberOfLines={1} ellipsizeMode='tail'>
-                                C  iao, {this.state.user}
-                            </Text>
+                            
+                            <Text style={styles.greet} numberOfLines={1} ellipsizeMode='tail'>C  iao, {this.state.user}</Text>                          
+                            
                         </View>
                     </ImageBackground>
                 </View>
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',        
         color: Colors.primary,
         fontFamily: 'Wildemount Rough',
-		fontSize: 30,		
+		fontSize: 35,		
     },
     headerText: {
         color: Colors.secondary,

@@ -1,6 +1,6 @@
-function Validate(kindOfField, value) {
+function Validate(kindOfField, userdata) {
   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
+  const value = userdata.trim();
   if (kindOfField === 'notEmpty') {
     if (value === '') {
       return '↑ Prego inserire il Dato';

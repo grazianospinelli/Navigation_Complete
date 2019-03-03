@@ -563,6 +563,18 @@ Redux Form, formik, unstate, reactN per eliminare redux
 
 _____________________________________
 
+GitHub Apps
+Personal access tokens
+Tokens you have generated that can be used to access the GitHub API:
+
+20777e5c491378f5008f4d8c0a4d5e86a8c45a16
+
+7ef0262c5f294db8a530a991c3e46859
+bd3d4befe38185704bf0fc875e9deed6	CarliGist
+github access
+grazianospinelli - OfficePWD
+
+
 ISTRUZIONI GIT:
 
 CREATE A BRANCH:
@@ -693,6 +705,21 @@ Error: Unable to resolve module `buffer`
 
 Installare il modulo buffer pure:
 npm install buffer --save
+
+react-native-uuid da problemi ------> installare invece uuid 
+npm install uuid --save
+___________________________________________________________________
+
+LIBRERIA LODASH PER USARE UTILITY throttle.
+throttle si usa per assicurasi che la funzione che gli passi non venga chiamata più spesso del numero di millisecondi specificato.
+Si usa per la performance nei metodi che renderizzano troppo spesso.
+
+import throttle from 'lodash/throttle';
+
+store.subscribe( 
+	throttle(() => {saveState({ todos: store.getState().todos });},
+	1000)
+);
 
 
 

@@ -23,7 +23,7 @@ export default class AuthLoading extends Component {
   verify = () => {
     isSignedIn()
       .then((user) => { this.props.navigation.navigate(user ? 'Drawer' : 'Auth'); })
-      .catch(err => alert(`An error occurred:${err}`));
+      .catch(err => alert(`Errore: ${err}`));
   }
 
   render() {

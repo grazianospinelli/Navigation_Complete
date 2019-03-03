@@ -23,7 +23,6 @@ const getDrawerItem = navigation => (
   />
 );
 
-// usare costruttore per scaricare nome e foto dal DB
 
 const Drawer = createDrawerNavigator({
   Profile:  { screen: ProfileScreen },

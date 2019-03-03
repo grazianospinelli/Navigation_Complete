@@ -71,7 +71,7 @@ export default class login extends Component {
 			}
 		);
 
-    }
+  }
 
 	componentWillUnmount() {
 		this.keyboardDidHideListener.remove();
