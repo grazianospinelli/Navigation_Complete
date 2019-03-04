@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-filename-extension */
 import React, { Component } from 'react';
-import { View, StyleSheet, ActivityIndicator, FlatList, Text, TouchableOpacity, AsyncStorage } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Image, Text, ScrollView, TouchableOpacity, AsyncStorage } from 'react-native';
 import firebase from 'react-native-firebase';
 import { Notification, NotificationOpen } from 'react-native-firebase';
 import { Card, Button } from 'react-native-elements';
@@ -76,55 +76,131 @@ export default class ProfileScreen extends Component {
         )
       }
       const data = this.state.dataSource;
+      if(data['photo']){
+        profile_image=`${IP}/Profiles/${uuid}.png`
+      } else {
+        profile_image=`${IP}/Profiles/profile-placeholder.png`
+      }
+      // alert(profile_image);
       return(
-          
-        <View style={{ paddingVertical: 20 }}>
-          <Card title={data['name']}>
-            <View
-              style={{
-                backgroundColor: '#bcbec1',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 80,
-                height: 80,
-                borderRadius: 40,
-                alignSelf: 'center',
-                marginBottom: 20,
-              }}
-            >
-              <Text style={{ color: 'white', fontSize: 28 }}>{data['name'].substring(0,2)}</Text>
-              
-            </View>
-            <Text style={styles.lightText}>{data['email']}</Text>
-          </Card>
         
+        <View style={styles.container}>
+            <ScrollView style={styles.containerscroll}>
+                <Image style={{ height: 200, width: '100%' }} source={require('../components/images/saltpepper.jpg')} resizeMode='cover' />
+                
+                <Image style={styles.avatar} source={{uri: `${profile_image}` }}/>
+                <View style={styles.body}>
+                  <View style={styles.bodyContent}>
+                    <Text style={styles.name}>{data['name']} {data['surname']}</Text>
+                    <Text style={styles.info}>{data['email']}</Text>
+                    <Text style={styles.description}>Lorem ipsum dolor sit amet, saepe sapientem eu nam. Qui ne assum electram expetendis, omittam deseruisse consequuntur ius an,</Text>
+                    
+                             
+                    <TouchableOpacity style={styles.buttonContainer}>
+                      <Text style={{color: '#fff'}}>Salva i Dati</Text> 
+                    </TouchableOpacity>
+                  </View>
+                </View>
+            </ScrollView>
         </View>
-        
+
+   
       )
   }
 }
 
 
 const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
+
+   container: {
+    // display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    // justifyContent: 'center',
   },
 
-  loader:{
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff"
-   },
-  
-  pageName: {
-    margin: 10,
-    fontWeight: 'bold',
-    color: '#000',
-    textAlign: 'center',
+  containerscroll: {
+    width: '100%',
+    // flex: 1,
+    // display: 'flex',
+    // alignItems: 'center',
   },
+
+
+  header:{
+    height:200,
+  },
+  avatar: {
+    width: 130,
+    height: 130,
+    borderRadius: 63,
+    borderWidth: 4,
+    borderColor: "white",
+    marginBottom:10,
+    alignSelf:'center',
+    position: 'absolute',
+    marginTop:130
+  },
+  name:{
+    fontSize:22,
+    color:"#FFFFFF",
+    fontWeight:'600',
+  },
+  body:{
+    marginTop:40,
+  },
+  bodyContent: {
+    flex: 1,
+    alignItems: 'center',
+    padding:30,
+  },
+  name:{
+    fontSize:28,
+    color: "#696969",
+    fontWeight: "600"
+  },
+  info:{
+    fontSize:16,
+    color: Colors.secondary,
+    marginTop:10
+  },
+  description:{
+    fontSize:16,
+    color: "#696969",
+    marginTop:10,
+    textAlign: 'center'
+  },
+  buttonContainer: {
+    marginTop:10,
+    height:45,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom:20,
+    width:250,
+    borderRadius:30,
+    backgroundColor: Colors.primary,
+  },
+
+
+  // container: {
+  //   display: 'flex',
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  // },
+
+  // loader:{
+  //   flex: 1,
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   backgroundColor: "#fff"
+  //  },
+  
+  // pageName: {
+  //   margin: 10,
+  //   fontWeight: 'bold',
+  //   color: '#000',
+  //   textAlign: 'center',
+  // },
 
 
 });

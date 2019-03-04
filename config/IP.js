@@ -1,2 +1,2 @@
-const IP = 'http://192.106.234.90/data1/FcmExample';
+const IP = 'http://192.106.234.90/FcmExample';
 export default IP;
