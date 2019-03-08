@@ -1,29 +1,96 @@
 /* eslint-disable react/jsx-filename-extension */
-import React, { Component, Fragment } from 'react';
-import { View, StyleSheet, ActivityIndicator, TextInput, Image, Text, ScrollView, Button, TouchableOpacity, AsyncStorage } from 'react-native';
+import React, { Component } from 'react';
+import { View, StyleSheet, ActivityIndicator, Image, Text, ScrollView, TouchableOpacity, AsyncStorage } from 'react-native';
 import firebase from 'react-native-firebase';
 import { Notification, NotificationOpen } from 'react-native-firebase';
 import { Card } from 'react-native-elements';
-import { TextField } from "react-native-material-textfield";
-import { Formik } from "formik";
-import { handleTextInput } from "react-native-formik";
-import * as Yup from "yup";
+import GenerateForm from 'react-native-form-builder';
+import theme from '../form-theme';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import FireManager from '../components/firemanager.js';
 import { USER_UUID } from '../components/auth';
 import IP from '../config/IP';
 import * as Colors from '../components/themes/colors';
 
-const myvalidationSchema = Yup.object().shape({
-  email: Yup
-    .string()
-    .required("please! email?")
-    .email("well that's not an email"),
-  password: Yup
-    .string()
-    .required()
-    .min(2, "pretty sure this will be hacked")
-});
+// Modifiche apportate in:
+// C:\Users\graziano.spinelli\UserLog-Navigation\node_modules\react-native-form-builder\src\fields
+// Per il componente date dove non era attivato lo spinner sulle date
+// Per il componente switch dove ho cambiato il colore
+
+const fields = [
+  {
+    type: 'text',
+    name: 'name',
+    required: true,
+    icon: 'ios-person',
+    label: 'Nome',
+    
+  },
+  {
+    type: 'text',
+    name: 'cognome',
+    required: true,
+    icon: 'ios-man',
+    label: 'Cognome',
+    iconOrientation: 'left',
+    editable: true,
+  },
+  {
+    type: 'number',
+    name: 'telephone',
+    label: 'Telefono',
+    icon: 'ios-call',
+  },
+  {
+    type: 'date',
+    mode: 'date', // 'time', 'datetime'
+    icon: 'ios-calendar',
+    name: 'birthday',
+    label: 'Compleanno',
+    maxDate: new Date(2018, 1, 1),
+  },
+  {
+    type: 'select', // required
+    name: 'sex', // required
+    label: 'Sesso', // required
+    options: ['', 'Uomo', 'Donna'],
+    defaultValue: ['Happy'],
+  },
+  {
+    type: 'text',
+    name: 'filler',
+    editable: false,
+    props: {
+      style: {height: 20, backgroundColor: '#cecece'}
+    },
+  },
+  {
+    type: 'switch',
+    name: 'Cuoco',
+    label: 'Cuoco',
+    defaultValue: true,
+  },
+  {
+    type: 'switch',
+    name: 'Cameriere',
+    label: 'Cameriere',
+    defaultValue: true,
+  },
+  {
+    type: 'switch',
+    name: 'Sommelier',
+    label: 'Sommelier',
+    defaultValue: true,
+  },
+  {
+    type: 'switch',
+    name: 'Barman',
+    label: 'Barman',
+    defaultValue: true,
+  },
+];
+
+
 
 export default class ProfileScreen extends Component {
   // eslint-disable-next-line no-useless-constructor
@@ -81,7 +148,12 @@ export default class ProfileScreen extends Component {
     FireManager();
   }
 
-  login = (values) => { alert(JSON.stringify(values)) }
+  login() {
+    // var form = this.refs['myForm'];
+    // const formValues = form.getValues();
+    const formValues = this.formGenerator.getValues();
+    alert('FORM VALUES', formValues);
+  }
 
   
   render() {
@@ -117,63 +189,16 @@ export default class ProfileScreen extends Component {
                         containerStyle={{width: '110%'}}
                         titleStyle={{padding: 10, backgroundColor: '#cecece'}}
                         title="INFORMAZIONI PERSONALI">
-                        
-                        <Formik
-                          initialValues={{ email: '', password: '' }}
-                          // onSubmit={values => alert(JSON.stringify(values))}
-                          onSubmit={values => this.login(values)}
-                          validationSchema={myvalidationSchema}
-                        >
-
-                          {({ values, handleChange, errors, submitCount, setFieldValue, setFieldTouched, touched, isValid, handleSubmit }) => (
-                          
-                                <Fragment>
-
-                                    <View style={{ padding: 10 }}>
-                                        <TextField
-                                          label="email"
-                                          onChangeText={text => setFieldValue("email", text)}
-                                          onBlur={() => setFieldTouched("email")}
-                                          error={touched.email || submitCount > 0 ? errors.email : null}
-                                        />
-                                        <TextField
-                                          label="password"
-                                          onChangeText={text => setFieldValue("password", text)}
-                                          onBlur={() => setFieldTouched("password")}
-                                          error={touched.password || submitCount > 0 ? errors.password : null}
-                                        />
-
-                                      {/* <TextInput
-                                        value={values.email}
-                                        onChangeText={handleChange('email')}
-                                        onBlur={() => setFieldTouched('email')}
-                                        placeholder="E-mail"
-                                      />
-                                      {touched.email && errors.email &&
-                                        <Text style={{ fontSize: 10, color: 'red' }}>{errors.email}</Text>
-                                      }
-                                      <TextInput
-                                        value={values.password}
-                                        onChangeText={handleChange('password')}
-                                        placeholder="Password"
-                                        onBlur={() => setFieldTouched('password')}
-                                        secureTextEntry={true}
-                                      />
-                                      {touched.password && errors.password &&
-                                        <Text style={{ fontSize: 10, color: 'red' }}>{errors.password}</Text>
-                                      } */}
-                                      
-                                  <Button
-                                    title='Salva Profilo'
-                                    disabled={!isValid}
-                                    onPress={handleSubmit}
-                                    color={Colors.primary}
-                                  />
-                                  </View>
-                                </Fragment>
-                          )}
-                        </Formik>
-
+                        <View>
+                          <GenerateForm
+                            ref={(c) => {
+                              this.formGenerator = c;
+                            }}
+                            // ref='myForm'
+                            theme = {theme}
+                            fields={fields}
+                          />
+                        </View>
 
 
                       </Card>                     

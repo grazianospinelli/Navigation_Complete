@@ -721,6 +721,17 @@ store.subscribe(
 	1000)
 );
 
+___________________________________________________________________
 
+LIBRERIE DI GESTIONE FORM:
+import { Formik } from "formik";
+import { handleTextInput } from "react-native-formik";
+import { TextField } from "react-native-material-textfield";
+import * as Yup from "yup";
 
+formik serve per gestire il contesto dello stato di un Form, ci dice quando un form è valido oppure sporco
+material-textfield offer un campo di input testo in versione material
+react-native-formik semplifica l'utilizzo di formik in react-native
+Yup è una libreria per facilitare la validazione dei form.
+___________________________________________________________________
 
