@@ -183,6 +183,28 @@ export default class login extends Component {
 				<Text style={{color:Colors.primary}}>{this.state.passWarn}</Text>
 
 				<View style={{ height: 40 }}><Text>{}</Text></View>
+
+				 {/* 
+				 	SINTASSI DA UTILIZZARE CON FORMIK
+				 	<TextInput
+						value={values.email}
+						onChangeText={handleChange('email')}
+						onBlur={() => setFieldTouched('email')}
+						placeholder="E-mail"
+					/>
+					{touched.email && errors.email &&
+						<Text style={{ fontSize: 10, color: 'red' }}>{errors.email}</Text>
+					}
+					<TextInput
+						value={values.password}
+						onChangeText={handleChange('password')}
+						placeholder="Password"
+						onBlur={() => setFieldTouched('password')}
+						secureTextEntry={true}
+					/>
+					{touched.password && errors.password &&
+						<Text style={{ fontSize: 10, color: 'red' }}>{errors.password}</Text>
+					} */}
 				
 		    </View>
 		</TouchableWithoutFeedback>
