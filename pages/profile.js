@@ -11,6 +11,7 @@ import * as Yup from "yup";
 import Icon from "react-native-vector-icons/Ionicons";
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IconTextField from '../components/IconTextField';
+import IconSwitch from '../components/IconSwitch';
 import RNPickerSelect from 'react-native-picker-select';
 import DatePicker from 'react-native-datepicker'
 import FireManager from '../components/firemanager.js';
@@ -21,11 +22,11 @@ import * as Colors from '../components/themes/colors';
 const gender = [
   {
       label: 'Uomo',
-      value: 'Uomo',
+      value: 'U',
   },
   {
       label: 'Donna',
-      value: 'Donna',
+      value: 'D',
   },
 ];
 
@@ -59,11 +60,10 @@ export default class ProfileScreen extends Component {
     super(props);
     this.state = {
       uuid: '',
+      myphoto: '',
       loading: true,
       dataSource:[],
-      date: '',
-      formData:{}
-     };
+    };
   }
   
   static navigationOptions = {
@@ -110,12 +110,29 @@ export default class ProfileScreen extends Component {
     FireManager();
   }
 
-  login = (values) => { alert(JSON.stringify(values)) }
+  update = (values) => { 
+    const myuuid = this.state.uuid;
+    values.uuid = myuuid;
+    values.photo = this.state.myphoto;
+    fetch(`${IP}/update.php`, {
+      method: 'POST',
+      header:{
+        'Accept': 'application/json',
+        'Content-type': 'application/json'
+      },
+      body:JSON.stringify(values)
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {alert(responseJson);})
+    .catch((error) => {alert(error);});
+       
+    alert(JSON.stringify(values)) 
+  }
 
   
+  
   render() {
-       
-
+   
       if(this.state.loading){
        return( 
          <View style={styles.loader}> 
@@ -148,118 +165,170 @@ export default class ProfileScreen extends Component {
                         title="INFORMAZIONI PERSONALI">
                         
                         <Formik
-                          initialValues={{ name: data['name'], surname: 'Spinelli', gender: '', birthdate: '' }}
+                          initialValues={{ 
+                              name: data['name'], surname: data['surname'], city: data['city'], 
+                              telephone: data['number'], fiscalcode: data['fiscalcode'], birthdate: data['birthdate'],
+                              gender: data['sex'], chef: data['chef'], waiter: data['waiter'], 
+                              barman: data['barman'], sommel: data['sommel'], pulizie: data['pulizie'],
+                              animaz: data['animaz'], hostess: data['animaz']
+                          }}
                           // onSubmit={values => alert(JSON.stringify(values))}
-                          onSubmit={values => this.login(values)}
+                          onSubmit={values => this.update(values)}
                           validationSchema={myvalidationSchema}
                         >
 
                           {({ values, handleChange, errors, submitCount, setFieldValue, setFieldTouched, touched, isValid, handleSubmit }) => (
                           
-                                <Fragment>
+                          <Fragment>
 
-                                    <View>
-                                        <IconTextField
-                                          label="Nome"
-                                          value={values.name}
-                                          onChangeText={text => setFieldValue("name", text)}
-                                          onBlur={() => setFieldTouched("name")}
-                                          error={touched.name || submitCount > 0 ? errors.name : null}
-                                          iconName='ios-person'
-                                        />
-                                        <IconTextField
-                                          label="Cognome"
-                                          value={values.surname}
-                                          onChangeText={text => setFieldValue("surname", text)}
-                                          onBlur={() => setFieldTouched("surname")}
-                                          error={touched.surname || submitCount > 0 ? errors.surname : null}
-                                          iconName='ios-man'
-                                        />
-                                        <IconTextField
-                                          label="Città"
-                                          value={values.city}
-                                          onChangeText={text => setFieldValue("city", text)}
-                                          onBlur={() => setFieldTouched("city")}
-                                          error={touched.city || submitCount > 0 ? errors.city : null}
-                                          iconName='ios-home'
-                                        />
-                                        <IconTextField
-                                          label="Telefono"
-                                          value={values.telephone}
-                                          keyboardType='number-pad'
-                                          onChangeText={text => setFieldValue("telephone", text)}
-                                          onBlur={() => setFieldTouched("telephone")}
-                                          error={touched.telephone || submitCount > 0 ? errors.telephone : null}
-                                          iconName='ios-call'
-                                        />
-                                        <IconTextField
-                                          label="Codice Fiscale"
-                                          autoCapitalize='characters'
-                                          value={values.fiscalcode}
-                                          onChangeText={text => setFieldValue("fiscalcode", text)}
-                                          onBlur={() => setFieldTouched("fiscalcode")}
-                                          error={touched.fiscalcode || submitCount > 0 ? errors.fiscalcode : null}
-                                          iconName='ios-card'
-                                        />
-                                        <View paddingVertical={5} />
+                              <View>
+                                  <IconTextField
+                                    label="Nome"
+                                    value={values.name}
+                                    onChangeText={text => setFieldValue("name", text)}
+                                    onBlur={() => setFieldTouched("name")}
+                                    error={touched.name || submitCount > 0 ? errors.name : null}
+                                    iconName='ios-person'
+                                  />
+                                  <IconTextField
+                                    label="Cognome"
+                                    value={values.surname}
+                                    onChangeText={text => setFieldValue("surname", text)}
+                                    onBlur={() => setFieldTouched("surname")}
+                                    error={touched.surname || submitCount > 0 ? errors.surname : null}
+                                    iconName='ios-man'
+                                  />
+                                  <IconTextField
+                                    label="Città"
+                                    value={values.city}
+                                    onChangeText={text => setFieldValue("city", text)}
+                                    onBlur={() => setFieldTouched("city")}
+                                    error={touched.city || submitCount > 0 ? errors.city : null}
+                                    iconName='ios-home'
+                                  />
+                                  <IconTextField
+                                    label="Telefono"
+                                    value={values.telephone}
+                                    keyboardType='number-pad'
+                                    onChangeText={text => setFieldValue("telephone", text)}
+                                    onBlur={() => setFieldTouched("telephone")}
+                                    error={touched.telephone || submitCount > 0 ? errors.telephone : null}
+                                    iconName='ios-call'
+                                  />
+                                  <IconTextField
+                                    label="Codice Fiscale"
+                                    autoCapitalize='characters'
+                                    value={values.fiscalcode}
+                                    onChangeText={text => setFieldValue("fiscalcode", text)}
+                                    onBlur={() => setFieldTouched("fiscalcode")}
+                                    error={touched.fiscalcode || submitCount > 0 ? errors.fiscalcode : null}
+                                    iconName='ios-card'
+                                  />
+                                  
+                                  <View style={styles.ElemForm}>	
+                                    <MaterialIcon style={{ marginBottom: 10 }} size={20} name='cake' />
+                                    <Text style={{marginBottom: 10, marginLeft: 15, fontSize: 16}}>Nascita:</Text> 
+                                    
+                                    <View style={{flex:1}}> 
+                                          <DatePicker
+                                                style={{width:'100%'}}
+                                                date={values.birthdate}
+                                                showIcon={false}
+                                                mode="date"
+                                                placeholder="Inserisci Data"
+                                                androidMode='spinner'
+                                                format="DD-MM-YYYY"
+                                                minDate="01-01-1940"
+                                                maxDate="01-01-2030"
+                                                confirmBtnText="Conferma"
+                                                cancelBtnText="Indietro"
+                                                customStyles={{                                              
+                                                  dateInput: { borderWidth: 0, alignItems: 'flex-end' }                                                
+                                                }}
+                                                onDateChange={(date) => setFieldValue("birthdate", date)}
+                                          />
+                                    </View>
+                                  </View>
 
-                                        <View style={styles.inputForm}>	
-                                          <Icon style={{
-                                                  position: 'absolute',
-                                                  top: 15,
-                                                  left: 0,
-                                                  }} 
-                                                size={20} name='ios-female' />
-                                          
-                                          <View style={{width: '91%'}}> 
-                                                <RNPickerSelect
-                                                    placeholder = {{
-                                                      label: 'Sesso...',
-                                                      value: null,
-                                                      color: 'green',
-                                                    }}
-                                                    value={values.gender}
-                                                    items={gender}
-                                                    onValueChange={text => setFieldValue("gender", text)}
-                                                    onBlur={() => setFieldTouched("gender")}
-                                                    textInputProps={{ underlineColor: 'red' }}
-                                                    style={{position: 'absolute', top: 15, left: 30 }}                                           
-                                                />
-                                          </View>
-                                        </View>
-                                        
-                                        <View style={styles.DateForm}>	
-                                          <MaterialIcon style={{ marginBottom: 10 }} size={20} name='cake' />
-                                          <Text style={{marginBottom: 10, marginLeft: 15, fontSize: 16}}>Nascita:</Text> 
-                                          
-                                          <View style={{flex:1}}> 
-                                                <DatePicker
-                                                      style={{width:'100%'}}
-                                                      date={values.birthdate}
-                                                      showIcon={false}
-                                                      mode="date"
-                                                      placeholder="Inserisci Data"
-                                                      androidMode='spinner'
-                                                      format="DD-MM-YYYY"
-                                                      minDate="01-01-1940"
-                                                      maxDate="01-01-2030"
-                                                      confirmBtnText="Conferma"
-                                                      cancelBtnText="Indietro"
-                                                      customStyles={{                                              
-                                                        dateInput: { borderWidth: 0, alignItems: 'flex-end' }                                                
-                                                      }}
-                                                      onDateChange={(date) => setFieldValue("birthdate", date)}
-                                                />
-                                          </View>
-                                        </View>
-                                        
-                                        <View style={{marginTop: 15, height: 40, width: '100%', alignItems: 'center', justifyContent:'center', backgroundColor: '#cecece'}}> 
-                                          <Text style={{fontSize: 14, fontWeight: 'bold', color: Colors.grey1}}>COMPETENZE PROFESSIONALI</Text> 
-                                        </View>
-                                        <Divider style={{marginTop: 15, marginBottom: 15, borderColor: Colors.grey5 }} />
+                                                                    
+                                  <View style={styles.ElemForm}>
+                                  <Icon style={{ marginBottom: 15, marginRight: 10 }} size={20} name='ios-female' />
+                                  <View style={{ flex: 1, alignItems: 'flex-end' }}> 
+                                          <RNPickerSelect
+                                              placeholder = {{
+                                                label: 'Sesso...',
+                                                value: null,
+                                                color: 'green',                                                      
+                                              }}
+                                              value={values.gender}
+                                              items={gender}
+                                              onValueChange={text => setFieldValue("gender", text)}
+                                              onBlur={() => setFieldTouched("gender")}
+                                              textInputProps={{ underlineColor: 'red' }}                                                                                       
+                                          />
+                                    </View>
+                                  
+                                  </View>
 
-                                        <View marginTop={140} />
-                         
+                                  {/* //////////////////////////////////////////////// */}
+
+                                  <View style={{marginTop: 15, height: 40, width: '100%', alignItems: 'center', justifyContent:'center', backgroundColor: '#cecece'}}> 
+                                    <Text style={{fontSize: 14, fontWeight: 'bold', color: Colors.grey1}}>COMPETENZE PROFESSIONALI</Text> 
+                                  </View>
+                                  <Divider style={{marginTop: 15, borderColor: 'gray' }} />
+                                  
+                                  <IconSwitch
+                                      label='Cuoco'
+                                      iconName='silverware'
+                                      onValueChange={(val) => setFieldValue("chef", val)}
+                                      value={values.chef}
+                                  />
+
+                                  <IconSwitch
+                                      label='Cameriere'
+                                      iconName='bow-tie'
+                                      onValueChange={(val) => setFieldValue("waiter", val)}
+                                      value={values.waiter}
+                                  />  
+                                  
+                                  <IconSwitch
+                                      label='Sommelier'
+                                      iconName='bottle-wine'
+                                      onValueChange={(val) => setFieldValue("sommel", val)}
+                                      value={values.sommel}
+                                  />
+
+                                  <IconSwitch
+                                      label='Barman'
+                                      iconName='glass-cocktail'
+                                      onValueChange={(val) => setFieldValue("barman", val)}
+                                      value={values.barman}
+                                  />
+
+                                  <IconSwitch
+                                      label='Pulizie'
+                                      iconName='broom'
+                                      onValueChange={(val) => setFieldValue("pulizie", val)}
+                                      value={values.pulizie}
+                                  />
+
+                                  <IconSwitch
+                                      label='Animazione'
+                                      iconName='artist'
+                                      onValueChange={(val) => setFieldValue("animaz", val)}
+                                      value={values.animaz}
+                                  />
+
+                                  <IconSwitch
+                                      label='Hostess'
+                                      iconName='star'
+                                      onValueChange={(val) => setFieldValue("hostess", val)}
+                                      value={values.hostess}
+                                  />
+                                  
+
+                                  <View marginTop={15} />
+                    
                                   <Button
                                     title='Salva Profilo'
                                     disabled={!isValid}
@@ -267,12 +336,12 @@ export default class ProfileScreen extends Component {
                                     color={Colors.primary}
                                   />
 
-                                  <TouchableOpacity style={styles.buttonContainer} disabled={!isValid} onPress={handleSubmit} >
-                                   <Text style={{color: '#fff'}}>SALVA PROFILO</Text> 
-                                  </TouchableOpacity>
+                                  {/* <TouchableOpacity style={styles.buttonContainer} disabled={!isValid} onPress={handleSubmit} >
+                                    <Text style={{color: '#fff'}}>SALVA PROFILO</Text> 
+                                  </TouchableOpacity> */}
 
-                                  </View>
-                                </Fragment>
+                            </View>
+                          </Fragment>
                           )}
                         </Formik>
 
@@ -293,20 +362,12 @@ export default class ProfileScreen extends Component {
 
 const styles = StyleSheet.create({
 
-   container: {
-    // display: 'flex',
+  container: {
     alignItems: 'center',
-    // justifyContent: 'center',
   },
-
   containerscroll: {
     width: '100%',
-    // flex: 1,
-    // display: 'flex',
-    // alignItems: 'center',
   },
-
-
   header:{
     height:200,
   },
@@ -321,22 +382,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginTop:130
   },
-  inputForm: {
-		flexDirection: 'row',
-		justifyContent: 'flex-end',
-    alignItems: 'center',
-    borderBottomWidth: .2,
-    borderColor: 'gray',
-    width: '100%',    
-  },
-  DateForm: {
+  ElemForm: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-end', 
     height: 70,
     borderBottomWidth: .2,
     borderColor: 'gray',
-    
   },
   name:{
     fontSize:22,
@@ -378,27 +430,11 @@ const styles = StyleSheet.create({
     borderRadius:30,    
     backgroundColor: Colors.primary
   },
-
-
-  // container: {
-  //   display: 'flex',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // },
-
   loader:{
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff"
    },
-  
-  // pageName: {
-  //   margin: 10,
-  //   fontWeight: 'bold',
-  //   color: '#000',
-  //   textAlign: 'center',
-  // },
-
 
 });
