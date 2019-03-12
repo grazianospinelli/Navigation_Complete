@@ -19,7 +19,7 @@ import { USER_UUID } from '../components/auth';
 import IP from '../config/IP';
 import * as Colors from '../components/themes/colors';
 
-const gender = [
+const sex = [
   {
       label: 'Uomo',
       value: 'U',
@@ -44,7 +44,7 @@ const myvalidationSchema = Yup.object().shape({
   city: Yup
     .string()
     .max(40,"Troppo Lungo"),
-  telephone: Yup
+  telnumber: Yup
     .string()
     .matches(phoneRegExp, { message: 'Numero non valido'}),
   fiscalcode: Yup
@@ -93,6 +93,7 @@ export default class ProfileScreen extends Component {
         })
         .then((response) => response.json())
         .then((responseJson)=> {
+          // console.log(responseJson);
           this.setState({
            loading: false,
            dataSource: responseJson
@@ -114,19 +115,21 @@ export default class ProfileScreen extends Component {
     const myuuid = this.state.uuid;
     values.uuid = myuuid;
     values.photo = this.state.myphoto;
-    fetch(`${IP}/update.php`, {
+    console.log(JSON.stringify(values));
+    fetch(`${IP}/updateprofile.php`, {
       method: 'POST',
       header:{
         'Accept': 'application/json',
         'Content-type': 'application/json'
       },
       body:JSON.stringify(values)
+      // Affinchè funzioni la comunicazione con gli script PHP ci deve essere corrispondenza
+      // tra i nomi dei componenti dell'oggetto values={name:'', ...} e i nomi dei campi del DB remoto
     })
     .then((response) => response.json())
     .then((responseJson) => {alert(responseJson);})
     .catch((error) => {alert(error);});
        
-    alert(JSON.stringify(values)) 
   }
 
   
@@ -158,7 +161,7 @@ export default class ProfileScreen extends Component {
                 <View style={styles.body}>
                   <View style={styles.bodyContent}>
                     <Text style={styles.name}>{data['name']} {data['surname']}</Text>
-                    <Text style={styles.info}>{data['email'].toLowerCase()}</Text>
+                    <Text style={styles.info}>{data['email'] ? data['email'].toLowerCase() : null }</Text>
                       <Card 
                         containerStyle={{width: '100%'}}
                         titleStyle={{padding: 10, backgroundColor: '#cecece'}}
@@ -166,11 +169,12 @@ export default class ProfileScreen extends Component {
                         
                         <Formik
                           initialValues={{ 
+                              // L'operatore !!() converte un valore in Boolean
                               name: data['name'], surname: data['surname'], city: data['city'], 
-                              telephone: data['number'], fiscalcode: data['fiscalcode'], birthdate: data['birthdate'],
-                              gender: data['sex'], chef: data['chef'], waiter: data['waiter'], 
-                              barman: data['barman'], sommel: data['sommel'], pulizie: data['pulizie'],
-                              animaz: data['animaz'], hostess: data['animaz']
+                              telnumber: data['telnumber'], fiscalcode: data['fiscalcode'], birthdate: data['birthdate'],
+                              sex: data['sex'], chef: !!(data['chef']), waiter: !!(data['waiter']),
+                              barman: !!(data['barman']), sommel: !!(data['sommel']), pulizie: !!(data['pulizie']),
+                              animaz: !!(data['animaz']), hostess: !!(data['hostess'])
                           }}
                           // onSubmit={values => alert(JSON.stringify(values))}
                           onSubmit={values => this.update(values)}
@@ -178,7 +182,9 @@ export default class ProfileScreen extends Component {
                         >
 
                           {({ values, handleChange, errors, submitCount, setFieldValue, setFieldTouched, touched, isValid, handleSubmit }) => (
-                          
+                          // Per non far saltare IconTextField ho modificato il database Mysql affinchè il valore di default
+                          // all'inserimento di una nuova riga nel DB non sia NULL ma impostato da interfaccia PHPMySql:
+                          // Predefinito -> Come Definito: -> campo vuoto
                           <Fragment>
 
                               <View>
@@ -208,11 +214,11 @@ export default class ProfileScreen extends Component {
                                   />
                                   <IconTextField
                                     label="Telefono"
-                                    value={values.telephone}
+                                    value={values.telnumber}
                                     keyboardType='number-pad'
-                                    onChangeText={text => setFieldValue("telephone", text)}
-                                    onBlur={() => setFieldTouched("telephone")}
-                                    error={touched.telephone || submitCount > 0 ? errors.telephone : null}
+                                    onChangeText={text => setFieldValue("telnumber", text)}
+                                    onBlur={() => setFieldTouched("telnumber")}
+                                    error={touched.telnumber || submitCount > 0 ? errors.telnumber : null}
                                     iconName='ios-call'
                                   />
                                   <IconTextField
@@ -260,10 +266,10 @@ export default class ProfileScreen extends Component {
                                                 value: null,
                                                 color: 'green',                                                      
                                               }}
-                                              value={values.gender}
-                                              items={gender}
-                                              onValueChange={text => setFieldValue("gender", text)}
-                                              onBlur={() => setFieldTouched("gender")}
+                                              value={values.sex}
+                                              items={sex}
+                                              onValueChange={text => setFieldValue("sex", text)}
+                                              onBlur={() => setFieldTouched("sex")}
                                               textInputProps={{ underlineColor: 'red' }}                                                                                       
                                           />
                                     </View>
