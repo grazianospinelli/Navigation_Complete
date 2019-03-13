@@ -735,3 +735,13 @@ react-native-formik semplifica l'utilizzo di formik in react-native
 Yup è una libreria per facilitare la validazione dei form.
 ___________________________________________________________________
 
+GESTIONE DELLE DATE:
+npm install moment --save 
+
+import moment from "moment";
+// Convertire una data in un formato particolare
+moment(data).format("DD-MM-YYYY")
+
+Se il comando precedente da errori, bisogna prima validare la data, 
+conoscendone il formato, in questo caso MM/DD/YYYY:
+moment(data, 'MM/DD/YYYY', true).isValid()

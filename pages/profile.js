@@ -96,7 +96,7 @@ export default class ProfileScreen extends Component {
           // console.log(responseJson);
           this.setState({
            loading: false,
-           dataSource: responseJson
+           dataSource: responseJson,           
           })
         })
         .catch(error=>console.log(error)) //to catch the errors if any
@@ -115,7 +115,7 @@ export default class ProfileScreen extends Component {
     const myuuid = this.state.uuid;
     values.uuid = myuuid;
     values.photo = this.state.myphoto;
-    console.log(JSON.stringify(values));
+    // console.log(JSON.stringify(values));
     fetch(`${IP}/updateprofile.php`, {
       method: 'POST',
       header:{
