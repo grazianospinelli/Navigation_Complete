@@ -142,6 +142,10 @@ android {
 }
 
 dependencies {
+    compile project(':rn-fetch-blob')
+    compile project(':react-native-fs')
+    compile project(':react-native-image-resizer')
+    compile project(':react-native-image-picker')
     compile project(':lottie-react-native')
     compile project(':react-native-vector-icons')
     compile project(':react-native-gesture-handler')

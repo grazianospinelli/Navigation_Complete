@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import NavBarItem from './components/common/NavBarItem';
 import DrawerContainer from './components/DrawerContainer';
 import ProfileScreen from './pages/profile';
+import PhotoScreen from './pages/photo';
 import JobScreen from './pages/impegni';
 import AgendaScreen from './pages/agenda';
 import LogoutScreen from './pages/logout';
@@ -28,6 +29,7 @@ const Drawer = createDrawerNavigator({
   Profile:  { screen: ProfileScreen },
   Job:      { screen: JobScreen },
   Agenda:   { screen: AgendaScreen },
+  Photo:    { screen: PhotoScreen },
   Logout:   { screen: LogoutScreen },
 }, 
 {

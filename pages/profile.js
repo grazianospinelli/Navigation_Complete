@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-filename-extension */
 import React, { Component, Fragment } from 'react';
-import { View, StyleSheet, ActivityIndicator, TextInput, Image, Text, ScrollView, Button, TouchableOpacity, AsyncStorage } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, ImageBackground, 
+          TextInput, Image, Text, ScrollView, Button, TouchableOpacity, AsyncStorage } from 'react-native';
 import firebase from 'react-native-firebase';
 import { Notification, NotificationOpen } from 'react-native-firebase';
 import { Card, Divider } from 'react-native-elements';
@@ -18,6 +19,7 @@ import FireManager from '../components/firemanager.js';
 import { USER_UUID } from '../components/auth';
 import IP from '../config/IP';
 import * as Colors from '../components/themes/colors';
+import PhotoUpload from 'react-native-photo-upload';
 
 const sex = [
   {
@@ -129,11 +131,9 @@ export default class ProfileScreen extends Component {
     .then((response) => response.json())
     .then((responseJson) => {alert(responseJson);})
     .catch((error) => {alert(error);});
-       
   }
 
-  
-  
+   
   render() {
    
       if(this.state.loading){
@@ -155,9 +155,23 @@ export default class ProfileScreen extends Component {
         
         <View style={styles.container}>
             <ScrollView style={styles.containerscroll}>
-                <Image style={{ height: 200, width: '100%' }} source={require('../components/images/saltpepper.jpg')} resizeMode='cover' />
-                
-                <Image style={styles.avatar} source={{uri: `${profile_image}` }}/>
+            <View style={{ height: 220, width: '100%' }} >
+                <ImageBackground source={require('../components/images/saltpepper.jpg')} style={{flex: 1}} resizeMode='cover' >
+                {/* <Image style={{ height: 200, width: '100%' }} source={require('../components/images/saltpepper.jpg')} resizeMode='cover' /> */}
+                  <PhotoUpload
+                    photoPickerTitle='Seleziona la Foto:'
+                    
+                    // onPhotoSelect={avatar => {
+                    //   if (avatar) {
+                    //     // Inviare l'immagine al server remoto
+                    //     console.log('Image base64 string: ', avatar)
+                    //   }
+                    // }}
+                  >
+                    <Image style={styles.avatar} resizeMode='cover' source={{uri: `${profile_image}` }}/>                  
+                  </PhotoUpload>
+                </ImageBackground>
+            </View>
                 <View style={styles.body}>
                   <View style={styles.bodyContent}>
                     <Text style={styles.name}>{data['name']} {data['surname']}</Text>
@@ -374,19 +388,18 @@ const styles = StyleSheet.create({
   containerscroll: {
     width: '100%',
   },
-  header:{
-    height:200,
-  },
   avatar: {
-    width: 130,
-    height: 130,
-    borderRadius: 63,
+    flex: 0,
+    width: 150,
+    height: 150,
+    borderRadius: 75,
     borderWidth: 4,
     borderColor: "white",
-    marginBottom:10,
+    // marginBottom:10,
     alignSelf:'center',
-    position: 'absolute',
-    marginTop:130
+    // position: 'absolute',
+    // marginTop:140
+    // marginTop: 30
   },
   ElemForm: {
     flexDirection: 'row',
@@ -418,12 +431,6 @@ const styles = StyleSheet.create({
     fontSize:16,
     color: Colors.secondary,
     marginTop:10
-  },
-  description:{
-    fontSize:16,
-    color: "#696969",
-    marginTop:10,
-    textAlign: 'center'
   },
   buttonContainer: {
     marginTop:10,

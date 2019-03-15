@@ -653,6 +653,10 @@ Aggiunto nel file android/app/src/main/AndroidManifest.xml nella sezione applica
 
 Per evitare il problema delle immagini Backgroud che spariscono.
 
+aggiunti permessi per utilizzare la fotocamera e il File System del Telefono:
+ <uses-permission android:name="android.permission.CAMERA" />
+ <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
 ___________________________________________________________________
 
 CREAZIONE ANIMAZIONE VETTORIALE PER REACT LOTTIE
@@ -745,3 +749,52 @@ moment(data).format("DD-MM-YYYY")
 Se il comando precedente da errori, bisogna prima validare la data, 
 conoscendone il formato, in questo caso MM/DD/YYYY:
 moment(data, 'MM/DD/YYYY', true).isValid()
+___________________________________________________________________
+
+Installato gestore fotocamera:
+npm install react-native-photo-upload --save
+
+react-native link react-native-image-picker
+react-native link react-native-image-resizer
+react-native link react-native-fs
+
+
+Nel file android/app/src/main/AndroidManifest.xml
+aggiunti permessi per utilizzare la fotocamera e il File System del Telefono:
+
+ <uses-permission android:name="android.permission.CAMERA" />
+ <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+___________________________________________________________________
+
+Installata libreria per trasferimento immagini su server:
+npm install --save rn-fetch-blob
+Impostata la variabile di ambiente:
+SET RNFB_ANDROID_PERMISSIONS=true
+a seguire dare il solito comando di link della libreria:
+react-native link
+___________________________________________________________________
+
+VISUALIZZAZIONE CONDIZIONALE:
+{this.state.avatarSource === null ? (
+              <Text>Select a Photo</Text>
+            ) : (
+              <Image style={styles.avatar} source={this.state.avatarSource} />
+            )}
+OPPURE
+{this.state.videoSource && (
+          <Text style={{ margin: 8, textAlign: 'center' }}> {this.state.videoSource} </Text>
+)}
+___________________________________________________________________
+
+Nel file index.js di react-native-photo-upload sono state inserite le seguenti modifiche:
+
+nel metodo render:
+<TouchableOpacity style={{flex: 0, width: 150, height: 150, marginTop: 200  }} 
+
+Tra le opzioni iniziali, inserite modifiche ai 2 attributi di ImagePicker.showImagePicker:
+options = {
+    title: this.props.photoPickerTitle || 'Select Photo',
+    takePhotoButtonTitle: 'Scatta una foto',
+    chooseFromLibraryButtonTitle: 'Scegli dalla Galleria',
+
+___________________________________________________________________
