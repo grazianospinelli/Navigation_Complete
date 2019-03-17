@@ -5,9 +5,8 @@ import { View, StyleSheet, ActivityIndicator, ImageBackground,
 import firebase from 'react-native-firebase';
 import { Notification, NotificationOpen } from 'react-native-firebase';
 import { Card, Divider } from 'react-native-elements';
-import { TextField } from "react-native-material-textfield";
+// import { TextField } from "react-native-material-textfield";
 import { Formik } from "formik";
-import { handleTextInput } from "react-native-formik";
 import * as Yup from "yup";
 import Icon from "react-native-vector-icons/Ionicons";
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -15,11 +14,12 @@ import IconTextField from '../components/IconTextField';
 import IconSwitch from '../components/IconSwitch';
 import RNPickerSelect from 'react-native-picker-select';
 import DatePicker from 'react-native-datepicker'
+import PhotoUpload from 'react-native-photo-upload';
 import FireManager from '../components/firemanager.js';
 import { USER_UUID } from '../components/auth';
 import IP from '../config/IP';
 import * as Colors from '../components/themes/colors';
-import PhotoUpload from 'react-native-photo-upload';
+
 
 const sex = [
   {
@@ -62,7 +62,6 @@ export default class ProfileScreen extends Component {
     super(props);
     this.state = {
       uuid: '',
-      myphoto: '',
       loading: true,
       dataSource:[],
     };
@@ -98,7 +97,7 @@ export default class ProfileScreen extends Component {
           // console.log(responseJson);
           this.setState({
            loading: false,
-           dataSource: responseJson,           
+           dataSource: responseJson,
           })
         })
         .catch(error=>console.log(error)) //to catch the errors if any
@@ -115,8 +114,7 @@ export default class ProfileScreen extends Component {
 
   update = (values) => { 
     const myuuid = this.state.uuid;
-    values.uuid = myuuid;
-    values.photo = this.state.myphoto;
+    values.uuid = myuuid;    
     // console.log(JSON.stringify(values));
     fetch(`${IP}/updateprofile.php`, {
       method: 'POST',
@@ -133,7 +131,31 @@ export default class ProfileScreen extends Component {
     .catch((error) => {alert(error);});
   }
 
-   
+  uploadPhoto = (image) => {
+    if(image.uri != '') {
+      const photoname = `${this.state.uuid}.jpg`;
+      console.log(image);
+      const data = new FormData();
+      // fileToUpload lo troviamo anche in uploadphoto.php
+      // La foto viene salvata come uuid.jpg sul server
+      // uuid viene anche usato sul server per aggiornare il campo photo nel DB
+      data.append('fileToUpload', {
+        uri: image.uri,
+        type: 'image/jpeg',
+        name: photoname,
+      });
+    
+    fetch(`${IP}/uploadphoto.php`, {
+      method: 'post',
+      body: data
+    })
+    .then((response) => response.json())
+    .then((responseJson) => { console.log(responseJson); })
+    .catch((error) => {alert(error);});
+    }
+  else { }
+  }
+  
   render() {
    
       if(this.state.loading){
@@ -144,8 +166,8 @@ export default class ProfileScreen extends Component {
         )
       }
       const data = this.state.dataSource;
-      if(data['photo']){
-        profile_image=`${IP}/Profiles/${this.state.uuid}.png`
+      if(!!(data['photo'])){
+        profile_image=`${IP}/Profiles/${this.state.uuid}.jpg`
       } else {
         profile_image=`${IP}/Profiles/profile-placeholder.png`
       }
@@ -160,15 +182,17 @@ export default class ProfileScreen extends Component {
                 {/* <Image style={{ height: 200, width: '100%' }} source={require('../components/images/saltpepper.jpg')} resizeMode='cover' /> */}
                   <PhotoUpload
                     photoPickerTitle='Seleziona la Foto:'
-                    
                     // onPhotoSelect={avatar => {
                     //   if (avatar) {
                     //     // Inviare l'immagine al server remoto
                     //     console.log('Image base64 string: ', avatar)
                     //   }
                     // }}
+                    
+                    onResponse={(image) => this.uploadPhoto(image)}
+                   
                   >
-                    <Image style={styles.avatar} resizeMode='cover' source={{uri: `${profile_image}` }}/>                  
+                      <Image style={styles.avatar} resizeMode='cover' source={{uri: `${profile_image}` }}/>                  
                   </PhotoUpload>
                 </ImageBackground>
             </View>

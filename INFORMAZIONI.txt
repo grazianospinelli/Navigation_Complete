@@ -754,6 +754,7 @@ ___________________________________________________________________
 Installato gestore fotocamera:
 npm install react-native-photo-upload --save
 
+che installa anche:
 react-native link react-native-image-picker
 react-native link react-native-image-resizer
 react-native link react-native-fs
@@ -764,6 +765,19 @@ aggiunti permessi per utilizzare la fotocamera e il File System del Telefono:
 
  <uses-permission android:name="android.permission.CAMERA" />
  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+ Durante la compilazione della App il seguente errore è stato riportato:
+  Failed to install the following Android SDK packages as some licences have not been accepted.
+  platforms;android-25 Android SDK Platform 25
+  To build this project, accept the SDK license agreements and install the missing components using the Android Studio SDK Manager.
+
+Da Android Studio -> SDK Manager (icona in alto a DX) -> Android SDK -> TAB SDK Platform ->
+-> Selezionato Android 7.1.1 -> Android SDK Platform 25 -> Apply -> Accettata Licenza
+
+Oppure da Terminale:
+cd C:\Users\Graziano\AppData\Local\Android\Sdk\tools\bin
+sdkmanager --licenses
+
 ___________________________________________________________________
 
 Installata libreria per trasferimento immagini su server:
