@@ -64,7 +64,6 @@ export default class ProfileScreen extends Component {
       uuid: '',
       loading: true,
       dataSource:[],
-      profile_image :''
     };
   }
   
@@ -96,13 +95,10 @@ export default class ProfileScreen extends Component {
         .then((response) => response.json())
         .then((responseJson)=> {
           // console.log(responseJson);
-          this.setState({dataSource: responseJson});
-          if(!!(responseJson['photo'])){
-            this.setState({profile_image:`${IP}/Profiles/${userUuid}.jpg`});
-          } else {
-            this.setState({profile_image:`${IP}/Profiles/profile-placeholder.png`});
-          }
-          this.setState({loading: false});
+          this.setState({
+           loading: false,
+           dataSource: responseJson,
+          })
         })
         .catch(error=>console.log(error)) //to catch the errors if any
         
@@ -170,8 +166,12 @@ export default class ProfileScreen extends Component {
         )
       }
       const data = this.state.dataSource;
-     
-      console.log(this.state.profile_image);
+      if(!!(data['photo'])){
+        profile_image=`${IP}/Profiles/${this.state.uuid}.jpg`
+      } else {
+        profile_image=`${IP}/Profiles/profile-placeholder.png`
+      }
+      // alert(profile_image);
       
       return(
         
@@ -192,7 +192,7 @@ export default class ProfileScreen extends Component {
                     onResponse={(image) => this.uploadPhoto(image)}
                    
                   >
-                      <Image style={styles.avatar} resizeMode='cover' source={{uri: this.state.profile_image }} key={this.state.profile_image}/>                  
+                      <Image style={styles.avatar} resizeMode='cover' source={{uri: `${profile_image}` }}/>                  
                   </PhotoUpload>
                 </ImageBackground>
             </View>
