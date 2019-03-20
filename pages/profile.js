@@ -98,7 +98,8 @@ export default class ProfileScreen extends Component {
           // console.log(responseJson);
           this.setState({dataSource: responseJson});
           if(!!(responseJson['photo'])){
-            this.setState({profile_image:`${IP}/Profiles/${userUuid}.jpg`});
+            // Inserito metodo random per evitare che venga caricata ogni volta la cache dell'immagine
+            this.setState({profile_image:`${IP}/Profiles/${userUuid}.jpg?${Math.random()}`});
           } else {
             this.setState({profile_image:`${IP}/Profiles/profile-placeholder.png`});
           }
@@ -107,8 +108,8 @@ export default class ProfileScreen extends Component {
         .catch(error=>console.log(error)) //to catch the errors if any
         
         // onSignIn(this.upperEmail,this.md5Password,UUID,userName);
-      })
-      .catch(error=>console.log(error))
+    })
+    .catch(error=>console.log(error))
   }
 
   componentDidMount() {
@@ -136,7 +137,7 @@ export default class ProfileScreen extends Component {
   }
 
   uploadPhoto = (image) => {
-    if(image.uri != '') {
+    if(image.uri != null) {
       const photoname = `${this.state.uuid}.jpg`;
       console.log(image);
       const data = new FormData();
@@ -170,7 +171,7 @@ export default class ProfileScreen extends Component {
         )
       }
       const data = this.state.dataSource;
-     
+           
       console.log(this.state.profile_image);
       
       return(
@@ -182,19 +183,13 @@ export default class ProfileScreen extends Component {
                 {/* <Image style={{ height: 200, width: '100%' }} source={require('../components/images/saltpepper.jpg')} resizeMode='cover' /> */}
                   <PhotoUpload
                     photoPickerTitle='Seleziona la Foto:'
-                    // onPhotoSelect={avatar => {
-                    //   if (avatar) {
-                    //     // Inviare l'immagine al server remoto
-                    //     console.log('Image base64 string: ', avatar)
-                    //   }
-                    // }}
-                    
                     onResponse={(image) => this.uploadPhoto(image)}
-                   
                   >
-                      <Image style={styles.avatar} resizeMode='cover' source={{uri: this.state.profile_image }} key={this.state.profile_image}/>                  
+                      <Image style={styles.avatar} resizeMode='cover' source={{uri: this.state.profile_image }} />
+                      
                   </PhotoUpload>
                 </ImageBackground>
+                
             </View>
                 <View style={styles.body}>
                   <View style={styles.bodyContent}>
