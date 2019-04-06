@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator, ImageBackground, 
   TextInput, Image, Text, ScrollView, TouchableOpacity, AsyncStorage } from 'react-native';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
-import DateList from "../components/DateList";
-import DateDetail from "../components/DateDetail";
+import moment from "moment";
 import * as Colors from '../components/themes/colors';
 import FireManager from '../components/firemanager.js';
 import { USER_UUID } from '../components/auth';
@@ -17,7 +16,6 @@ export default class JobScreen extends Component {
       uuid: '',
       loading: true,
       dataSource:[],
-      selectedDate: null
     };
   }
 
@@ -53,42 +51,21 @@ export default class JobScreen extends Component {
     })
     .catch(error=>console.log(error))
   }
+
   
   componentDidMount() {
     this.fetchData();
     FireManager();
   }
 
-  
+  ModalItem = (item) => {
+     alert(item);
+  }
 
-  dateDeletedHandler = () => {
-    this.setState(prevState => {
-      return {
-        dataSource: prevState.dataSource.filter(date => {
-          return date.comID !== prevState.selectedDate.comID;
-        }),
-        selectedDate: null
-      };
-    });
-  };
-
-  modalClosedHandler = () => {
-    this.setState({
-      selectedDate: null
-    });
-  };
-
-  dateSelectedHandler = key => {
-    this.setState(prevState => {
-      return {
-        selectedDate: prevState.dataSource.find(date => {
-          return date.comID === key;
-        })
-      };
-    });
-  };
-
-
+  convertDate = (date) => {
+    moment(date, 'YYYY-MM-DD', true).isValid();
+    return moment(date).format("DD-MM-YYYY");
+  }
 
   render() {
 
@@ -100,27 +77,30 @@ export default class JobScreen extends Component {
        )
      }
     
-    
+    // const listToShow = this.state.dataSource.map((elem,i)=>(
     //   // comID: 2, comDate: "2019-03-01", comTime: "15:20:00", comPay: 80, resName: "Santissimo"
-    
+    //   <Text key={i}>{elem.comDate}</Text>
+    // ));
 
              
     return(
     
       <View style={styles.container}>
-        <DateDetail
-            selectedDate={this.state.selectedDate}
-            onItemDeleted={this.dateDeletedHandler}
-            onModalClosed={this.modalClosedHandler}
-        />
         <Text style={styles.pageName}>Lista Impegni</Text>
         <ScrollView>
-          <DateList
-            dates={this.state.dataSource}
-            onItemSelected={this.dateSelectedHandler}
-          />
-        </ScrollView>
-               
+          {
+            this.state.dataSource.map((item, key) => (
+               <TouchableOpacity key={key} onPress={this.ModalItem.bind(this, item)}>
+                 <Text style={styles.TextStyle} > {this.convertDate(item.comDate)} </Text>
+                 <Text style={styles.TextStyle} > Ore: {item.comTime} </Text>
+                 <Text  style={styles.TextStyle} > Ristorante: {item.resName} </Text>
+                 <Text  style={styles.TextStyle} > Indirizzo: {item.resAddress} </Text>
+                 <View style={{ width: '100%', height: 1, backgroundColor: '#000' }} />
+               </TouchableOpacity>
+             ))
+          }
+         </ScrollView>
+        <Text style={styles.pageName}></Text>
       </View>
     );
   }
