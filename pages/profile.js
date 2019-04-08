@@ -23,12 +23,12 @@ import * as Colors from '../components/themes/colors';
 
 const sex = [
   {
-      label: 'Uomo',
-      value: 'U',
+    label: 'Uomo',
+    value: 'U',
   },
   {
-      label: 'Donna',
-      value: 'D',
+    label: 'Donna',
+    value: 'D',
   },
 ];
 
@@ -135,11 +135,13 @@ export default class ProfileScreen extends Component {
     .then((responseJson) => {alert(responseJson);})
     .catch((error) => {alert(error);});
   }
+  // In fase di rilascio verificare tutti gli alert !
+
 
   uploadPhoto = (image) => {
     if(image.uri != null) {
       const photoname = `${this.state.uuid}.jpg`;
-      console.log(image);
+      // console.log(image);
       const data = new FormData();
       // fileToUpload lo troviamo anche in uploadphoto.php
       // La foto viene salvata come uuid.jpg sul server
@@ -180,7 +182,6 @@ export default class ProfileScreen extends Component {
             <ScrollView style={styles.containerscroll}>
             <View style={{ height: 220, width: '100%' }} >
                 <ImageBackground source={require('../components/images/saltpepper.jpg')} style={{flex: 1}} resizeMode='cover' >
-                {/* <Image style={{ height: 200, width: '100%' }} source={require('../components/images/saltpepper.jpg')} resizeMode='cover' /> */}
                   <PhotoUpload
                     photoPickerTitle='Seleziona la Foto:'
                     onResponse={(image) => this.uploadPhoto(image)}

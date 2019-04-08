@@ -1,0 +1,35 @@
+
+
+ogni utente ha la sua tabella con impegni e date
+ogni utente ha una sua tabella date con solo le date impegnate, 
+se nella tabella non è presente la data richiesta, allora l'utente è libero.
+L'utente ha un calendario con tutti gli impegni
+In un giorno determinato l'utente deve poter dire al sistema che è impegnato (nobrook.com)
+L'utente in Lista impegni può aggiungere un impegno personale "campo note" sul DB commitments
+Lista Impegni è fatto tipo a bottoni Modali dove su ogni bottone (di colore verdino) c'è la data,
+una background image di contorno completa la schermata. Schiacciando il bottone e aprendo il modale, 
+si va nei dettagli della giornata. 
+Nella schermata iniziale c'è anche un bottone + che consente di aggiungere altri impegni con data.
+Usare react-native-action-button
+In caso di aggiunte o cancellazioni di date l'array locale va aggiornato solo se il DB remoto 
+è stato aggiornato con successo !! In caso di aggiunta devo anche riscaricare il DB impegni in locale, 
+per avere a disposizione gli indici delle date in caso di cancellazione
+INSTALLARE react-native-modal
+
+
+Le richieste in attesa ricevute dall'utente scadono se la data sistema > data richiesta
+oppure se la sala chiude la squadra -> questo fa scomparire la richiesta (aggiornamento dati sul cell!)
+
+
+
+ogni sala ha la sua tabella annuale con date e per ogni data quante persone ci sono
+
+query della sala: dammi tutti gli utenti di quella provincia che sono liberi in quella data
+quindi fai prima la query per raccogliere tutti gli uuid di quella provincia. 
+Per ogni uuid entra in tabella calendario_impegni_di_quell_uuid e cerca se c'è la data. 
+Se non c'è allora l'utente è libero. usare tabella unica o una tabella per ogni uuid? 
+
+
+Quando la data attuale sistema è maggiore delle date riportate nella tabella offerte di lavoro, 
+le offerte vecchie vengono automaticamente cancellate.
+
