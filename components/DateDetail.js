@@ -1,8 +1,11 @@
 import React from "react";
-import { Modal, View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet } from "react-native";
+import Modal from "react-native-modal";
 import moment from "moment";
 
+
 const dateDetail = props => {
+
   let modalContent = null;
   
   convertDate = (date) => {
@@ -25,8 +28,16 @@ const dateDetail = props => {
   return (
     <Modal
       onRequestClose={props.onModalClosed}
-      visible={props.selectedDate !== null}
-      animationType="slide"
+      // supportedOrientations={['portrait', 'landscape']}
+      isVisible={props.selectedDate !== null}
+      // animationIn="slideInLeft"
+      // animationOut="slideOutRight"
+      animationIn="zoomInDown"
+      animationOut="zoomOutUp"
+      animationInTiming={1000}
+      animationOutTiming={1000}
+      backdropTransitionInTiming={1000}
+      backdropTransitionOutTiming={1000}
     >
       <View style={styles.modalContainer}>
         {modalContent}
@@ -41,7 +52,12 @@ const dateDetail = props => {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    margin: 22
+    // flex:1,
+    height: '70%',
+    backgroundColor: 'rgba(210,210,210,0.98)',
+    borderRadius: 15,
+    padding: 30,
+    justifyContent: 'center'
   },
   dateName: {
     fontWeight: "bold",

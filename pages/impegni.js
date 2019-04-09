@@ -129,7 +129,7 @@ export default class JobScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -146,16 +146,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff"
-   },
-
-   TextStyle: {
-    fontSize: 15,
-    color: '#000',
-    textAlign: 'left'
-  }
-
-
-
+   },  
+  
 });
 
 

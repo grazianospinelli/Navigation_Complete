@@ -617,6 +617,11 @@ nella welcome page di VSCode click su "Clone Git Repository.."
 Copiare l'URL e specificare la cartella locale
 Click su Open Repository.
 
+PER RISOLVERE CONFLITTI DI MERGING:
+Per dare precedenza alla versione locale in fase di sync col repository remoto:
+git checkout --ours PATH/FILE 
+usare il path principale per risolvere tutti i conflitti.
+
 Per forzare le modifiche sul repository remoto, da terminale:
 
 git push https://github.com/grazianospinelli/Navigation_Complete.git --force
