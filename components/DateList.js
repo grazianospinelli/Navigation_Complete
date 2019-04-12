@@ -47,6 +47,11 @@ const dateList = props => {
       </View>
     
       {
+        // Prima di ciclare sull'array con map abbiamo renderizzato il separatore
+        // mese e anno tratti dal primo elemento: props.dates[0]
+        // Nel ciclo verifichiamo quando il mese cambia da un elemento all'altro
+        // con isSameMonth confrontando l'elemento corrente item con il successivo
+        // array[index+1] e se cambia andiamo a renderizzare il separatore mese+anno
         props.dates.map((item, index, array) => {
           if (index < array.length-1) { 
               if (isSameMonth(item.comDate,array[index+1].comDate)) { 

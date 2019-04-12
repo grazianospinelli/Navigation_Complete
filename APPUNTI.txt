@@ -13,8 +13,12 @@ Nella schermata iniziale c'è anche un bottone + che consente di aggiungere altr
 Usare react-native-action-button
 In caso di aggiunte o cancellazioni di date l'array locale va aggiornato solo se il DB remoto 
 è stato aggiornato con successo !! In caso di aggiunta devo anche riscaricare il DB impegni in locale, 
-per avere a disposizione gli indici delle date in caso di cancellazione
-INSTALLARE react-native-modal
+per avere a disposizione gli indici delle date in caso di cancellazione delle date appena introdotte manualmente.
+Prima di fare upload impegni metto lo stato di loading in true e 
+quando e se il DB update va a buon fine faccio la chiamata di this.fetchData() 
+in cui posso riscaricare l'array da remoto e in cui si reimposta lo stato di loading a false 
+e abbiamo lo stato dell'array aggiornato.
+fd6d4830-a7af-41a0-b0a6-5793aabab423   <- codice impegno personale
 
 
 Le richieste in attesa ricevute dall'utente scadono se la data sistema > data richiesta
@@ -33,3 +37,4 @@ Se non c'è allora l'utente è libero. usare tabella unica o una tabella per ogn
 Quando la data attuale sistema è maggiore delle date riportate nella tabella offerte di lavoro, 
 le offerte vecchie vengono automaticamente cancellate.
 
+Nel Drawer mancano istruzioni(swiper) - Offerte in Attesa - Meme OCCCA? - Consiglio del giorno

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator, ImageBackground, 
   TextInput, Image, Text, ScrollView, TouchableOpacity, AsyncStorage } from 'react-native';
+import ActionButton from 'react-native-action-button';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import DateList from "../components/DateList";
 import DateDetail from "../components/DateDetail";
+import AddCommit from "../components/AddCommits";
 import * as Colors from '../components/themes/colors';
 import FireManager from '../components/firemanager.js';
 import { USER_UUID } from '../components/auth';
@@ -17,7 +19,10 @@ export default class JobScreen extends Component {
       uuid: '',
       loading: true,
       dataSource:[],
-      selectedDate: null
+      selectedDate: null,
+      openAddCommit: false,
+      noteAddCommit: '',
+      dateAddCommit: null
     };
   }
 
@@ -58,29 +63,54 @@ export default class JobScreen extends Component {
     this.fetchData();
     FireManager();
   }
+ 
+
+  dateDeletedHandler = () => {
+
+    fetch(`${IP}/delcommitments.php`,{
+      method:'post',
+      header:{
+        'Accept': 'application/json',
+        'Content-type': 'application/json'
+      },
+      body:JSON.stringify({
+        id: this.state.selectedDate.comID,
+        uuid: this.state.uuid
+      })
+    })
+    .then((response) => response.json())
+    .then((responseJson)=> {
+      alert(responseJson);
+      if (responseJson == 'OK') {
+        alert('Lista impegni aggiornata');
+        this.setState(prevState => {
+          return {
+            dataSource: prevState.dataSource.filter(date => {
+              return date.comID !== prevState.selectedDate.comID;
+            }),
+            selectedDate: null
+          };
+        });
+      }
+      else {alert('Errore aggiornamento lista impegni')}
+    })
+    .catch(error=>console.log(error))
+  };
 
   
 
-  dateDeletedHandler = () => {
-    this.setState(prevState => {
-      return {
-        dataSource: prevState.dataSource.filter(date => {
-          return date.comID !== prevState.selectedDate.comID;
-        }),
-        selectedDate: null
-      };
-    });
-  };
+
 
   modalClosedHandler = () => {
-    this.setState({
-      selectedDate: null
-    });
+    this.setState({selectedDate: null});
   };
 
   dateSelectedHandler = key => {
     this.setState(prevState => {
       return {
+        // Stiamo impostando il valore di selectedDate
+        // Confrontando il valore comID di tutti gli oggetti 
+        // dell'array di oggetti date con il vaore di key
         selectedDate: prevState.dataSource.find(date => {
           return date.comID === key;
         })
@@ -88,6 +118,44 @@ export default class JobScreen extends Component {
     });
   };
 
+  onInputChanged = (changedText) => {
+    this.setState({noteAddCommit: changedText});    
+  }
+
+  onDateChanged = (changedDate)=> {
+    this.setState({dateAddCommit: changedDate});    
+  }
+
+  addCommitClosedHandler = () => {
+    this.setState({openAddCommit: false});
+  };
+
+  addCommitHandler = () => {
+    this.setState({loading: true})
+
+    fetch(`${IP}/uploadcommitments.php`,{
+      method:'post',
+      header:{
+        'Accept': 'application/json',
+        'Content-type': 'application/json'
+      },
+      body:JSON.stringify({
+        uuid: this.state.uuid,
+        date: this.state.dateAddCommit,
+        note: this.state.noteAddCommit
+      })
+    })
+    .then((response) => response.json())
+    .then((responseJson)=> {
+      if (responseJson == 'OK') {
+        alert('Aggiunto nuovo impegno');
+        this.fetchData();
+      }
+      // aggiungere else per data già esistente
+      else {alert('Errore aggiornamento lista impegni')}
+    })
+    .catch(error=>console.log(error))
+  };
 
 
   render() {
@@ -98,20 +166,21 @@ export default class JobScreen extends Component {
           <ActivityIndicator size="large" color="#0c9"/>
         </View>
        )
-     }
-    
-    
-    //   // comID: 2, comDate: "2019-03-01", comTime: "15:20:00", comPay: 80, resName: "Santissimo"
-    
-
-             
+    }
+                 
     return(
-    
       <View style={styles.container}>
         <DateDetail
             selectedDate={this.state.selectedDate}
             onItemDeleted={this.dateDeletedHandler}
             onModalClosed={this.modalClosedHandler}
+        />
+        <AddCommit
+            openAddCommit={this.state.openAddCommit}
+            onInputChanged={this.onInputChanged}
+            onDateChanged={this.onDateChanged}
+            onHandleAddCommit={this.addCommitHandler}            
+            onAddCommitClosed={this.addCommitClosedHandler}
         />
         <Text style={styles.pageName}>Lista Impegni</Text>
         <ScrollView style={{width: '70%'}} >
@@ -120,6 +189,19 @@ export default class JobScreen extends Component {
             onItemSelected={this.dateSelectedHandler}
           />
         </ScrollView>
+          <ActionButton buttonColor={Colors.primary}>
+            <ActionButton.Item 
+                  buttonColor={Colors.secondary} 
+                  title="Aggiungi Impegno Personale" 
+                  onPress={() => {this.setState({openAddCommit: true});}}                  
+            >
+                <Icon name="pencil" style={styles.actionButtonIcon} />
+                {/* </ActionButton.Item>
+                <ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() => {}}>
+                  <ButIcon name="md-done-all" style={styles.actionButtonIcon} /> */}
+            </ActionButton.Item>
+          </ActionButton>
+        
                
       </View>
     );
@@ -129,9 +211,9 @@ export default class JobScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    // justifyContent: 'center',
   },
 
   pageName: {
@@ -139,6 +221,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
     textAlign: 'center',
+  },
+
+  actionButtonIcon: {
+    fontSize: 20,
+    height: 22,
+    color: 'white',
   },
 
   loader:{
