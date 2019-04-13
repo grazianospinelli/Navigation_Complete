@@ -18,11 +18,7 @@ export default class AddCommit extends Component {
     }
   }
 
-  convertDate = (date) => {
-    moment(date, 'YYYY-MM-DD', true).isValid();
-    return moment(date).format("DD-MM-YYYY");
-  }
-
+  
   render() {
     return (
       <Modal
@@ -41,7 +37,7 @@ export default class AddCommit extends Component {
             />
 
             <View style={styles.ElemForm}>	
-              <Text style={{marginBottom: 10, marginLeft: 15, fontSize: 16}}>Nascita:</Text> 
+              <Text style={{marginBottom: 10, marginLeft: 15, fontSize: 16}}>Giorno:</Text> 
               
               <View style={{flex:1}}> 
                     <DatePicker
@@ -59,7 +55,11 @@ export default class AddCommit extends Component {
                           customStyles={{                                              
                             dateInput: { borderWidth: 0, alignItems: 'flex-end' }                                                
                           }}
-                          onDateChange={(date) => {this.props.onDateChanged(date); this.setState({comDate: date})}}
+                          onDateChange={(date) => {
+                              const convdate = moment(date, "DD-MM-YYYY").format("YYYY-MM-DD");
+                              this.props.onDateChanged(convdate); 
+                              this.setState({comDate: date})}
+                          }
                     />
               </View>
             </View>

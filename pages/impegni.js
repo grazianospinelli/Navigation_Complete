@@ -3,6 +3,7 @@ import { View, StyleSheet, ActivityIndicator, ImageBackground,
   TextInput, Image, Text, ScrollView, TouchableOpacity, AsyncStorage } from 'react-native';
 import ActionButton from 'react-native-action-button';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
+import moment from 'moment';
 import DateList from "../components/DateList";
 import DateDetail from "../components/DateDetail";
 import AddCommit from "../components/AddCommits";
@@ -10,6 +11,7 @@ import * as Colors from '../components/themes/colors';
 import FireManager from '../components/firemanager.js';
 import { USER_UUID } from '../components/auth';
 import IP from '../config/IP';
+
 
 export default class JobScreen extends Component {
 
@@ -31,6 +33,8 @@ export default class JobScreen extends Component {
         drawerIcon: () =>(
         <Icon  name="notebook" size={20} color={Colors.secondary} />),
   }
+
+  
 
   fetchData = () => {
       
@@ -122,7 +126,7 @@ export default class JobScreen extends Component {
     this.setState({noteAddCommit: changedText});    
   }
 
-  onDateChanged = (changedDate)=> {
+  onDateChanged = (changedDate) => {
     this.setState({dateAddCommit: changedDate});    
   }
 
@@ -131,30 +135,42 @@ export default class JobScreen extends Component {
   };
 
   addCommitHandler = () => {
-    this.setState({loading: true})
+    
+        this.setState({loading: true});
+        console.log(this.state);
+        
+        fetch(`${IP}/uploadcommitments.php`,{
+          method:'post',
+          header:{
+            'Accept': 'application/json',
+            'Content-type': 'application/json'
+          },
+          body:JSON.stringify({
+            uuid: this.state.uuid,
+            date: this.state.dateAddCommit,
+            time: '00:00:00',
+            note: this.state.noteAddCommit
+          })
+        })
+        .then((response) => response.json())
+        .then((responseJson)=> {
+          if (responseJson == 'OK') {
+            alert('Aggiunto nuovo impegno');
+            this.fetchData();
+            // la data non puo essere vuota perche non renderizza la lista
+          }
+          // aggiungere else per data già esistente
+          else {
+            
+            if (responseJson == 'KO') { alert('Errore aggiornamento lista impegni'); }
+            else { alert('Data già presente')}
 
-    fetch(`${IP}/uploadcommitments.php`,{
-      method:'post',
-      header:{
-        'Accept': 'application/json',
-        'Content-type': 'application/json'
-      },
-      body:JSON.stringify({
-        uuid: this.state.uuid,
-        date: this.state.dateAddCommit,
-        note: this.state.noteAddCommit
-      })
-    })
-    .then((response) => response.json())
-    .then((responseJson)=> {
-      if (responseJson == 'OK') {
-        alert('Aggiunto nuovo impegno');
-        this.fetchData();
-      }
-      // aggiungere else per data già esistente
-      else {alert('Errore aggiornamento lista impegni')}
-    })
-    .catch(error=>console.log(error))
+            this.setState({loading: false});
+          }
+        })
+        .catch(error=>console.log(error));
+
+    this.setState({openAddCommit: false});
   };
 
 
