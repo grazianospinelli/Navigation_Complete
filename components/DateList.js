@@ -37,6 +37,14 @@ const ListItem = props => (
 // - props.onItemSelected
 
 const dateList = props => {
+  if (props.dates == 'EMPTY') {
+    return (
+      <View style={styles.listContainer}>
+        <Text>Nessun Impegno</Text>
+      </View>
+    )
+  }
+  else {
   return (
     <View style={styles.listContainer}>
       <View style={styles.showMonth}>
@@ -97,6 +105,8 @@ const dateList = props => {
       }
     </View>
   );
+  }
+
 };
 
 

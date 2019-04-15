@@ -68,7 +68,6 @@ export default class JobScreen extends Component {
     FireManager();
   }
  
-
   dateDeletedHandler = () => {
 
     fetch(`${IP}/delcommitments.php`,{
@@ -100,10 +99,6 @@ export default class JobScreen extends Component {
     })
     .catch(error=>console.log(error))
   };
-
-  
-
-
 
   modalClosedHandler = () => {
     this.setState({selectedDate: null});
@@ -199,11 +194,13 @@ export default class JobScreen extends Component {
             onAddCommitClosed={this.addCommitClosedHandler}
         />
         <Text style={styles.pageName}>Lista Impegni</Text>
-        <ScrollView style={{width: '70%'}} >
+        <ScrollView style={{width: '100%'}} >
+        {/* <ImageBackground source={require('../components/images/notebook.jpg')} style={{width: '100%', }} resizeMode='contain' > */}
           <DateList
             dates={this.state.dataSource}
             onItemSelected={this.dateSelectedHandler}
           />
+        {/* </ImageBackground> */}
         </ScrollView>
           <ActionButton buttonColor={Colors.primary}>
             <ActionButton.Item 
@@ -229,6 +226,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    backgroundColor: '#e9e9e9',
     // justifyContent: 'center',
   },
 
