@@ -1,7 +1,11 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { Image, ScrollView, } from 'react-native';
 
-export default class ScrollViewWithBg extends PureComponent {
+// Non più utilizzato
+// Il modulo si occupa di ripetere un immagine backgroud 
+// all'interno di un componente ScrollView
+
+export default class ScrollViewWithBg extends Component {
   constructor (props) {
     super(props);
 
@@ -21,7 +25,7 @@ export default class ScrollViewWithBg extends PureComponent {
         onContentSizeChange={(width, height) => this.setState({contentSize: {width, height}})}>
 
         <Image
-          source={require('../components/images/notebook.jpg')}
+          source={require('../components/images/notebook_rings.jpg')}
           style={bgStyles} />
 
         {this.props.children}

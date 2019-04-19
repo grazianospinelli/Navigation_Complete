@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, ActivityIndicator, ImageBackground, 
-  TextInput, Image, Text, ScrollView, TouchableOpacity, AsyncStorage } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Text, ScrollView, AsyncStorage } from 'react-native';
 import ActionButton from 'react-native-action-button';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
-import moment from 'moment';
 import DateList from "../components/DateList";
 import DateDetail from "../components/DateDetail";
 import AddCommit from "../components/AddCommits";
@@ -194,25 +192,32 @@ export default class JobScreen extends Component {
             onAddCommitClosed={this.addCommitClosedHandler}
         />
         <Text style={styles.pageName}>Lista Impegni</Text>
+        
         <ScrollView style={{width: '100%'}} >
-        {/* <ImageBackground source={require('../components/images/notebook.jpg')} style={{width: '100%', }} resizeMode='contain' > */}
+        
           <DateList
             dates={this.state.dataSource}
             onItemSelected={this.dateSelectedHandler}
           />
-        {/* </ImageBackground> */}
+       
         </ScrollView>
+       
           <ActionButton buttonColor={Colors.primary}>
-            <ActionButton.Item 
-                  buttonColor={Colors.secondary} 
-                  title="Aggiungi Impegno Personale" 
-                  onPress={() => {this.setState({openAddCommit: true});}}                  
-            >
-                <Icon name="pencil" style={styles.actionButtonIcon} />
-                {/* </ActionButton.Item>
+                <ActionButton.Item 
+                      buttonColor={Colors.secondary} 
+                      title="Aggiungi Impegno Personale" 
+                      onPress={() => {this.setState({openAddCommit: true});}}                  
+                >
+                    <Icon name="pencil" style={styles.actionButtonIcon} />
+                </ActionButton.Item>
+                
+                {/* 
+                Da utilizzare per aggiungere un pulsante in più
                 <ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() => {}}>
-                  <ButIcon name="md-done-all" style={styles.actionButtonIcon} /> */}
-            </ActionButton.Item>
+                  <Icon name="md-done-all" style={styles.actionButtonIcon} />
+                </ActionButton.Item> 
+                */}
+                
           </ActionButton>
         
                
@@ -225,7 +230,7 @@ export default class JobScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    // alignItems: 'center',
     backgroundColor: '#e9e9e9',
     // justifyContent: 'center',
   },
