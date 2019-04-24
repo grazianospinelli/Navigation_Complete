@@ -84,6 +84,7 @@
 		D47833B12C18472290880F5D /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F38B74F7CE474FC4B78177FE /* libRNFS.a */; };
 		26A716F648DD4C1FB3C06D93 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B6A923870D19410EAD5BD15C /* libRNFetchBlob.a */; };
 		13AA636A7C3E41AD9052DB7C /* Abecedary.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6E7D22FEDCF44584899D9412 /* Abecedary.ttf */; };
+		11A38116F4CA4D7896AF65B1 /* Luna.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 57F60F016C08454BADFD0553 /* Luna.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -446,6 +447,7 @@
 		D4F82BDE6BBF49288668864F /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; name = "RNFetchBlob.xcodeproj"; path = "../node_modules/rn-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		B6A923870D19410EAD5BD15C /* libRNFetchBlob.a */ = {isa = PBXFileReference; name = "libRNFetchBlob.a"; path = "libRNFetchBlob.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		6E7D22FEDCF44584899D9412 /* Abecedary.ttf */ = {isa = PBXFileReference; name = "Abecedary.ttf"; path = "../Assets/Fonts/Abecedary.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		57F60F016C08454BADFD0553 /* Luna.ttf */ = {isa = PBXFileReference; name = "Luna.ttf"; path = "../Assets/Fonts/Luna.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -767,6 +769,7 @@
 				525580A6C7964AFCAD5692A6 /* SimpleLineIcons.ttf */,
 				D8F5F226C35F407C97D76824 /* Zocial.ttf */,
 				6E7D22FEDCF44584899D9412 /* Abecedary.ttf */,
+				57F60F016C08454BADFD0553 /* Luna.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1253,6 +1256,7 @@
 				E9FAE8F541514B6C8390175E /* SimpleLineIcons.ttf in Resources */,
 				31383111E4E84C2F94DA77FA /* Zocial.ttf in Resources */,
 				13AA636A7C3E41AD9052DB7C /* Abecedary.ttf in Resources */,
+				11A38116F4CA4D7896AF65B1 /* Luna.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

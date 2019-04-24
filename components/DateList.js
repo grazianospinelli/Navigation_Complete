@@ -22,10 +22,8 @@ const RingsImage = () => (
 
 const Separator = () => (<View style={{ width: '100%', height: 1, backgroundColor: Colors.grey4, marginTop: 25 }} />);
 
-const ListItem = props => (
-  
-    
-      <View key={props.keyc} style={styles.listItem}>
+const ListItem = props => (    
+    <View key={props.keyc} style={styles.listItem}>
         <View style={styles.showRings}>
           <RingsImage />
           <RingsImage />
@@ -38,16 +36,18 @@ const ListItem = props => (
               <Text style={{color: '#fff'}}> {this.getWeekDay(props.dateNum)} </Text>
             </View>
             <TouchableOpacity onPress={props.onItemPressed} style={styles.showJob}>
-                <View>
-                    <Text style={{fontFamily: 'Abecedary', fontSize: 15}}> {props.dateRes} </Text>
+                <View style={{flexDirection: 'column'}}>
+                    <Text style={{marginLeft: 10, fontFamily: 'Abecedary', fontSize: 20}}> {props.dateRes} </Text>
+                    { props.dateRes=='Impegno Personale' ? 
+                    (
+                      <Text style={{marginLeft: 20, fontFamily: 'Abecedary', fontSize: 15}}> {props.dateNote} </Text>  
+                    ) : null }
                 </View>
             </TouchableOpacity>
           </View>
           <Separator />
         </View>
-        
-      </View>
-    
+    </View>    
 )
 
 // Al modulo dateList viene passato:
@@ -57,8 +57,11 @@ const ListItem = props => (
 const dateList = props => {
   if (props.dates == 'EMPTY') {
     return (
-      <View style={styles.listContainer}>
-          <Text>Nessun Impegno</Text>
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <View style={styles.emptyJob}>
+          <Image style={{width: 120, height: 120, margin: 30}} source={require('./images/staffextralogo.png')} resizeMode='cover' />  
+          <Text style={{fontFamily: 'Abecedary', fontSize: 30}}> Nessun Impegno </Text>
+        </View>
       </View>
     )
   }
@@ -86,6 +89,7 @@ const dateList = props => {
               return (<ListItem
                         dateNum={item.comDate}
                         dateRes={item.resName}
+                        dateNote={item.comNote}
                         onItemPressed={() => props.onItemSelected(item.comID)}
                         key={item.comID}
                       />)
@@ -99,6 +103,7 @@ const dateList = props => {
                     <ListItem
                         dateNum={item.comDate}
                         dateRes={item.resName}
+                        dateNote={item.comNote}
                         onItemPressed={() => props.onItemSelected(item.comID)}
                         keyc={item.comID}
                     />
@@ -119,6 +124,7 @@ const dateList = props => {
             return (<ListItem
               dateNum={item.comDate}
               dateRes={item.resName}
+              dateNote={item.comNote}
               onItemPressed={() => props.onItemSelected(item.comID)}
               key={item.comID}
             />)
@@ -190,6 +196,19 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     marginLeft: 8,    
   },
+  emptyJob:
+  {
+    flexDirection: 'column',
+    width: '70%',
+    height: 300,
+    backgroundColor: Colors.grey5,    
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: Colors.grey4,
+    borderWidth: 2,
+    marginTop: 20
+  }
 
 });
 
