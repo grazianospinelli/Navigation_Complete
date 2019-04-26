@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, ActivityIndicator, AsyncStorage, StyleSheet } from 'react-native';
 import { Agenda, Calendar, LocaleConfig } from 'react-native-calendars';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import * as Colors from '../components/themes/colors';
@@ -16,6 +16,7 @@ export default class AgendaScreen extends Component {
         uuid: '',
         loading: true,
         dataSource:[],
+        markedDate: null,
       };
 
       LocaleConfig.locales['it'] = {
@@ -33,6 +34,26 @@ export default class AgendaScreen extends Component {
         drawerIcon: () =>(
         <Icon  name="calendar" size={20} color={Colors.secondary} />
       )
+  }
+
+  composeDate = (commitments) => {
+      //Estraiamo l'array delle sole date
+      const dayArray=commitments.map((elem)=>{return elem.comDate});
+      //componiamo l'oggetto contente array di date e stile per data
+      var obj = dayArray.reduce((c, v) => Object.assign(c, {[v]: {
+                            customStyles: {
+                              container: {
+                                backgroundColor: 'red',
+                                elevation: 4
+                              },
+                              text: {
+                                color: 'white',
+                                fontWeight: 'bold'
+                              },
+                            },
+                          } 
+      }), {});
+      this.setState({ markedDate : obj});
   }
 
   fetchData = () => {
@@ -56,6 +77,7 @@ export default class AgendaScreen extends Component {
           console.log(responseJson);
           this.setState({dataSource: responseJson});
           this.setState({loading: false});
+          this.composeDate(responseJson);
         })
         .catch(error=>console.log(error)) //to catch the errors if any
     })
@@ -67,7 +89,7 @@ export default class AgendaScreen extends Component {
     FireManager();
   }
 
-
+  // prima di montare il componente impostiamo tutte le date come marked verdi
   render() {
     
     if(this.state.loading){
@@ -82,29 +104,25 @@ export default class AgendaScreen extends Component {
       <Calendar
         // Date marking style [simple/period/multi-dot/single]. Default = 'simple'
         markingType={'custom'}
-        markedDates={{
-          '2018-03-28': {
-            customStyles: {
-              container: {
-                backgroundColor: 'green',
-              },
-              text: {
-                color: 'black',
-                fontWeight: 'bold'
-              },
-            },
-          },
-          '2018-03-29': {
-            customStyles: {
-              container: {
-                backgroundColor: 'white',
-                elevation: 2
-              },
-              text: {
-                color: 'blue',
-              },
-            }
-          }}}
+        markedDates={this.state.markedDate}
+        theme={{
+            backgroundColor: 'green',
+            calendarBackground: '#cece',
+            textSectionTitleColor: 'red',
+            selectedDayBackgroundColor: '#00adf5',
+            selectedDayTextColor: '#ffffff',
+            todayTextColor: '#00adf5',
+            dayTextColor: '#2d4150',
+            textDisabledColor: '#d9e1e8',
+            dotColor: '#00adf5',
+            selectedDotColor: '#ffffff',
+            arrowColor: 'orange',
+            monthTextColor: 'blue',
+            textMonthFontWeight: 'bold',
+            textDayFontSize: 16,
+            textMonthFontSize: 16,
+            textDayHeaderFontSize: 15
+        }}
       />
     );
   }
