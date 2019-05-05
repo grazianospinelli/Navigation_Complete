@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ActivityIndicator, AsyncStorage, StyleSheet } from 'react-native';
+import { View, Image, Text, ActivityIndicator, AsyncStorage, StyleSheet } from 'react-native';
 import { Agenda, Calendar, LocaleConfig } from 'react-native-calendars';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import * as Colors from '../components/themes/colors';
@@ -39,11 +39,11 @@ export default class AgendaScreen extends Component {
   composeDate = (commitments) => {
       //Estraiamo l'array delle sole date
       const dayArray=commitments.map((elem)=>{return elem.comDate});
-      //componiamo l'oggetto contente array di date e stile per data
+      //componiamo l'oggetto da passare a markedDates di Calendar contente array di date e stile per data
       var obj = dayArray.reduce((c, v) => Object.assign(c, {[v]: {
                             customStyles: {
                               container: {
-                                backgroundColor: 'red',
+                                backgroundColor: Colors.primary,
                                 elevation: 4
                               },
                               text: {
@@ -101,29 +101,28 @@ export default class AgendaScreen extends Component {
     }
        
     return (
-      <Calendar
-        // Date marking style [simple/period/multi-dot/single]. Default = 'simple'
-        markingType={'custom'}
-        markedDates={this.state.markedDate}
-        theme={{
-            backgroundColor: 'green',
-            calendarBackground: '#cece',
-            textSectionTitleColor: 'red',
-            selectedDayBackgroundColor: '#00adf5',
-            selectedDayTextColor: '#ffffff',
-            todayTextColor: '#00adf5',
-            dayTextColor: '#2d4150',
-            textDisabledColor: '#d9e1e8',
-            dotColor: '#00adf5',
-            selectedDotColor: '#ffffff',
-            arrowColor: 'orange',
-            monthTextColor: 'blue',
-            textMonthFontWeight: 'bold',
-            textDayFontSize: 16,
-            textMonthFontSize: 16,
-            textDayHeaderFontSize: 15
-        }}
-      />
+      <View style={{alignItems: "center"}}>
+        <Image style={{width: 100, height: 100, marginTop: 15,}} source={require('../components/images/staffextralogo.png')} resizeMode='cover' /> 
+        <Calendar
+          // Date marking style [simple/period/multi-dot/single]. Default = 'simple'
+          markingType={'custom'}
+          markedDates={this.state.markedDate}
+          theme={{
+              backgroundColor: 'green',
+              calendarBackground: 'white',
+              textSectionTitleColor: 'black',
+              todayTextColor: '#00adf5',
+              dayTextColor: '#30e000',
+              textDisabledColor: '#d9e1e8',
+              arrowColor: Colors.primary,
+              monthTextColor: 'black',
+              textMonthFontWeight: 'bold',
+              textDayFontSize: 16,
+              textMonthFontSize: 20,
+              textDayHeaderFontSize: 15
+          }}
+        />
+      </View>
     );
   }
 }
@@ -131,18 +130,12 @@ export default class AgendaScreen extends Component {
 
 
 const styles = StyleSheet.create({
-  item: {
-    backgroundColor: 'white',
+  loader:{
     flex: 1,
-    borderRadius: 5,
-    padding: 10,
-    marginRight: 10,
-    marginTop: 17
-  },
-  emptyDate: {
-    height: 15,
-    flex:1,
-    paddingTop: 30
-  }
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff"
+   }
+
 
 });

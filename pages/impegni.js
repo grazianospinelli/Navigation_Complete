@@ -107,7 +107,7 @@ export default class JobScreen extends Component {
       return {
         // Stiamo impostando il valore di selectedDate
         // Confrontando il valore comID di tutti gli oggetti 
-        // dell'array di oggetti date con il vaore di key
+        // dell'array di oggetti date con il valore di key
         selectedDate: prevState.dataSource.find(date => {
           return date.comID === key;
         })
