@@ -15,8 +15,9 @@ export default class AgendaScreen extends Component {
       this.state = {
         uuid: '',
         loading: true,
-        dataSource:[],
-        markedDate: null,
+        // dataSource:[],
+        commDate: null,
+        offerDate: null,        
       };
 
       LocaleConfig.locales['it'] = {
@@ -36,14 +37,19 @@ export default class AgendaScreen extends Component {
       )
   }
 
-  composeDate = (commitments) => {
-      //Estraiamo l'array delle sole date
-      const dayArray=commitments.map((elem)=>{return elem.comDate});
+  composeDate = (eventDate,type) => {
+      //Estraiamo l'array delle sole date in base al tipo
+      if (type=='comm') {
+        var dayArray=eventDate.map((elem)=>{return elem.comDate});
+      } else {
+        var dayArray=eventDate.map((elem)=>{return elem.joDate});
+      }
       //componiamo l'oggetto da passare a markedDates di Calendar contente array di date e stile per data
       var obj = dayArray.reduce((c, v) => Object.assign(c, {[v]: {
                             customStyles: {
                               container: {
-                                backgroundColor: Colors.primary,
+                                // backgroundColor: operatore terziario -> Colors.primary se è impegno
+                                backgroundColor: (type=='comm') ? Colors.primary : Colors.secondary,
                                 elevation: 4
                               },
                               text: {
@@ -53,9 +59,10 @@ export default class AgendaScreen extends Component {
                             },
                           } 
       }), {});
-      this.setState({ markedDate : obj});
+      return obj;
   }
 
+  
   fetchData = () => {
       
     AsyncStorage.getItem(USER_UUID)
@@ -74,14 +81,36 @@ export default class AgendaScreen extends Component {
         })
         .then((response) => response.json())
         .then((responseJson)=> {
-          console.log(responseJson);
-          this.setState({dataSource: responseJson});
-          this.setState({loading: false});
-          this.composeDate(responseJson);
+          // console.log(responseJson);
+          // this.setState({dataSource: responseJson});
+          var commArray=this.composeDate(responseJson,'comm');
+          this.setState({ commDate : commArray});
         })
-        .catch(error=>console.log(error)) //to catch the errors if any
+        .catch(error=>console.log(error)) // fetch error
+
+        fetch(`${IP}/loadjoboffers.php`,{
+          method:'post',
+          header:{
+            'Accept': 'application/json',
+            'Content-type': 'application/json'
+          },
+          body:JSON.stringify({
+            uuid: userUuid
+          })
+        })
+        .then((response) => response.json())
+        .then((responseJson)=> {
+          // this.setState({dataSource: responseJson});
+          var offerArray=this.composeDate(responseJson,'offer');
+          // console.log(offerArray);
+          this.setState({ offerDate : offerArray});
+          this.setState({loading: false});         
+        })
+        .catch(error=>console.log(error)) // fetch error
+
+
     })
-    .catch(error=>console.log(error))
+    .catch(error=>console.log(error)) // storage error
   }
   
   componentDidMount() {
@@ -89,7 +118,7 @@ export default class AgendaScreen extends Component {
     FireManager();
   }
 
-  // prima di montare il componente impostiamo tutte le date come marked verdi
+  
   render() {
     
     if(this.state.loading){
@@ -99,14 +128,15 @@ export default class AgendaScreen extends Component {
         </View>
        )
     }
-       
+    
+    const myMarkedDates = {...this.state.offerDate,...this.state.commDate}
     return (
       <View style={{alignItems: "center"}}>
         <Image style={{width: 100, height: 100, marginTop: 15,}} source={require('../components/images/staffextralogo.png')} resizeMode='cover' /> 
         <Calendar
           // Date marking style [simple/period/multi-dot/single]. Default = 'simple'
           markingType={'custom'}
-          markedDates={this.state.markedDate}
+          markedDates={myMarkedDates}
           theme={{
               backgroundColor: 'green',
               calendarBackground: 'white',

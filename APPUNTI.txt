@@ -23,7 +23,11 @@ fd6d4830-a7af-41a0-b0a6-5793aabab423   <- codice impegno personale
 
 Le richieste in attesa ricevute dall'utente scadono se la data sistema > data richiesta
 oppure se la sala chiude la squadra -> questo fa scomparire la richiesta (aggiornamento dati sul cell!)
-
+Se un utente accetta l'offerta, si elimina il record dalla tabella joboffer, 
+e tutti gli altri con la stessa data ma di altre sale, e si mette in commitments,
+se l'utente rifiuta si elimina il record dalla tabella joboffer ma potrebbe ritornare la richiesta,
+se l'utente lascia in attesa un'offerta, quando la sala invia richieste, si fa un controllo in tabella joboffer 
+e non si reinvia l'offerta per quell'utente!
 
 
 ogni sala ha la sua tabella annuale con date e per ogni data quante persone ci sono
@@ -31,7 +35,11 @@ ogni sala ha la sua tabella annuale con date e per ogni data quante persone ci s
 query della sala: dammi tutti gli utenti di quella provincia che sono liberi in quella data
 quindi fai prima la query per raccogliere tutti gli uuid di quella provincia. 
 Per ogni uuid entra in tabella calendario_impegni_di_quell_uuid e cerca se c'è la data. 
-Se non c'è allora l'utente è libero. usare tabella unica o una tabella per ogni uuid? 
+Se non c'è allora l'utente è libero.
+
+Selezionare tutti gli users liberi il 01/05/2019 di Putignano
+SELECT UID FROM users WHERE uuid NOT IN (SELECT comUserUUID FROM commitments WHERE comDate='2019-05-01') 
+AND city='Putignano'
 
 
 Quando la data attuale sistema è maggiore delle date riportate nella tabella offerte di lavoro, 
