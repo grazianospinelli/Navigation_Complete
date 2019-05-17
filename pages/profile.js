@@ -2,8 +2,6 @@
 import React, { Component, Fragment } from 'react';
 import { View, StyleSheet, ActivityIndicator, ImageBackground, 
           TextInput, Image, Text, ScrollView, Button, TouchableOpacity, AsyncStorage } from 'react-native';
-import firebase from 'react-native-firebase';
-import { Notification, NotificationOpen } from 'react-native-firebase';
 import { Card, Divider } from 'react-native-elements';
 // import { TextField } from "react-native-material-textfield";
 import { Formik } from "formik";
@@ -137,7 +135,6 @@ export default class ProfileScreen extends Component {
   }
   // In fase di rilascio verificare tutti gli alert !
 
-
   uploadPhoto = (image) => {
     if(image.uri != null) {
       const photoname = `${this.state.uuid}.jpg`;
@@ -214,9 +211,11 @@ export default class ProfileScreen extends Component {
                           onSubmit={values => this.update(values)}
                           validationSchema={myvalidationSchema}
                         >
-
+                          
                           {({ values, handleChange, errors, submitCount, setFieldValue, setFieldTouched, touched, isValid, handleSubmit }) => (
-                          // Per non far saltare IconTextField ho modificato il database Mysql affinchè il valore di default
+                          // https://medium.com/fotontech/react-native-formik-yup-%EF%B8%8F-18465e020ea0 
+                          // ^Per uso di Formik+Yup+Fragment.
+                          // Invece per non far saltare IconTextField ho modificato il database Mysql affinchè il valore di default
                           // all'inserimento di una nuova riga nel DB non sia NULL ma impostato da interfaccia PHPMySql:
                           // Predefinito -> Come Definito: -> campo vuoto
                           <Fragment>

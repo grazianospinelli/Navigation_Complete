@@ -52,7 +52,7 @@ export default class JobScreen extends Component {
         })
         .then((response) => response.json())
         .then((responseJson)=> {
-          console.log(responseJson);
+          // console.log(responseJson);
           this.setState({dataSource: responseJson});
           this.setState({loading: false});
         })

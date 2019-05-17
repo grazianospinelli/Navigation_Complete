@@ -857,3 +857,8 @@ PER AGGIUNGERE NUOVI FONT:
     fontFamily: "vincHand",
     fontSize: 20
    }
+___________________________________________________________________
+
+PER MODIFICARE UNO CARATTERISTICA DI UNO STYLE LASCIANDO TUTTE LE ALTRE INVARIATE:
+
+style={[styles.button, { backgroundColor: Colors.secondary }]}>
