@@ -171,7 +171,7 @@ export default class ProfileScreen extends Component {
       }
       const data = this.state.dataSource;
            
-      console.log(this.state.profile_image);
+      // console.log(this.state.profile_image);
       
       return(
         
