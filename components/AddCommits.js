@@ -12,13 +12,14 @@ import * as Colors from '../components/themes/colors';
 const myvalidationSchema = Yup.object().shape({
   comDate: Yup
     .string()
-    .required("Inserire Data!"),
+    .required("Inserire Data"),
   comTime: Yup
     .string()
     .required("Inserire Ora"),
   comNote: Yup
     .string()
-    .max(40,"Troppo Lungo"),
+    .required("Inserire Note")
+    .max(40,"Testo troppo Lungo"),
   });
 
 // How to Pass input Field Data from Modal to the Container in react-Native?
@@ -29,9 +30,6 @@ export default class AddCommit extends Component {
 
   constructor(props){
     super(props)
-    this.state = {
-      comDate: null
-    }
   }
 
   
@@ -50,27 +48,19 @@ export default class AddCommit extends Component {
         <View style={styles.modalContainer}>
 
             <View style={styles.Title}>
-              <Text style={{color: 'white', fontWeight: "bold", fontSize: 25 }}>Impegno Personale</Text>
+              <Text style={{color: 'white', fontWeight: "bold", fontSize: 20 }}>Impegno Personale</Text>
             </View>
 
             <Formik
-              onSubmit={values => alert(JSON.stringify(values))}
-              // onSubmit={values => this.update(values)}
+              initialValues={{comNote: '', comDate: '', comTime: ''}}
+              onSubmit={this.props.onHandleAddCommit}
               validationSchema={myvalidationSchema}
             >
 
             {({ values, handleChange, errors, submitCount, setFieldValue, setFieldTouched, touched, isValid, handleSubmit }) => (
+              
             <Fragment>
-
-                    <TextField
-                        label="Note"
-                        value={values.comNote}
-                        onChangeText={text => setFieldValue("comNote", text)}
-                        // onChangeText={(changedText) => this.props.onInputChanged(changedText)} 
-                        onBlur={() => setFieldTouched("comNote")}
-                        error={touched.comNote || submitCount > 0 ? errors.comNote : null}
-                        style={{borderRadius: 25, width:220, height: 60, backgroundColor: 'gray'}}
-                    />
+                                  
 
                     <View style={styles.ElemForm}>	
                       <Text style={{marginBottom: 10, marginLeft: 15, fontSize: 16}}>Giorno:</Text> 
@@ -78,7 +68,7 @@ export default class AddCommit extends Component {
                       <View style={{flex:1}}> 
                             <DatePicker
                                   style={{width:'100%'}}
-                                  date={this.state.comDate}
+                                  date={values.comDate}
                                   showIcon={false}
                                   mode="date"
                                   placeholder="Inserisci Data"
@@ -91,21 +81,58 @@ export default class AddCommit extends Component {
                                   customStyles={{                                              
                                     dateInput: { borderWidth: 0, alignItems: 'flex-end' }                                                
                                   }}
-                                  onDateChange={(date) => setFieldValue("comDate", date)}
-                                  // onDateChange={(date) => {
-                                  //     const convdate = moment(date, "DD-MM-YYYY").format("YYYY-MM-DD");
-                                  //     this.props.onDateChanged(convdate); 
-                                  //     this.setState({comDate: date})}
-                                  // }
+                                  onDateChange={(date) => { setFieldValue("comDate", date);
+                                                const convdate = moment(date, "DD-MM-YYYY").format("YYYY-MM-DD");
+                                                this.props.onDateChanged(convdate);} 
+                                  }
                             />
                       </View>
                     </View>
+                    { errors.comDate && <Text style={{color: Colors.primary}}>{errors.comDate }</Text> }
+
+                    <View style={styles.ElemForm}>	
+                      <Text style={{marginBottom: 10, marginLeft: 15, fontSize: 16}}>Ora:</Text> 
+                      
+                      <View style={{flex:1}}> 
+                            <DatePicker
+                                  style={{width:'100%'}}
+                                  date={values.comTime}
+                                  showIcon={false}
+                                  mode="time"
+                                  placeholder="Inserisci Ora"
+                                  androidMode='spinner'
+                                  confirmBtnText="Conferma"
+                                  cancelBtnText="Indietro"
+                                  customStyles={{                                              
+                                    dateInput: { borderWidth: 0, alignItems: 'flex-end' }                                                
+                                  }}
+                                  onDateChange={(time) => { setFieldValue("comTime", time);this.props.onTimeChanged(time)}}
+                            />
+                      </View>
+                    </View>
+                    { errors.comTime && <Text style={{color: Colors.primary}}>{errors.comTime }</Text> }
+
+
+                    <Text style={{marginBottom: 5, marginLeft: 15, fontSize: 16}}>Note:</Text>
+                    <TextInput
+                        multiline = {true}
+                        numberOfLines = {4}
+                        value={values.comNote}
+                        onChangeText={(text) => { setFieldValue("comNote", text); this.props.onInputChanged(text+':00') }}
+                        onBlur={() => setFieldTouched("comNote")}
+                        style={{ marginBottom: 5, height: 60, backgroundColor: 'white'}}
+                    />
+                    <Text style={{color: Colors.primary}}>
+                        {touched.comNote || submitCount > 0 ? errors.comNote : null }
+                    </Text>
+                    
+                    <Text>{JSON.stringify(values, null, 2)}</Text>
 
                     <View style={styles.Buttons}>
                         <TouchableOpacity onPress={this.props.onAddCommitClosed} style={[styles.modalButton, {backgroundColor: Colors.primary}]}>
                             <Icon  name="ios-close" size={35} color='white' />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={()=>{}} style={[styles.modalButton, {backgroundColor: Colors.secondary}]}>
+                        <TouchableOpacity onPress={handleSubmit} style={[styles.modalButton, {backgroundColor: Colors.secondary}]}>
                             <Icon  name="ios-add" size={35} color='white' />
                         </TouchableOpacity>
 
@@ -137,12 +164,12 @@ const styles = StyleSheet.create({
     
   },
   Title: {
-    height: 50,      
+    height: 40,      
     backgroundColor: Colors.grey2,    
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 40
+    marginBottom: 20
   },
   dateName: {
     fontWeight: "bold",
@@ -158,7 +185,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-end', 
-    height: 70,
+    height: 50,
     borderBottomWidth: .2,
     borderColor: 'gray',
   },

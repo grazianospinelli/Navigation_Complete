@@ -22,7 +22,8 @@ export default class JobScreen extends Component {
       selectedDate: null,
       openAddCommit: false,
       noteAddCommit: '',
-      dateAddCommit: null
+      dateAddCommit: null,
+      timeAddCommit: '00:00:00'
     };
   }
 
@@ -123,6 +124,10 @@ export default class JobScreen extends Component {
     this.setState({dateAddCommit: changedDate});    
   }
 
+  onTimeChanged = (changedTime) => {
+    this.setState({timeAddCommit: changedTime});    
+  }
+
   addCommitClosedHandler = () => {
     this.setState({openAddCommit: false});
   };
@@ -141,7 +146,7 @@ export default class JobScreen extends Component {
           body:JSON.stringify({
             uuid: this.state.uuid,
             date: this.state.dateAddCommit,
-            time: '00:00:00',
+            time: this.state.timeAddCommit,
             note: this.state.noteAddCommit
           })
         })
