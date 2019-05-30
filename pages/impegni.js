@@ -193,6 +193,7 @@ export default class JobScreen extends Component {
             openAddCommit={this.state.openAddCommit}
             onInputChanged={this.onInputChanged}
             onDateChanged={this.onDateChanged}
+            onTimeChanged={this.onTimeChanged}
             onHandleAddCommit={this.addCommitHandler}            
             onAddCommitClosed={this.addCommitClosedHandler}
         />

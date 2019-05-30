@@ -13,9 +13,6 @@ const myvalidationSchema = Yup.object().shape({
   comDate: Yup
     .string()
     .required("Inserire Data"),
-  comTime: Yup
-    .string()
-    .required("Inserire Ora"),
   comNote: Yup
     .string()
     .required("Inserire Note")
@@ -63,7 +60,7 @@ export default class AddCommit extends Component {
                                   
 
                     <View style={styles.ElemForm}>	
-                      <Text style={{marginBottom: 10, marginLeft: 15, fontSize: 16}}>Giorno:</Text> 
+                      <Text style={{marginBottom: 5, marginLeft: 15, fontSize: 16}}>Giorno:</Text> 
                       
                       <View style={{flex:1}}> 
                             <DatePicker
@@ -91,7 +88,7 @@ export default class AddCommit extends Component {
                     { errors.comDate && <Text style={{color: Colors.primary}}>{errors.comDate }</Text> }
 
                     <View style={styles.ElemForm}>	
-                      <Text style={{marginBottom: 10, marginLeft: 15, fontSize: 16}}>Ora:</Text> 
+                      <Text style={{marginBottom: 5, marginLeft: 15, fontSize: 16}}>Ora:</Text> 
                       
                       <View style={{flex:1}}> 
                             <DatePicker
@@ -106,19 +103,22 @@ export default class AddCommit extends Component {
                                   customStyles={{                                              
                                     dateInput: { borderWidth: 0, alignItems: 'flex-end' }                                                
                                   }}
-                                  onDateChange={(time) => { setFieldValue("comTime", time);this.props.onTimeChanged(time)}}
+                                  onDateChange={(time) => { setFieldValue("comTime", time);this.props.onTimeChanged(time+':00')}}
                             />
                       </View>
                     </View>
                     { errors.comTime && <Text style={{color: Colors.primary}}>{errors.comTime }</Text> }
+                    
+                    <View style={styles.ElemForm}>
+                        
+                    </View>
 
-
-                    <Text style={{marginBottom: 5, marginLeft: 15, fontSize: 16}}>Note:</Text>
+                    <Text style={{marginBottom: 5, marginTop: 20, marginLeft: 15, fontSize: 16}}>Note:</Text>
                     <TextInput
                         multiline = {true}
                         numberOfLines = {4}
                         value={values.comNote}
-                        onChangeText={(text) => { setFieldValue("comNote", text); this.props.onInputChanged(text+':00') }}
+                        onChangeText={(text) => { setFieldValue("comNote", text); this.props.onInputChanged(text) }}
                         onBlur={() => setFieldTouched("comNote")}
                         style={{ marginBottom: 5, height: 60, backgroundColor: 'white'}}
                     />
@@ -126,7 +126,7 @@ export default class AddCommit extends Component {
                         {touched.comNote || submitCount > 0 ? errors.comNote : null }
                     </Text>
                     
-                    <Text>{JSON.stringify(values, null, 2)}</Text>
+                    {/* <Text>{JSON.stringify(values, null, 2)}</Text> */}
 
                     <View style={styles.Buttons}>
                         <TouchableOpacity onPress={this.props.onAddCommitClosed} style={[styles.modalButton, {backgroundColor: Colors.primary}]}>
@@ -200,6 +200,6 @@ const styles = StyleSheet.create({
     width: 60, 
     height: 60, 
     borderRadius: 75,
-    marginTop: 20
+    marginTop: 15
   }
 });

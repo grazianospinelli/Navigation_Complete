@@ -49,7 +49,9 @@ export default class DateDetail extends Component {
           </View>
           <View style={{justifyContent: 'flex-end' }}>
               <Text style={styles.commitStyle}>{this.props.selectedDate.resName}</Text>
-              <Text style={styles.TextStyle}> Indirizzo: {this.props.selectedDate.resAddress} </Text>
+              { this.props.selectedDate.resName!=='Impegno Personale' ? 
+                (<Text style={styles.TextStyle}> Indirizzo: {this.props.selectedDate.resAddress} </Text>) : null
+              }
               <View style={{ width: '100%', height: 2, backgroundColor: Colors.grey4, margin: 5 }} />
               <Text style={styles.TextStyle}> Orario Appuntamento: {this.props.selectedDate.comTime.slice(0, -3)} </Text>
               <Text style={styles.TextStyle}> Compenso: {this.props.selectedDate.comPay} </Text>
