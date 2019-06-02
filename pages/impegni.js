@@ -23,7 +23,8 @@ export default class JobScreen extends Component {
       openAddCommit: false,
       noteAddCommit: '',
       dateAddCommit: null,
-      timeAddCommit: '00:00:00'
+      timeAddCommit: '00:00:00',
+      payAddCommit: null
     };
   }
 
@@ -124,6 +125,10 @@ export default class JobScreen extends Component {
     this.setState({dateAddCommit: changedDate});    
   }
 
+  onPayChanged = (changedPay) => {
+    this.setState({payAddCommit: changedPay});    
+  }
+
   onTimeChanged = (changedTime) => {
     this.setState({timeAddCommit: changedTime});    
   }
@@ -147,6 +152,7 @@ export default class JobScreen extends Component {
             uuid: this.state.uuid,
             date: this.state.dateAddCommit,
             time: this.state.timeAddCommit,
+            pay: parseInt(this.state.payAddCommit),
             note: this.state.noteAddCommit
           })
         })
@@ -169,6 +175,12 @@ export default class JobScreen extends Component {
         .catch(error=>console.log(error));
 
     this.setState({openAddCommit: false});
+
+    // Reset per nuove immissioni
+    // altri campi non resettati perchè hanno immissione obbligatoria
+    this.setState({timeAddCommit: '00:00:00'});
+    this.setState({payAddCommit: null});
+
   };
 
 
@@ -194,6 +206,7 @@ export default class JobScreen extends Component {
             onInputChanged={this.onInputChanged}
             onDateChanged={this.onDateChanged}
             onTimeChanged={this.onTimeChanged}
+            onPayChanged={this.onPayChanged}
             onHandleAddCommit={this.addCommitHandler}            
             onAddCommitClosed={this.addCommitClosedHandler}
         />

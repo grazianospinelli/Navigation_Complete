@@ -17,6 +17,11 @@ const myvalidationSchema = Yup.object().shape({
     .string()
     .required("Inserire Note")
     .max(40,"Testo troppo Lungo"),
+  comPay: Yup
+    .number()
+    .typeError('Inserire numero')
+    .positive("Inserire numero positivo")
+    .integer("Inserire numero intero")
   });
 
 // How to Pass input Field Data from Modal to the Container in react-Native?
@@ -49,7 +54,7 @@ export default class AddCommit extends Component {
             </View>
 
             <Formik
-              initialValues={{comNote: '', comDate: '', comTime: ''}}
+              initialValues={{comNote: '', comDate: '', comTime: '', comPay: ''}}
               onSubmit={this.props.onHandleAddCommit}
               validationSchema={myvalidationSchema}
             >
@@ -110,8 +115,19 @@ export default class AddCommit extends Component {
                     { errors.comTime && <Text style={{color: Colors.primary}}>{errors.comTime }</Text> }
                     
                     <View style={styles.ElemForm}>
-                        
+                      <Text style={{marginBottom: 5, marginLeft: 15, fontSize: 16}}>Compenso:</Text>
+                      <TextInput
+                        // Importantissimo per TextInput => paddingBottom: 0 per allinearsi con altri componenti in row 
+                        style={{flex:1, paddingBottom: 3, height: 30, fontSize: 16}}
+                        textAlign='right'
+                        // textAlignVertical='bottom'
+                        placeholder="$$$"
+                        keyboardType='numeric'
+                        value={values.comPay}
+                        onChangeText={(text) => { setFieldValue("comPay", text); this.props.onPayChanged(text) }}
+                      />
                     </View>
+                    { errors.comPay && <Text style={{color: Colors.primary}}>{errors.comPay }</Text> }
 
                     <Text style={{marginBottom: 5, marginTop: 20, marginLeft: 15, fontSize: 16}}>Note:</Text>
                     <TextInput
