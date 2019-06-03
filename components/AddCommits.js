@@ -3,7 +3,6 @@ import { View, Text, Button, TextInput, StyleSheet, TouchableOpacity } from "rea
 import Modal from "react-native-modal";
 import DatePicker from 'react-native-datepicker'
 import moment from "moment";
-import { TextField } from "react-native-material-textfield";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -142,7 +141,11 @@ export default class AddCommit extends Component {
                         {touched.comNote || submitCount > 0 ? errors.comNote : null }
                     </Text>
                     
-                    {/* <Text>{JSON.stringify(values, null, 2)}</Text> */}
+                    
+                    {/* 
+                      Per visualizzare lo stato dei valori di Formik:
+                      <Text>{JSON.stringify(values, null, 2)}</Text> 
+                    */}
 
                     <View style={styles.Buttons}>
                         <TouchableOpacity onPress={this.props.onAddCommitClosed} style={[styles.modalButton, {backgroundColor: Colors.primary}]}>
@@ -152,8 +155,7 @@ export default class AddCommit extends Component {
                             <Icon  name="ios-add" size={35} color='white' />
                         </TouchableOpacity>
 
-                        {/* <Button title="Add" color="red" onPress={this.props.onHandleAddCommit} />
-                        <Button title="Close" onPress={this.props.onAddCommitClosed} /> */}
+                        
                     </View>
             
               </Fragment>
