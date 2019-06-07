@@ -91,7 +91,7 @@ export default class JobScreen extends Component {
             dataSource: prevState.dataSource.filter(date => {
               return date.comID !== prevState.selectedDate.comID;
             }),
-            selectedDate: null
+            selectedDate: null            
           };
         });
       }

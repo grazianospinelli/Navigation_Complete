@@ -118,7 +118,7 @@ export default class AgendaScreen extends Component {
     FireManager();
   }
 
-  
+    
   render() {
     
     if(this.state.loading){

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 import Dialog from "react-native-dialog";
@@ -35,10 +35,22 @@ export default class DateDetail extends Component {
     this.setState({ showAlert: false })
   }
 
+  handleDeleteAlert = () => {
+      // this.props.onItemDeleted non veniva richiamato dentro questa funzione
+      // solo aggiungendo () in coda alla funzione viene richiamato.
+      // senza parentesi viene passata direttamente la funzione come prop da impegni a DateDetail
+      // ma se viene messa in un altra funzione come in questo caso non va.
+      // con le parentesi invece si effettua una chiamata alla funzione nel componente padre
+      // ma probabilemente c'è un calo di prestazioni.
+      this.props.onItemDeleted();
+      this.setState({showAlert: false});    
+  }
+
   render() {
 
     let modalContent = null;
-
+    
+    
     if (this.props.selectedDate) {
       modalContent = (
         <View>
@@ -62,41 +74,54 @@ export default class DateDetail extends Component {
       );
     }
 
+
     return (
-      <Modal
-        onRequestClose={this.props.onModalClosed}
-        supportedOrientations={['portrait', 'landscape']}
-        isVisible={this.props.selectedDate !== null}
-        // animationIn="slideInLeft"
-        // animationOut="slideOutRight"
-        animationIn="zoomInDown"
-        animationOut="zoomOutUp"
-        animationInTiming={1000}
-        animationOutTiming={1000}
-        backdropTransitionInTiming={1000}
-        backdropTransitionOutTiming={1000}
-      >
-        <View style={styles.modalContainer}>
-          {modalContent}
-          <View style={styles.Buttons}>
-            <TouchableOpacity onPress={this.props.onModalClosed} style={[styles.modalButton, {backgroundColor: Colors.primary}]}>
-                <Icon  name="ios-close" size={35} color='white' />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.handleOpenAlert} style={[styles.modalButton, {backgroundColor: Colors.secondary}]}>
-                <Icon  name="ios-trash" size={35} color='white' />
-            </TouchableOpacity>
-            <Dialog.Container visible={this.state.showAlert}>
-                <Dialog.Title>Attenzione!</Dialog.Title>
-                <Dialog.Description>
-                    Vuoi davvero cancellare il tuo impegno?
-                    Verrai rimosso dalla squadra di lavoro di questa data!
-                </Dialog.Description>
-                <Dialog.Button label="Annulla" onPress={this.handleCloseAlert} />
-                <Dialog.Button label="Conferma" onPress={this.props.onItemDeleted} />
-            </Dialog.Container>
+
+      <Fragment>
+        
+
+        <Modal
+          onRequestClose={this.props.onModalClosed}
+          supportedOrientations={['portrait', 'landscape']}
+          isVisible={this.props.selectedDate !== null}
+          // animationIn="slideInLeft"
+          // animationOut="slideOutRight"
+          animationIn="zoomInDown"
+          animationOut="zoomOutUp"
+          animationInTiming={1000}
+          animationOutTiming={1000}
+          backdropTransitionInTiming={1000}
+          backdropTransitionOutTiming={1000}
+        >
+          <View style={styles.modalContainer}>
+
+            {modalContent}
+
+            <View style={styles.Buttons}>
+              <TouchableOpacity onPress={this.props.onModalClosed} style={[styles.modalButton, {backgroundColor: Colors.primary}]}>
+                  <Icon  name="ios-close" size={35} color='white' />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.handleOpenAlert} style={[styles.modalButton, {backgroundColor: Colors.secondary}]}>
+                  <Icon  name="ios-trash" size={35} color='white' />
+              </TouchableOpacity>
+              
+            </View>
+
           </View>
-        </View>
-      </Modal>
+        </Modal>
+
+        <Dialog.Container visible={this.state.showAlert} >
+            <Dialog.Title>Attenzione!</Dialog.Title>
+            <Dialog.Description>
+                Vuoi davvero cancellare il tuo impegno?
+                Verrai rimosso dalla squadra di lavoro di questa data!
+            </Dialog.Description>
+            <Dialog.Button label="Annulla" onPress={this.handleCloseAlert} />
+            <Dialog.Button label="Conferma" onPress={this.handleDeleteAlert} />
+        </Dialog.Container>
+
+      </Fragment>
+      
     );
   };
 }

@@ -46,3 +46,12 @@ Quando la data attuale sistema è maggiore delle date riportate nella tabella of
 le offerte vecchie vengono automaticamente cancellate.
 
 Nel Drawer mancano istruzioni(swiper) - Offerte in Attesa - Meme OCCCA? - Consiglio del giorno
+
+ISTRUZIONI PER IL LISTATO:
+Creare ed editare la lista dei file da stampare:
+da terminale nella cartella progetto:
+git ls-tree -r master --name-only  
+mettere la lista in list.txt
+
+In PowerShell:
+Get-Content .\list.txt | Foreach-Object { echo $_; echo "`n"; type $_; echo "`n"; } > summa.js
