@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Image, Text, ActivityIndicator, AsyncStorage, StyleSheet } from 'react-native';
+import {NavigationEvents} from "react-navigation";
 import { Agenda, Calendar, LocaleConfig } from 'react-native-calendars';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import * as Colors from '../components/themes/colors';
@@ -64,7 +65,7 @@ export default class AgendaScreen extends Component {
 
   
   fetchData = () => {
-      
+
     AsyncStorage.getItem(USER_UUID)
     .then((userUuid) => {
         this.setState({uuid: userUuid});
@@ -121,6 +122,7 @@ export default class AgendaScreen extends Component {
     
   render() {
     
+    
     if(this.state.loading){
       return( 
         <View style={styles.loader}> 
@@ -131,8 +133,10 @@ export default class AgendaScreen extends Component {
     
     const myMarkedDates = {...this.state.offerDate,...this.state.commDate}
     return (
+      
       <View style={{alignItems: "center"}}>
-        <Image style={{width: 100, height: 100, marginTop: 15,}} source={require('../components/images/staffextralogo.png')} resizeMode='cover' /> 
+        <Image style={{width: 100, height: 100, marginTop: 15,}} source={require('../components/images/staffextralogo.png')} resizeMode='cover' />
+        
         <Calendar
           // Date marking style [simple/period/multi-dot/single]. Default = 'simple'
           markingType={'custom'}
@@ -152,6 +156,9 @@ export default class AgendaScreen extends Component {
               textDayHeaderFontSize: 15
           }}
         />
+
+        <NavigationEvents onDidFocus={()=>this.fetchData()} />
+        
       </View>
     );
   }
