@@ -16,26 +16,29 @@ import Register from './pages/register';
 import Drawer from './drawer';
 
 
-const AuthStack = createStackNavigator({
-  Home: { screen: Home,
-          navigationOptions: {
-            header: null
-          }
-        },
-  Login: { screen: Login,
-    navigationOptions: {
-      header: null
-    } 
+const AuthStack = createStackNavigator(
+  {
+    Home: { screen: Home,
+                navigationOptions: {
+                  header: null
+                }
+    },
+    Login: { screen: Login,
+                navigationOptions: {
+                  header: null
+                } 
+    },
+    Register: { screen: Register,
+                navigationOptions: {
+                  header: null
+                }  
+    },
   },
-  Register: { screen: Register,
-    navigationOptions: {
-      header: null
-    }  
-  },
-}, {
-  initialRouteName: 'Home',
-  navigationOptions: { header: null },
-});
+  {
+    initialRouteName: 'Home',
+    navigationOptions: { header: null },
+  }
+);
 
 const AppStack = createStackNavigator({ Drawer: { screen: Drawer } });
 

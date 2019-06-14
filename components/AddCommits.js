@@ -23,7 +23,7 @@ const myvalidationSchema = Yup.object().shape({
     .integer("Inserire numero intero")
   });
 
-// How to Pass input Field Data from Modal to the Container in react-Native?
+// How to Pass input Field Data from Modal to the Parent Container in react-Native?
 // To pass data from Modal to Parent Component, you can make your Modal call a function 
 // that you passed by props every time input text is changed. 
 // Here's a simple callback logic you can use.
