@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator, Text, ScrollView, AsyncStorage } from 'react-native';
+import Carousel from 'react-native-snap-carousel';
+import LinearGradient from 'react-native-linear-gradient';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import * as Colors from '../components/themes/colors';
+import SliderEntry from '../components/SliderEntry';
+import { sliderWidth, itemWidth } from '../components/themes/SliderEntry.style';
+import styles from '../components/themes/index.style';
 import FireManager from '../components/firemanager.js';
 import { USER_UUID } from '../components/auth';
 import IP from '../config/IP';
 
+const SLIDER_1_FIRST_ITEM = 1;
 
 export default class OfferScreen extends Component {
   
@@ -15,7 +21,8 @@ export default class OfferScreen extends Component {
       uuid: '',
       loading: true,
       // dataSource:[],
-      dataSource: null
+      dataSource: null,
+      slider1ActiveSlide: SLIDER_1_FIRST_ITEM
     };
   }
   
@@ -58,6 +65,21 @@ export default class OfferScreen extends Component {
   }
 
 
+  get gradient () {
+    return (
+        <LinearGradient
+          colors={[Colors.background1, Colors.background2]}
+          startPoint={{ x: 1, y: 0 }}
+          endPoint={{ x: 0, y: 1 }}
+          style={styles.gradient}
+        />
+    );
+  }
+
+  _renderItem ({item, index}) {
+    return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
+  }
+
   render() {
 
     if(this.state.loading){
@@ -70,36 +92,28 @@ export default class OfferScreen extends Component {
                  
     return(
       <View style={styles.container}>
-        <ScrollView>
+
+        { this.gradient }
+
+        <View style={styles.exampleContainer}>
+                        <Text style={styles.title}>{'Example'}</Text>
+                        <Text style={styles.subtitle}>{'Titolo'}</Text>
+                        <Carousel
+                          data={this.state.dataSource}
+                          renderItem={this._renderItem}
+                          sliderWidth={sliderWidth}
+                          itemWidth={itemWidth}
+                          containerCustomStyle={styles.slider}
+                          contentContainerCustomStyle={styles.sliderContentContainer}
+                          layout={'stack'}
+                          loop={false}
+                        />
+        </View>
+
+        {/* <ScrollView>
           <Text>{JSON.stringify(this.state.dataSource, null, 2)}</Text>
-          </ScrollView>
+        </ScrollView> */}
       </View>
     );
   }
 }
-
-
-
-
-const styles = StyleSheet.create({
-
-  loader:{
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff"
-   },  
-
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-
-  TextStyle:{
-    fontSize : 25,
-     textAlign: 'center'
-  }
-
-});

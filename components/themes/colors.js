@@ -7,3 +7,5 @@ export const grey2 = '#5e6977';
 export const grey3 = '#86939e';
 export const grey4 = '#bdc6cf';
 export const grey5 = '#e1e8ee';
+export const background1 = '#B721FF';
+export const background2 = '#21D4FD';
