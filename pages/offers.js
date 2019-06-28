@@ -96,10 +96,12 @@ export default class OfferScreen extends Component {
         { this.gradient }
 
         <View style={styles.exampleContainer}>
-                        <Text style={styles.title}>{'Example'}</Text>
-                        <Text style={styles.subtitle}>{'Titolo'}</Text>
+                        <Text style={styles.title}>{'Offerte di Lavoro'}</Text>
+                        
                         <Carousel
-                          data={this.state.dataSource}
+                          data={this.state.dataSource.reverse()}
+                          firstItem={this.state.dataSource.length - 1}
+                          containerCustomStyle={{ transform: [{ scaleX: -1 }] }}
                           renderItem={this._renderItem}
                           sliderWidth={sliderWidth}
                           itemWidth={itemWidth}

@@ -1,5 +1,6 @@
 import { StyleSheet, Dimensions, Platform } from 'react-native';
 import { colors } from './index.style';
+import * as Colors from './colors';
 
 const IS_IOS = Platform.OS === 'ios';
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
@@ -9,7 +10,7 @@ function wp(percentage) {
   return Math.round(value);
 }
 
-const slideHeight = viewportHeight * 0.36;
+const slideHeight = viewportHeight * 0.5;
 const slideWidth = wp(75);
 const itemHorizontalMargin = wp(2);
 
@@ -40,12 +41,12 @@ export default StyleSheet.create({
   imageContainer: {
     flex: 1,
     marginBottom: IS_IOS ? 0 : -1, // Prevent a random Android rendering issue
-    backgroundColor: 'white',
+    backgroundColor: Colors.secondary,
     borderTopLeftRadius: entryBorderRadius,
     borderTopRightRadius: entryBorderRadius,
   },
   imageContainerEven: {
-    backgroundColor: colors.black,
+    backgroundColor: Colors.primary,
   },
   image: {
     ...StyleSheet.absoluteFillObject,

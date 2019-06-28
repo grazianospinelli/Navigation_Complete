@@ -51,7 +51,7 @@ export default StyleSheet.create({
   title: {
     paddingHorizontal: 30,
     backgroundColor: 'transparent',
-    color: 'rgba(255, 255, 255, 0.9)',
+    color: 'black',
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',

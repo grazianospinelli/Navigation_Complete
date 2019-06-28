@@ -53,7 +53,7 @@ const Drawer = createDrawerNavigator({
       borderBottomColor: Colors.secondary
     }
   },
-  initialRouteName: 'Job',
+  initialRouteName: 'Offers',
   drawerOpenRoute: 'DrawerOpen',
   drawerCloseRoute: 'DrawerClose',
   drawerToggleRoute: 'DrawerToggle',
