@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator, Text, ScrollView, Image, AsyncStorage, Button } from 'react-native';
 import {NavigationEvents} from "react-navigation";
 import Carousel from 'react-native-snap-carousel';
@@ -77,7 +77,6 @@ export default class OfferScreen extends Component {
     );
   }
 
-  
   _renderItem ({item, index}) {
     return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
   }
@@ -109,49 +108,6 @@ export default class OfferScreen extends Component {
 
   render() {
 
-    if (this.state.dataSource == 'EMPTY') {
-        offerComponent = (
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <View style={styles.emptyJob}>
-              <Image style={{width: 120, height: 120, margin: 30}} source={require('../components/images/staffextralogo.png')} resizeMode='cover' />  
-              <Text style={{fontFamily: 'Abecedary', fontSize: 30}}> Nessun Offerta </Text>
-            </View>
-          </View>
-        )
-    } 
-    else {
-      offerComponent = (
-        <Fragment>
-          <Carousel
-              ref={(c) => { this._carousel = c; }}
-              data={this.state.dataSource}
-              // data={this.state.dataSource.reverse()}
-              // firstItem={SLIDER_1_FIRST_ITEM}
-              firstItem={this.state.dataSource.length - 1}
-              containerCustomStyle={{ transform: [{ scaleX: 1 }] }}
-              renderItem={this._renderItem}
-              sliderWidth={sliderWidth}
-              itemWidth={itemWidth}
-              // containerCustomStyle={styles.slider}
-              contentContainerCustomStyle={styles.sliderContentContainer}
-              layoutCardOffset={15}
-              useScrollView={true}
-              layout={'stack'}
-              loop={false}
-              onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
-          />
-
-          <Button
-                  title='Elimina Scheda'
-                  onPress={this.removeCard}
-                  color={Colors.primary}
-          />
-        </Fragment>
-      );
-
-    }
-
-
     if(this.state.loading){
       return( 
         <View style={styles.loader}> 
@@ -160,32 +116,71 @@ export default class OfferScreen extends Component {
        )
     }
     console.log(this.state.dataSource);
-    
-    return(
+    if (this.state.dataSource == 'EMPTY') {
+      return (
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          <View style={styles.emptyJob}>
+            <Image style={{width: 120, height: 120, margin: 30}} source={require('../components/images/staffextralogo.png')} resizeMode='cover' />  
+            <Text style={{fontFamily: 'Abecedary', fontSize: 30}}> Nessun Offerta </Text>
+          </View>
+        </View>
+      )
+    }
+    else {
+
+      return(
         <View style={styles.container}>
 
           { this.gradient }
 
-                <Text style={styles.title}>{'Offerte di Lavoro'}</Text>
-          
-                {offerComponent}
-                
-                {/* https://github.com/archriss/react-native-snap-carousel/issues/446
-                {this._carousel && (
-                    <Text style={{ margin: 8, textAlign: 'center' }}> {'index:'+this._carousel.currentIndex} </Text>
-                )} */}
-          
+          <View style={styles.exampleContainer}>
+                          <Text style={styles.title}>{'Offerte di Lavoro'}</Text>
+
+                          
+
+                                                                        
+                          <Carousel
+                              ref={(c) => { this._carousel = c; }}
+                              data={this.state.dataSource}
+                              // data={this.state.dataSource.reverse()}
+                              // firstItem={SLIDER_1_FIRST_ITEM}
+                              firstItem={this.state.dataSource.length - 1}
+                              containerCustomStyle={{ transform: [{ scaleX: 1 }] }}
+                              renderItem={this._renderItem}
+                              sliderWidth={sliderWidth}
+                              itemWidth={itemWidth}
+                              // containerCustomStyle={styles.slider}
+                              contentContainerCustomStyle={styles.sliderContentContainer}
+                              layoutCardOffset={15}
+                              useScrollView={true}
+                              layout={'stack'}
+                              loop={false}
+                              onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
+                          />
+
+                          <Button
+                                  title='Elimina Scheda'
+                                  onPress={this.removeCard}
+                                  color={Colors.primary}
+                          />
+
+
+
+                          {/* https://github.com/archriss/react-native-snap-carousel/issues/446
+                          {this._carousel && (
+                              <Text style={{ margin: 8, textAlign: 'center' }}> {'index:'+this._carousel.currentIndex} </Text>
+                          )} */}
+
+          </View>
+
           <NavigationEvents onDidFocus={()=>this.fetchData()} />
           
-          {/* 
-            Per visualizzare velocemente tutto il vettore di dati scaricati dal server
-            <ScrollView>
-              <Text>{JSON.stringify(this.state.dataSource, null, 2)}</Text>
-            </ScrollView> 
-          */}
+          {/* <ScrollView>
+            <Text>{JSON.stringify(this.state.dataSource, null, 2)}</Text>
+          </ScrollView> */}
 
         </View>
       );
-    
+    }
   }
 }

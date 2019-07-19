@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import * as Colors from './colors';
 
 
 export const colors = {
@@ -18,9 +19,8 @@ export default StyleSheet.create({
 
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
   },
 
   TextStyle: {
@@ -40,20 +40,11 @@ export default StyleSheet.create({
   scrollview: {
     flex: 1,
   },
-  exampleContainer: {
-    paddingVertical: 30,
-  },
-  exampleContainerDark: {
-    backgroundColor: 'yellow',
-  },
-  exampleContainerLight: {
-    backgroundColor: 'white',
-  },
   title: {
-    paddingHorizontal: 30,
+    paddingVertical: 10,
     backgroundColor: 'transparent',
     color: 'black',
-    fontSize: 20,
+    fontSize: 15,
     fontWeight: 'bold',
     textAlign: 'center',
   },
@@ -84,5 +75,18 @@ export default StyleSheet.create({
     height: 8,
     borderRadius: 4,
     marginHorizontal: 8,
+  },
+  emptyJob:
+  {
+    flexDirection: 'column',
+    width: '70%',
+    height: 300,
+    backgroundColor: Colors.grey5,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: Colors.grey4,
+    borderWidth: 2,
+    marginTop: 20,
   },
 });

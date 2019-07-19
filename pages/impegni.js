@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator, Text, ScrollView, AsyncStorage } from 'react-native';
+import {NavigationEvents} from "react-navigation";
 import ActionButton from 'react-native-action-button';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import DateList from "../components/DateList";
@@ -85,15 +86,20 @@ export default class JobScreen extends Component {
     .then((responseJson)=> {
       alert(responseJson);
       if (responseJson == 'OK') {
+        
         alert('Lista impegni aggiornata');
-        this.setState(prevState => {
-          return {
-            dataSource: prevState.dataSource.filter(date => {
-              return date.comID !== prevState.selectedDate.comID;
-            }),
-            selectedDate: null            
-          };
-        });
+        
+        this.setState({selectedDate: null});
+        this.fetchData();
+        // this.setState(prevState => {
+        //   return {
+        //     dataSource: prevState.dataSource.filter(date => {
+        //       return date.comID !== prevState.selectedDate.comID;
+        //     }),
+        //     selectedDate: null            
+        //   };
+        // });
+        
       }
       else {alert('Errore aggiornamento lista impegni')}
     })
@@ -239,6 +245,7 @@ export default class JobScreen extends Component {
                 
           </ActionButton>
         
+          {/* <NavigationEvents onDidFocus={()=>this.fetchData()} /> */}
                
       </View>
     );

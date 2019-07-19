@@ -39,27 +39,33 @@ export default class AgendaScreen extends Component {
   }
 
   composeDate = (eventDate,type) => {
-      //Estraiamo l'array delle sole date in base al tipo
-      if (type=='comm') {
-        var dayArray=eventDate.map((elem)=>{return elem.comDate});
-      } else {
-        var dayArray=eventDate.map((elem)=>{return elem.joDate});
+      if (eventDate=='EMPTY') {
+        var obj = [];
       }
-      //componiamo l'oggetto da passare a markedDates di Calendar contente array di date e stile per data
-      var obj = dayArray.reduce((c, v) => Object.assign(c, {[v]: {
-                            customStyles: {
-                              container: {
-                                // backgroundColor: operatore terziario -> Colors.primary se è impegno
-                                backgroundColor: (type=='comm') ? Colors.primary : Colors.secondary,
-                                elevation: 4
+      else {
+        //Estraiamo l'array delle sole date in base al tipo
+        if (type=='comm') {
+          var dayArray=eventDate.map((elem)=>{return elem.comDate});
+        } else {
+          var dayArray=eventDate.map((elem)=>{return elem.joDate});
+        }
+        //componiamo l'oggetto da passare a markedDates di Calendar contente array di date e stile per data
+        var obj = dayArray.reduce((c, v) => Object.assign(c, {[v]: {
+                              customStyles: {
+                                container: {
+                                  // backgroundColor: operatore terziario -> Colors.primary se è impegno
+                                  backgroundColor: (type=='comm') ? Colors.primary : Colors.secondary,
+                                  elevation: 4
+                                },
+                                text: {
+                                  color: 'white',
+                                  fontWeight: 'bold'
+                                },
                               },
-                              text: {
-                                color: 'white',
-                                fontWeight: 'bold'
-                              },
-                            },
-                          } 
-      }), {});
+                            } 
+        }), {});
+        
+      }
       return obj;
   }
 
@@ -157,6 +163,7 @@ export default class AgendaScreen extends Component {
           }}
         />
 
+        {/* Per riaggiornare automaticamente la pagina quando la si seleziona da drawer */}
         <NavigationEvents onDidFocus={()=>this.fetchData()} />
         
       </View>
