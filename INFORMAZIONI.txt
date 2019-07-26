@@ -865,3 +865,17 @@ ___________________________________________________________________
 PER MODIFICARE UNO CARATTERISTICA DI UNO STYLE LASCIANDO TUTTE LE ALTRE INVARIATE:
 
 style={[styles.button, { backgroundColor: Colors.secondary }]}>
+___________________________________________________________________
+
+VISUALIZZAZIONE RAPIDA ARRAY:
+
+const VisualArray = (props) => {
+    return (
+        <View>{props.myarray.map((elem, i) => <Text key={i}>{elem}</Text>)}</View>
+    );
+}
+
+render() {
+    <VisualArray myarray={this.state.array01} />
+}
+

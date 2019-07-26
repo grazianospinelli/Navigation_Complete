@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { View, StyleSheet, ActivityIndicator, Text, ScrollView, Image, AsyncStorage, Button } from 'react-native';
 import {NavigationEvents} from "react-navigation";
 import Carousel from 'react-native-snap-carousel';
@@ -12,8 +12,6 @@ import FireManager from '../components/firemanager.js';
 import { USER_UUID } from '../components/auth';
 import IP from '../config/IP';
 
-const SLIDER_1_FIRST_ITEM = 0;
-
 export default class OfferScreen extends Component {
   
   constructor(props) {
@@ -23,7 +21,7 @@ export default class OfferScreen extends Component {
       loading: true,
       dataSource:[],
       // dataSource: null,
-      slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
+      ActiveSlide: null,
       currentIndex: null
     };
   }
@@ -55,6 +53,7 @@ export default class OfferScreen extends Component {
           // console.log(responseJson);
           this.setState({dataSource: responseJson});
           this.setState({loading: false});
+          this.setState({ActiveSlide: this.state.dataSource.length - 1});
         })
         .catch(error=>console.log(error)) //to catch the errors if any
     })
@@ -77,13 +76,15 @@ export default class OfferScreen extends Component {
     );
   }
 
+  
   _renderItem ({item, index}) {
     return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
   }
 
   removeCard = () => {
     if (this._carousel) {   
-      console.log(this._carousel.currentIndex);
+      console.log('currentIndex: '+this._carousel.currentIndex);
+      console.log('stateIndex: '+this.state.ActiveSlide);
       console.log(this.state.dataSource);
       if (this._carousel.currentIndex == this.state.dataSource.length - 1) {
         if (this._carousel.currentIndex == 0) {
@@ -108,6 +109,49 @@ export default class OfferScreen extends Component {
 
   render() {
 
+    if (this.state.dataSource == 'EMPTY') {
+        offerComponent = (
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <View style={styles.emptyJob}>
+              <Image style={{width: 120, height: 120, margin: 30}} source={require('../components/images/staffextralogo.png')} resizeMode='cover' />  
+              <Text style={{fontFamily: 'Abecedary', fontSize: 30}}> Nessun Offerta </Text>
+            </View>
+          </View>
+        )
+    } 
+    else {
+      offerComponent = (
+        <Fragment>
+          <Carousel
+              ref={(c) => { this._carousel = c; }}
+              data={this.state.dataSource}
+              // data={this.state.dataSource.reverse()}
+              // firstItem={SLIDER_1_FIRST_ITEM}
+              firstItem={this.state.dataSource.length - 1}
+              containerCustomStyle={{ transform: [{ scaleX: 1 }] }}
+              renderItem={this._renderItem}
+              sliderWidth={sliderWidth}
+              itemWidth={itemWidth}
+              // containerCustomStyle={styles.slider}
+              contentContainerCustomStyle={styles.sliderContentContainer}
+              layoutCardOffset={15}
+              useScrollView={true}
+              layout={'stack'}
+              loop={false}
+              onSnapToItem={(index) => this.setState({ ActiveSlide: index }) }
+          />
+
+          <Button
+                  title='Elimina Scheda'
+                  onPress={this.removeCard}
+                  color={Colors.primary}
+          />
+        </Fragment>
+      );
+
+    }
+
+
     if(this.state.loading){
       return( 
         <View style={styles.loader}> 
@@ -115,72 +159,36 @@ export default class OfferScreen extends Component {
         </View>
        )
     }
-    console.log(this.state.dataSource);
-    if (this.state.dataSource == 'EMPTY') {
-      return (
-        <View style={{justifyContent: 'center', alignItems: 'center'}}>
-          <View style={styles.emptyJob}>
-            <Image style={{width: 120, height: 120, margin: 30}} source={require('../components/images/staffextralogo.png')} resizeMode='cover' />  
-            <Text style={{fontFamily: 'Abecedary', fontSize: 30}}> Nessun Offerta </Text>
-          </View>
-        </View>
-      )
-    }
-    else {
 
-      return(
+    console.log(this.state.dataSource);
+    console.log('stateIndex: '+this.state.ActiveSlide);
+    console.log('job ID: '+this.state.dataSource[this.state.ActiveSlide].joID);
+    
+    return(
         <View style={styles.container}>
 
           { this.gradient }
 
-          <View style={styles.exampleContainer}>
-                          <Text style={styles.title}>{'Offerte di Lavoro'}</Text>
-
-                          
-
-                                                                        
-                          <Carousel
-                              ref={(c) => { this._carousel = c; }}
-                              data={this.state.dataSource}
-                              // data={this.state.dataSource.reverse()}
-                              // firstItem={SLIDER_1_FIRST_ITEM}
-                              firstItem={this.state.dataSource.length - 1}
-                              containerCustomStyle={{ transform: [{ scaleX: 1 }] }}
-                              renderItem={this._renderItem}
-                              sliderWidth={sliderWidth}
-                              itemWidth={itemWidth}
-                              // containerCustomStyle={styles.slider}
-                              contentContainerCustomStyle={styles.sliderContentContainer}
-                              layoutCardOffset={15}
-                              useScrollView={true}
-                              layout={'stack'}
-                              loop={false}
-                              onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
-                          />
-
-                          <Button
-                                  title='Elimina Scheda'
-                                  onPress={this.removeCard}
-                                  color={Colors.primary}
-                          />
-
-
-
-                          {/* https://github.com/archriss/react-native-snap-carousel/issues/446
-                          {this._carousel && (
-                              <Text style={{ margin: 8, textAlign: 'center' }}> {'index:'+this._carousel.currentIndex} </Text>
-                          )} */}
-
-          </View>
-
+                <Text style={styles.title}>{'Offerte di Lavoro'}</Text>
+          
+                {offerComponent}
+                
+                {/* https://github.com/archriss/react-native-snap-carousel/issues/446
+                {this._carousel && (
+                    <Text style={{ margin: 8, textAlign: 'center' }}> {'index:'+this._carousel.currentIndex} </Text>
+                )} */}
+          
           <NavigationEvents onDidFocus={()=>this.fetchData()} />
           
-          {/* <ScrollView>
-            <Text>{JSON.stringify(this.state.dataSource, null, 2)}</Text>
-          </ScrollView> */}
+          {/* 
+            Per visualizzare velocemente tutto il vettore di dati scaricati dal server
+            <ScrollView>
+              <Text>{JSON.stringify(this.state.dataSource, null, 2)}</Text>
+            </ScrollView> 
+          */}
 
         </View>
       );
-    }
+    
   }
 }

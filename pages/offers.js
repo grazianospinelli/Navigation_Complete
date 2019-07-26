@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, StyleSheet, ActivityIndicator, Text, ScrollView, Image, AsyncStorage, Button } from 'react-native';
+import { View, ActivityIndicator, Text, Image, AsyncStorage, Button } from 'react-native';
 import {NavigationEvents} from "react-navigation";
 import Carousel from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
@@ -12,8 +12,6 @@ import FireManager from '../components/firemanager.js';
 import { USER_UUID } from '../components/auth';
 import IP from '../config/IP';
 
-const SLIDER_1_FIRST_ITEM = 0;
-
 export default class OfferScreen extends Component {
   
   constructor(props) {
@@ -22,9 +20,7 @@ export default class OfferScreen extends Component {
       uuid: '',
       loading: true,
       dataSource:[],
-      // dataSource: null,
-      slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
-      currentIndex: null
+      ActiveSlide: null,      
     };
   }
   
@@ -33,7 +29,6 @@ export default class OfferScreen extends Component {
     drawerIcon: () =>(
     <Icon  name="briefcase" size={20} color={Colors.secondary} />),
   }
-
 
   fetchData = () => {
     AsyncStorage.getItem(USER_UUID)
@@ -51,10 +46,11 @@ export default class OfferScreen extends Component {
           })
         })
         .then((response) => response.json())
-        .then((responseJson)=> {
-          // console.log(responseJson);
+        .then((responseJson)=> {       
           this.setState({dataSource: responseJson});
+          if (this.state.ActiveSlide === null) {this.setState({ActiveSlide: this.state.dataSource.length - 1});}          
           this.setState({loading: false});
+          // console.log('State: ' +JSON.stringify(this.state));
         })
         .catch(error=>console.log(error)) //to catch the errors if any
     })
@@ -64,6 +60,11 @@ export default class OfferScreen extends Component {
   componentDidMount() {
     this.fetchData();
     FireManager();
+  }
+
+  reload = () => {
+    this.fetchData();
+    this.setState({ActiveSlide: this.state.dataSource.length - 1});
   }
 
   get gradient () {
@@ -78,33 +79,40 @@ export default class OfferScreen extends Component {
   }
 
   
-  _renderItem ({item, index}) {
-    return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
+  _renderItem = ({item, index}) => {
+    return <SliderEntry data={item} even={(this.state.dataSource[index].joID + 1) % 2 === 0} />;
   }
 
   removeCard = () => {
-    if (this._carousel) {   
-      console.log(this._carousel.currentIndex);
-      console.log(this.state.dataSource);
-      if (this._carousel.currentIndex == this.state.dataSource.length - 1) {
-        if (this._carousel.currentIndex == 0) {
-          // No item left in carousel
-          this.props.navigation.pop()
-        } else {
-          console.log('ID1:'+this.state.dataSource[this._carousel.currentIndex].joID)
-          this.state.dataSource.splice(this._carousel.currentIndex, 1)
-          this._carousel.snapToPrev()
-        }
-      } else {
 
-        let temp = this.state.dataSource.slice()
-        console.log('ID2:'+this.state.dataSource[this._carousel.currentIndex].joID)
-        temp.splice(this._carousel.currentIndex, 1)
-        
-        this.setState({dataSource: temp}, () => {this._carousel.snapToNext()} )
+    fetch(`${IP}/deloffers.php`,{
+      method:'post',
+      header:{
+        'Accept': 'application/json',
+        'Content-type': 'application/json'
+      },
+      body:JSON.stringify({
+        id: this.state.dataSource[this.state.ActiveSlide].joID,
+        uuid: this.state.uuid
+      })
+    })
+    .then((response) => response.json())
+    .then((responseJson)=> {
+      if (responseJson == 'OK') {
+        if (this.state.ActiveSlide == 0) {
+          this._carousel.snapToNext();
+        }
+        else {
+          this._carousel.snapToPrev();
+          this.setState((prevState) => ({ActiveSlide: prevState.ActiveSlide - 1}));
+        }
+        this.fetchData();
       }
-    }
-  }
+      else {alert('Errore aggiornamento offerte di lavoro')}
+    })
+    .catch(error=>console.log(error))
+  };
+  
 
 
   render() {
@@ -125,20 +133,17 @@ export default class OfferScreen extends Component {
           <Carousel
               ref={(c) => { this._carousel = c; }}
               data={this.state.dataSource}
-              // data={this.state.dataSource.reverse()}
-              // firstItem={SLIDER_1_FIRST_ITEM}
-              firstItem={this.state.dataSource.length - 1}
+              firstItem={this.state.ActiveSlide}
               containerCustomStyle={{ transform: [{ scaleX: 1 }] }}
               renderItem={this._renderItem}
               sliderWidth={sliderWidth}
               itemWidth={itemWidth}
-              // containerCustomStyle={styles.slider}
               contentContainerCustomStyle={styles.sliderContentContainer}
               layoutCardOffset={15}
               useScrollView={true}
               layout={'stack'}
               loop={false}
-              onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
+              onSnapToItem={(index) => this.setState({ ActiveSlide: index }) }
           />
 
           <Button
@@ -159,7 +164,10 @@ export default class OfferScreen extends Component {
         </View>
        )
     }
+
     console.log(this.state.dataSource);
+    console.log('stateIndex: '+this.state.ActiveSlide);
+    // console.log('job ID: '+this.state.dataSource[this.state.ActiveSlide].joID);
     
     return(
         <View style={styles.container}>
