@@ -4,39 +4,12 @@ import styles from './themes/SliderEntry.style';
 
 export default class SliderEntry extends Component {
 
-    constructor(props){
-        super(props)
-        this.state = {
-          caseStyle: null
-        }
-    }
-
-    componentWillMount() {
-        console.log(this.props.even);
-        switch(this.props.even) {
-            case(0):
-            this.setState({caseStyle: styles.textContainer1});
-            break;
-            case(1):
-            this.setState({caseStyle: styles.textContainer2});
-            break;
-            case(2):
-            this.setState({caseStyle: styles.textContainer3});
-            break;
-            case(3):
-            this.setState({caseStyle: styles.textContainer4});
-            break;        
-        }
-    }
-
     render () {
         const { data: { joDate, joTime, joPay, joNote, resName, resAddress, resCity }, even } = this.props;
-        
-
 
         const uppercaseTitle = resName ? (
             <Text 
-                style={[styles.title, {}]}
+                style={[styles.title, even ? styles.titleEven : {}]}
                 numberOfLines={2}
             >
                 { resName.toUpperCase() }
@@ -50,29 +23,32 @@ export default class SliderEntry extends Component {
               onPress={() => { alert(`You've clicked '${joDate}'`); }}
               >
                 <View style={styles.shadow} />
-                
-                <View style={[styles.textContainer, this.state.caseStyle]}>
+                <View style={[styles.imageContainer, even ? styles.imageContainerEven : {}]}>
+                    {/* { this.image } */}
+                    <View style={[styles.radiusMask, even ? styles.radiusMaskEven : {}]} />
+                </View>
+                <View style={[styles.textContainer, even ? styles.textContainerEven : {}]}>
                     { uppercaseTitle }
                     <Text
-                      style={[styles.subtitle,  {}]}
+                      style={[styles.subtitle, even ? styles.subtitleEven : {}]}
                       numberOfLines={2}
                     >
                         { joDate }
                     </Text>
                     <Text
-                      style={[styles.subtitle, {}]}
+                      style={[styles.subtitle, even ? styles.subtitleEven : {}]}
                       numberOfLines={2}
                     >
                         { joTime }
                     </Text>
                     <Text
-                      style={[styles.subtitle, {}]}
+                      style={[styles.subtitle, even ? styles.subtitleEven : {}]}
                       numberOfLines={2}
                     >
                         { joPay }
                     </Text>
                     <Text
-                      style={[styles.subtitle, {}]}
+                      style={[styles.subtitle, even ? styles.subtitleEven : {}]}
                       numberOfLines={2}
                     >
                         { joNote }

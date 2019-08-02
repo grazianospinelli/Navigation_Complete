@@ -878,4 +878,55 @@ const VisualArray = (props) => {
 render() {
     <VisualArray myarray={this.state.array01} />
 }
+___________________________________________________________________
+
+Installati:
+npm install react-native-deck-swiper --save
+
+npm install react-native-view-overflow --save
+react-native link react-native-view-overflow
+
+npm install react-native-card-flip --save
+
+___________________________________________________________________
+
+GENERARE ARRAY DI NUMERI:
+
+function * range (start, end) {
+  for (let i = start; i <= end; i++) {
+    yield i
+  }
+}
+
+Nello stato:
+this.state = {
+      cards: [...range(1, 10)],      
+};
+
+___________________________________________________________________
+
+USARE IL GRADIENTE:
+Fuori dal Metodo Render definire funzione:
+get gradient () {
+    return (
+        <LinearGradient
+          colors={[Colors.background1, Colors.background2]}
+          startPoint={{ x: 1, y: 0 }}
+          endPoint={{ x: 0, y: 1 }}
+          style={styles.gradient}
+        />
+    );
+}
+Dentro render, dopo la view container, richiamarla come:
+{ this.gradient }
+
+___________________________________________________________________
+
+Per visualizzare velocemente tutto il vettore di dati scaricati dal server:
+<ScrollView>
+  <Text>{JSON.stringify(this.state.dataSource, null, 2)}</Text>
+</ScrollView> 
+___________________________________________________________________
+
+
 

@@ -20,7 +20,6 @@ export const itemWidth = slideWidth + itemHorizontalMargin * 2;
 const entryBorderRadius = 8;
 
 export default StyleSheet.create({
-
   slideInnerContainer: {
     width: itemWidth,
     height: slideHeight,
@@ -39,13 +38,15 @@ export default StyleSheet.create({
     shadowRadius: 10,
     borderRadius: entryBorderRadius,
   },
-
   imageContainer: {
     flex: 1,
     marginBottom: IS_IOS ? 0 : -1, // Prevent a random Android rendering issue
     backgroundColor: Colors.secondary,
     borderTopLeftRadius: entryBorderRadius,
     borderTopRightRadius: entryBorderRadius,
+  },
+  imageContainerEven: {
+    backgroundColor: Colors.primary,
   },
   image: {
     ...StyleSheet.absoluteFillObject,
@@ -63,42 +64,37 @@ export default StyleSheet.create({
     height: entryBorderRadius,
     backgroundColor: 'white',
   },
-
+  radiusMaskEven: {
+    backgroundColor: colors.black,
+  },
   textContainer: {
-    flex: 1,
     justifyContent: 'center',
     paddingTop: 20 - entryBorderRadius,
     paddingBottom: 20,
     paddingHorizontal: 16,
-    // backgroundColor: 'white',
-    borderRadius: entryBorderRadius,
+    backgroundColor: 'white',
+    borderBottomLeftRadius: entryBorderRadius,
+    borderBottomRightRadius: entryBorderRadius,
   },
-  textContainer1: {
-    backgroundColor: Colors.primary,
+  textContainerEven: {
+    backgroundColor: colors.black,
   },
-  textContainer2: {
-    backgroundColor: Colors.secondary,
-  },
-  textContainer3: {
-    backgroundColor: Colors.tertiary,
-  },
-  textContainer4: {
-    backgroundColor: Colors.quaternary,
-  },
-
   title: {
     color: colors.black,
     fontSize: 13,
     fontWeight: 'bold',
     letterSpacing: 0.5,
   },
-
+  titleEven: {
+    color: 'white',
+  },
   subtitle: {
     marginTop: 6,
     color: colors.gray,
     fontSize: 12,
     fontStyle: 'italic',
   },
-
-
+  subtitleEven: {
+    color: 'rgba(255, 255, 255, 0.7)',
+  },
 });

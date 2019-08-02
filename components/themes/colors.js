@@ -1,8 +1,9 @@
-// export const primary = '#4f6fff';
-// export const secondary = '#43c717';
 export const primary = '#f24f32';
 export const secondary = '#dfdf20';
 // export const secondary = '#e7c717';
+export const tertiary = '#30e000';
+export const quaternary = '#ff00ff';
+
 export const grey1 = '#43484d';
 export const grey2 = '#5e6977';
 export const grey3 = '#86939e';
