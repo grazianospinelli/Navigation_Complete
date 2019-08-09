@@ -906,6 +906,7 @@ this.state = {
 ___________________________________________________________________
 
 USARE IL GRADIENTE:
+import LinearGradient from 'react-native-linear-gradient';
 Fuori dal Metodo Render definire funzione:
 get gradient () {
     return (
@@ -919,6 +920,10 @@ get gradient () {
 }
 Dentro render, dopo la view container, richiamarla come:
 { this.gradient }
+E negli stili scrivere:
+gradient: {
+    ...StyleSheet.absoluteFillObject,
+  },
 
 ___________________________________________________________________
 

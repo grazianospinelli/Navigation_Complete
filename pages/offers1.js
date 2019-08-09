@@ -88,6 +88,7 @@ export default class OfferScreen extends Component {
       console.log(this.state.dataSource);
       if (this._carousel.currentIndex == this.state.dataSource.length - 1) {
         if (this._carousel.currentIndex == 0) {
+          this.setState({dataSource: 'EMPTY'});
           // No item left in carousel
           this.props.navigation.pop()
         } else {
