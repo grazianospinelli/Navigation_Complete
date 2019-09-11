@@ -203,7 +203,7 @@ export default class ProfileScreen extends Component {
                               // L'operatore !!() converte un valore in Boolean
                               name: data['name'], surname: data['surname'], city: data['city'], 
                               telnumber: data['telnumber'], fiscalcode: data['fiscalcode'], birthdate: data['birthdate'],
-                              sex: data['sex'], chef: !!(data['chef']), waiter: !!(data['waiter']),
+                              sex: data['sex'], chef: !!(data['chef']), pizzaman: !!(data['pizzaman']), waiter: !!(data['waiter']),
                               barman: !!(data['barman']), sommel: !!(data['sommel']), pulizie: !!(data['pulizie']),
                               animaz: !!(data['animaz']), hostess: !!(data['hostess'])
                           }}
@@ -321,6 +321,13 @@ export default class ProfileScreen extends Component {
                                       iconName='silverware'
                                       onValueChange={(val) => setFieldValue("chef", val)}
                                       value={values.chef}
+                                  />
+
+                                  <IconSwitch
+                                      label='Pizzaiolo'
+                                      iconName='pizza'
+                                      onValueChange={(val) => setFieldValue("pizzaman", val)}
+                                      value={values.pizzaman}
                                   />
 
                                   <IconSwitch
@@ -448,7 +455,7 @@ const styles = StyleSheet.create({
   },
   info:{
     fontSize:16,
-    color: Colors.secondary,
+    color: Colors.tertiary,
     marginTop:10
   },
   buttonContainer: {

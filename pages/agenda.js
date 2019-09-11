@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Image, Text, ActivityIndicator, AsyncStorage, StyleSheet } from 'react-native';
 import {NavigationEvents} from "react-navigation";
-import { Agenda, Calendar, LocaleConfig } from 'react-native-calendars';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import * as Colors from '../components/themes/colors';
 import FireManager from '../components/firemanager.js';
@@ -49,7 +49,8 @@ export default class AgendaScreen extends Component {
         } else {
           var dayArray=eventDate.map((elem)=>{return elem.joDate});
         }
-        //componiamo l'oggetto da passare a markedDates di Calendar contente array di date e stile per data
+        // componiamo l'oggetto da passare a markedDates di Calendar contente array di date e stile per data
+        // https://stackoverflow.com/questions/50584554/mark-multiple-dates-dynamically-react-native-wix
         var obj = dayArray.reduce((c, v) => Object.assign(c, {[v]: {
                               customStyles: {
                                 container: {
@@ -68,7 +69,19 @@ export default class AgendaScreen extends Component {
       }
       return obj;
   }
-
+  // Formato richiesto da markedDates implementato in composeDate:
+  // markedDates={{  
+  //   '2018-03-28': {
+  //     customStyles: {
+  //       container: {
+  //         backgroundColor: Colors.primary oppure Colors.secondary
+  //       },
+  //       text: {
+  //         color: 'black',
+  //         fontWeight: 'bold'
+  //       },
+  //     },
+  //   },
   
   fetchData = () => {
 
@@ -137,11 +150,14 @@ export default class AgendaScreen extends Component {
        )
     }
     
+    // Fusione dei 2 array di oggetti
     const myMarkedDates = {...this.state.offerDate,...this.state.commDate}
     return (
       
       <View style={{alignItems: "center"}}>
-        <Image style={{width: 100, height: 100, marginTop: 15,}} source={require('../components/images/staffextralogo.png')} resizeMode='cover' />
+        <Image  style={{width: 100, height: 100, marginTop: 15,}} 
+                source={require('../components/images/staffextralogo.png')} 
+                resizeMode='cover' />
         
         <Calendar
           // Date marking style [simple/period/multi-dot/single]. Default = 'simple'
@@ -170,7 +186,6 @@ export default class AgendaScreen extends Component {
     );
   }
 }
-      
 
 
 const styles = StyleSheet.create({
@@ -180,6 +195,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff"
    }
-
-
 });

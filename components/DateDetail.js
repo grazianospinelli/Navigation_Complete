@@ -2,17 +2,18 @@ import React, { Component, Fragment } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 import Dialog from "react-native-dialog";
-import moment from "moment";
+import {getWeekDay, getYear, getMonth} from './DateUtility';
 import Icon from "react-native-vector-icons/Ionicons";
-import * as Colors from '../components/themes/colors';
+import * as Colors from './themes/colors';
 
-// Trasformato DateDetail.1 da funzione a classe Componente
+// Trasformato DateDetail da funzione a classe Componente
 // Quando si costruisce un componente avente delle proprietà, 
 // bisogna richiamare super(props) nel costruttore prima di ogni altra operazione!
 // nel metodo render() le props si richiamano con this.props.
 
-const months = ['Gennaio','Febbraio','Marzo','Aprile', 'Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
-const weekday = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
+const Separator = (colorSep) => (
+    <View style={{width: '70%', height: 2, backgroundColor: colorSep, marginVertical: 20 }} />
+);
 
 export default class DateDetail extends Component {
 
@@ -21,11 +22,8 @@ export default class DateDetail extends Component {
     this.state={
       showAlert: false
     }
+    modalContent = null;
   }
-
-  getWeekDay = (date) => (weekday[parseInt(moment(date).format('d'))]);
-  getMonth = (date) => (months[parseInt(date.split('-')[1])-1]);
-
   
   handleOpenAlert = () => {
     this.setState({ showAlert: true })
@@ -46,32 +44,70 @@ export default class DateDetail extends Component {
       this.setState({showAlert: false});    
   }
 
+  
   render() {
-
-    let modalContent = null;
-    
-    
     if (this.props.selectedDate) {
+      const {selectedDate: { comID, comDate, comTime, comPay, comMansion, comNote, resName, resAddress, resCity, resProv, resTel }} = this.props;
+      
+      switch((comID % 4)) {
+        case(0):
+        var caseStyle=Colors.primary;
+        break;
+        case(1):
+        var caseStyle='#00d6d6';
+        break;
+        case(2):
+        var caseStyle=Colors.tertiary;
+        break;
+        case(3):
+        var caseStyle=Colors.quaternary;
+        break;        
+    }
+    
       modalContent = (
-        <View>
+        <View style={{alignItems: 'center'}}>
           <View style={styles.dateName}>
-              <Text style={styles.dateStyle}>{this.getWeekDay(this.props.selectedDate.comDate)+' '}</Text>
-              <Text style={styles.dateStyle}>{this.props.selectedDate.comDate.split('-')[2]+' '}</Text>
-              <Text style={styles.dateStyle}>{this.getMonth(this.props.selectedDate.comDate)}</Text>              
+              <Text style={{fontSize: 15, color: caseStyle}}> {getWeekDay(comDate)} </Text>
+              <Text style={{fontSize: 20, color: caseStyle}}> {comDate.split('-')[2]+' '}</Text>
+              <Text style={{fontSize: 20, color: caseStyle}}>
+                  {getMonth(comDate)+' '+ getYear(comDate)}
+              </Text>
           </View>
-          <View style={{justifyContent: 'flex-end' }}>
-              <Text style={styles.commitStyle}>{this.props.selectedDate.resName}</Text>
-              { this.props.selectedDate.resName!=='Impegno Personale' ? 
-                (<Text style={styles.TextStyle}> Indirizzo: {this.props.selectedDate.resAddress} </Text>) : null
+        
+          <View style={[styles.Ribbon, {backgroundColor: caseStyle}]}>
+              <Text style={styles.title} numberOfLines={2}> {resName} </Text>
+              { resName!=='Impegno Personale' ? 
+                (<Fragment>
+                <Text style={styles.subtitle} numberOfLines={2}> {resAddress} </Text>
+                <Text style={styles.subtitle}> {resCity+' - ('}
+                {resProv?resProv:'--'}{')'} </Text>                       
+                <Text style={styles.subtitle}>{'Tel: '+resTel}</Text>
+                </Fragment>) : null
               }
-              <View style={{ width: '100%', height: 2, backgroundColor: Colors.grey4, margin: 5 }} />
-              <Text style={styles.TextStyle}> Orario Appuntamento: {this.props.selectedDate.comTime.slice(0, -3)} </Text>
-              <Text style={styles.TextStyle}> Compenso: {this.props.selectedDate.comPay} </Text>
-              <Text style={styles.TextStyle}> Note: {this.props.selectedDate.comNote} </Text>
-              <View style={{ width: '100%', height: 2, backgroundColor: Colors.grey4, margin: 5 }} />
           </View>
+
+          <View style={styles.showOffer}>
+                        <Text style={[styles.notes, {fontSize: 15, fontWeight: 'bold', marginBottom: 5}]}>{comMansion.toUpperCase()}</Text> 
+                        <View style={{flexDirection: 'row'}}>
+                            <Text style={[styles.notes, {fontWeight: 'bold'}]}>ORE: </Text>
+                            <Text style={[styles.notes, {fontStyle: 'italic',}]}>{comTime.substr(0,5)}</Text>                            
+                        </View>
+                        <View style={{flexDirection: 'row'}}>
+                            <Text style={[styles.notes, {fontWeight: 'bold'}]}>PAGA: </Text>
+                            <Text style={[styles.notes, {fontStyle: 'italic',}]}>{comPay}{' €'}</Text>
+                        </View>
+                        <View style={{flexDirection: 'row', width: '65%'}}>
+                            <Text style={[styles.notes, {fontWeight: 'bold'}]}>NOTE: </Text>
+                            <Text style={[styles.notes, {fontStyle: 'italic'}]} numberOfLines={3} ellipsizeMode='tail'>{comNote?comNote:'  - - -'}</Text>
+                        </View>
+          </View>
+
+          {Separator(caseStyle)}
+           
+          
         </View>
       );
+      
     }
 
 
@@ -84,10 +120,8 @@ export default class DateDetail extends Component {
           onRequestClose={this.props.onModalClosed}
           supportedOrientations={['portrait', 'landscape']}
           isVisible={this.props.selectedDate !== null}
-          // animationIn="slideInLeft"
-          // animationOut="slideOutRight"
-          animationIn="zoomInDown"
-          animationOut="zoomOutUp"
+          animationIn="flipInY"
+          animationOut="flipOutY"
           animationInTiming={1000}
           animationOutTiming={1000}
           backdropTransitionInTiming={1000}
@@ -98,27 +132,39 @@ export default class DateDetail extends Component {
             {modalContent}
 
             <View style={styles.Buttons}>
-              <TouchableOpacity onPress={this.props.onModalClosed} style={[styles.modalButton, {backgroundColor: Colors.primary}]}>
-                  <Icon  name="ios-close" size={35} color='white' />
+              <TouchableOpacity onPress={this.props.onModalClosed} style={[styles.modalButton, {borderColor: Colors.tertiary}]}>
+                  <Icon  name="ios-arrow-round-back" size={40} color={Colors.tertiary} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={this.handleOpenAlert} style={[styles.modalButton, {backgroundColor: Colors.secondary}]}>
-                  <Icon  name="ios-trash" size={35} color='white' />
-              </TouchableOpacity>
-              
+              <TouchableOpacity onPress={this.handleOpenAlert} style={[styles.modalButton, {borderColor: Colors.primary}]}>
+                  <Icon  name="ios-trash" size={35} color={Colors.primary} />
+              </TouchableOpacity>              
             </View>
 
           </View>
         </Modal>
 
-        <Dialog.Container visible={this.state.showAlert} >
-            <Dialog.Title>Attenzione!</Dialog.Title>
-            <Dialog.Description>
-                Vuoi davvero cancellare il tuo impegno?
-                Verrai rimosso dalla squadra di lavoro di questa data!
-            </Dialog.Description>
-            <Dialog.Button label="Annulla" onPress={this.handleCloseAlert} />
-            <Dialog.Button label="Conferma" onPress={this.handleDeleteAlert} />
-        </Dialog.Container>
+        {this.props.selectedDate !== null ?  
+          <Fragment>
+            <Dialog.Container contentStyle={{backgroundColor: 'rgba(0, 0, 0, 0.8)', borderRadius: 15}} visible={this.state.showAlert} >
+              <Dialog.Title style={styles.dialogTitle}>Attenzione!</Dialog.Title>
+              { this.props.selectedDate.resName!=='Impegno Personale' ? 
+              <Dialog.Description style={{color: 'white'}}>
+                  Vuoi davvero cancellare il tuo impegno?
+                  Verrai rimosso dalla squadra di lavoro di questa data,
+                  creando un disagio per la sala!
+              </Dialog.Description> :
+              <Dialog.Description style={{color: 'white'}}>
+                  Vuoi davvero cancellare il tuo impegno?
+                  Le aziende sapranno che sei disponibile per lavorare in questa data!
+              </Dialog.Description> }
+
+              <Dialog.Button label="Annulla" onPress={this.handleCloseAlert} />
+              <Dialog.Button label="Conferma" onPress={this.handleDeleteAlert} />
+            </Dialog.Container>
+          </Fragment> 
+          : null}
+
+        
 
       </Fragment>
       
@@ -127,55 +173,75 @@ export default class DateDetail extends Component {
 }
 
 const styles = StyleSheet.create({
-  modalContainer: {
-    flex:0,
-    // height: '70%',
-    backgroundColor: Colors.grey5,    
-    borderRadius: 15,
-    padding: 30,
-    // alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    borderColor: Colors.grey4,
-    borderWidth: 4,
-    
-  },
-  dateName: {
-    flexDirection: "row",
-    height: 50,      
-    backgroundColor: Colors.grey2,    
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 40
-  },
-  dateStyle: {
-    color: 'white',
-    fontWeight: "bold",    
-    fontSize: 25 
-  },
-  commitStyle: {
-    fontSize: 20, 
-    color: '#000', 
-    textAlign: 'center', 
-    fontWeight: "bold", 
-    marginBottom: 20
-  },
-  TextStyle: {
-    fontSize: 15,
-    color: '#000',
-    textAlign: 'left'
-  },
-  Buttons: {
-    flexDirection: "row",
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  modalButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 60, 
-    height: 60, 
-    borderRadius: 75,
-    marginTop: 20
-  }
+modalContainer: {
+  flex:0,
+  backgroundColor: Colors.grey5,    
+  borderRadius: 10,
+  justifyContent: 'center',
+},
+dateName: {
+  flexDirection: "row",
+  alignItems: 'center',
+  justifyContent: 'center',
+  margin: 20
+},
+Ribbon: {
+  width: '100%',
+  paddingVertical: 10,
+  // height: '30%',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginBottom: 20
+},
+title: {
+  color: 'white',
+  fontFamily: 'Abecedary',
+  paddingHorizontal: 5,
+  fontSize: 20,
+  fontWeight: 'bold',
+  textAlign: 'center',
+  // letterSpacing: 0.5,
+},
+subtitle: {
+  paddingHorizontal: 5,
+  color: 'white',
+  fontSize: 12,
+  fontStyle: 'italic',
+  textAlign: 'center',
+},
+Buttons: {
+  flexDirection: "row",
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: 20,
+  marginHorizontal: 50
+},
+showOffer: {
+  backgroundColor: Colors.grey4,    
+  borderRadius: 10,
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: 20    
+},
+notes: {    
+  color: Colors.grey1,
+  fontSize: 15,        
+  textAlign: 'center',
+},
+modalButton: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  width:55,
+  height:55,
+  backgroundColor:'transparent',
+  borderRadius:75,
+  borderWidth:3,
+  marginTop: 20
+},
+dialogTitle:{
+  color:Colors.primary, 
+  fontSize: 25, 
+  fontFamily: 'Abecedary', 
+  fontWeight:'bold'
+  }  
 });

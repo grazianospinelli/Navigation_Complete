@@ -182,8 +182,8 @@ export default class JobScreen extends Component {
 
     this.setState({openAddCommit: false});
 
-    // Reset per nuove immissioni
-    // altri campi non resettati perchè hanno immissione obbligatoria
+    // Reset per nuove immissioni.
+    // Gli altri campi non vengono resettati perchè hanno immissione obbligatoria
     this.setState({timeAddCommit: '00:00:00'});
     this.setState({payAddCommit: null});
 

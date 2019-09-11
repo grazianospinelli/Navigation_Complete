@@ -1,8 +1,20 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import {months, weekday, convertDate, getWeekDay, getYear, getMonth, isSameMonth, isSameYear } from './DateUtility';
+import moment from "moment";
 import * as Colors from '../components/themes/colors';
 
+const months = ['Gennaio','Febbraio','Marzo','Aprile', 'Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+const weekday = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
+
+convertDate = (date) => {
+  moment(date, 'YYYY-MM-DD', true).isValid();
+  return moment(date).format("DD-MM-YYYY");
+}
+getWeekDay = (date) => (weekday[parseInt(moment(date).format('d'))]);
+getYear = (date) => (date.split('-',1));
+getMonth = (date) => (months[parseInt(date.split('-')[1])-1]);
+isSameMonth = (date1,date2) => {return getMonth(date1) === getMonth(date2)};
+isSameYear = (date1,date2) => {return getYear(date1) === getYear(date2)};
 
 const RingsImage = () => (
   <Image source={require('../components/images/notebook_rings.jpg')} style={{width: 50, height: 50, marginRight: 10 }} resizeMode='contain' />
@@ -21,7 +33,7 @@ const ListItem = props => (
           <View style={{flexDirection: 'row'}}>
             <View style={styles.showDay}>
               <Text style={{fontSize: 25, color: '#fff',}}> {props.dateNum.split('-')[2]} </Text>
-              <Text style={{color: '#fff'}}> {getWeekDay(props.dateNum)} </Text>
+              <Text style={{color: '#fff'}}> {this.getWeekDay(props.dateNum)} </Text>
             </View>
             <TouchableOpacity onPress={props.onItemPressed} style={styles.showJob}>
                 <View style={{flexDirection: 'column'}}>

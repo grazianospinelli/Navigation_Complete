@@ -30,6 +30,7 @@ export default class SliderEntry extends Component {
     }
 
     render () {
+        // Assegnazione di tipo DESTRUCTURED ES6
         const { data: { joDate, joTime, joPay, joNote, resName, resAddress, resCity }, even } = this.props;
         
 

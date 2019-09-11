@@ -43,10 +43,9 @@ export default StyleSheet.create({
   title: {
     paddingVertical: 10,
     backgroundColor: 'transparent',
-    color: 'black',
+    color: 'white',
     fontSize: 15,
     fontWeight: 'bold',
-    textAlign: 'center',
   },
   titleDark: {
     color: colors.black,
