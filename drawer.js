@@ -53,7 +53,7 @@ const Drawer = createDrawerNavigator({
       borderBottomColor: Colors.secondary
     }
   },
-  initialRouteName: 'Job',
+  initialRouteName: 'Profile',
   drawerOpenRoute: 'DrawerOpen',
   drawerCloseRoute: 'DrawerClose',
   drawerToggleRoute: 'DrawerToggle',

@@ -1,30 +1,42 @@
 import React, { Component } from 'react';
-import { AppRegistry,View,Text,StyleSheet,Button,TouchableOpacity,StatusBar,ImageBackground } from 'react-native';
+import { AppRegistry,View,Text,StyleSheet,TouchableOpacity,StatusBar,ImageBackground, BackHandler } from 'react-native';
+import Icon from "react-native-vector-icons/SimpleLineIcons";
 import * as Colors from '../components/themes/colors';
 export default class home extends Component{
 
 	render(){
+
 		const { navigate } = this.props.navigation;
+		
+		backPage=(
+		<TouchableOpacity 
+			style={{position:'absolute',left:0,top:0,margin: 5}} 
+			onPress={() => BackHandler.exitApp()}>
+				<Icon style={{ padding: 5 }} name="arrow-left-circle" size={25} color={Colors.secondary} />  
+		</TouchableOpacity>);
+
+		
 		return(
 		<ImageBackground 
-		source={require('../components/images/waiter.jpg')}
-		style={styles.backgroundImage}
+			source={require('../components/images/waiter.jpg')}
+			style={styles.backgroundImage}
 		>
 			<View style={styles.container}>
 			<StatusBar backgroundColor = '#000' translucent={false} barStyle='light-content' />
+			{backPage}
 			
 				<Text style={styles.pageName}>Benvenuto !</Text>
 
 				<TouchableOpacity
-				onPress={() => navigate('Login')}
-				style={[styles.button, { backgroundColor: Colors.secondary }]}>
-				<Text style={styles.btnText}>Entra</Text>
+					onPress={() => navigate('Login')}
+					style={[styles.button, { backgroundColor: Colors.secondary }]}>
+					<Text style={styles.btnText}>Entra</Text>
 				</TouchableOpacity>
 				
 				<TouchableOpacity		
-				onPress={()=> navigate('Register')}
-				style={[styles.button, { backgroundColor: Colors.primary }]}>
-				<Text style={styles.btnText}>Registrati</Text>
+					onPress={()=> navigate('Register')}
+					style={[styles.button, { backgroundColor: Colors.primary }]}>
+					<Text style={styles.btnText}>Registrati</Text>
 				</TouchableOpacity>
 			
 			

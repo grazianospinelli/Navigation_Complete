@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { View, Text, Button, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import Modal from "react-native-modal";
 import DatePicker from 'react-native-datepicker'
 import moment from "moment";
@@ -27,6 +27,7 @@ const myvalidationSchema = Yup.object().shape({
 // To pass data from Modal to Parent Component, you can make your Modal call a function 
 // that you passed by props every time input text is changed. 
 // Here's a simple callback logic you can use.
+// https://stackoverflow.com/questions/43775445/how-to-pass-input-field-data-from-modal-to-the-container-in-react-native
 export default class AddCommit extends Component {
 
   constructor(props){
@@ -46,6 +47,7 @@ export default class AddCommit extends Component {
           backdropTransitionInTiming={1000}
           backdropTransitionOutTiming={1000} 
       >
+        <ScrollView>
         <View style={styles.modalContainer}>
 
             <View style={styles.Title}>
@@ -163,6 +165,7 @@ export default class AddCommit extends Component {
             </Formik> 
           
         </View>
+        </ScrollView>
       </Modal>
     );
   };

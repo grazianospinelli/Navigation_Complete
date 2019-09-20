@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Text, ActivityIndicator, AsyncStorage, StyleSheet } from 'react-native';
+import { View, Image, Text, ActivityIndicator, AsyncStorage, ScrollView, StyleSheet } from 'react-native';
 import {NavigationEvents} from "react-navigation";
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
@@ -18,7 +18,9 @@ export default class AgendaScreen extends Component {
         loading: true,
         // dataSource:[],
         commDate: null,
-        offerDate: null,        
+        offerDate: null,
+        light: 'white',
+        dayDetail: null        
       };
 
       LocaleConfig.locales['it'] = {
@@ -43,16 +45,19 @@ export default class AgendaScreen extends Component {
         var obj = [];
       }
       else {
-        //Estraiamo l'array delle sole date in base al tipo
+        // Estraiamo l'array delle sole date in base al tipo se commitment oppure joboffer
+        // dayArray è un array di oggetti composti da data e luogo di lavoro
         if (type=='comm') {
-          var dayArray=eventDate.map((elem)=>{return elem.comDate});
+          var dayArray=eventDate.map((elem)=>{return ({date: elem.comDate, place: elem.resName})});
         } else {
-          var dayArray=eventDate.map((elem)=>{return elem.joDate});
+          var dayArray=eventDate.map((elem)=>{return ({date: elem.joDate, place: elem.resName})});
         }
         // componiamo l'oggetto da passare a markedDates di Calendar contente array di date e stile per data
+        // key aggiunta e usata per immagazzinare per quella data il luogo di lavoro relativo alla data stessa
         // https://stackoverflow.com/questions/50584554/mark-multiple-dates-dynamically-react-native-wix
-        var obj = dayArray.reduce((c, v) => Object.assign(c, {[v]: {
+        var obj = dayArray.reduce((c, v) => Object.assign(c, {[v.date]: {
                               customStyles: {
+                                key: v.place,
                                 container: {
                                   // backgroundColor: operatore terziario -> Colors.primary se è impegno
                                   backgroundColor: (type=='comm') ? Colors.primary : Colors.secondary,
@@ -72,6 +77,8 @@ export default class AgendaScreen extends Component {
   // Formato richiesto da markedDates implementato in composeDate:
   // markedDates={{  
   //   '2018-03-28': {
+  //     AGGIUNTA DA ME LA PROPRIETA' KEY
+  //     key: 'resName',
   //     customStyles: {
   //       container: {
   //         backgroundColor: Colors.primary oppure Colors.secondary
@@ -135,13 +142,29 @@ export default class AgendaScreen extends Component {
   
   componentDidMount() {
     this.fetchData();
-    FireManager();
+    FireManager();    
   }
-
-    
+  
+  showDayDetail = (day,dateArray) => {
+    if (dateArray[day.dateString]){
+      var dayColor = dateArray[day.dateString].customStyles.container.backgroundColor;
+      if (dayColor=='#f24f32') {
+        var dDetail=` IMPEGNO:  ${dateArray[day.dateString].customStyles.key}`
+      }
+      else {
+        var dDetail= ' OFFERTE: '+dateArray[day.dateString].customStyles.key
+      }            
+    }
+    else {
+      var dDetail= ' GIORNO LIBERO'; 
+      var dayColor= Colors.tertiary;
+    }
+    this.setState({light: dayColor, dayDetail: dDetail});
+    setTimeout(() => this.setState({light: 'white', dayDetail: null}), 800);
+  }
+  
   render() {
-    
-    
+        
     if(this.state.loading){
       return( 
         <View style={styles.loader}> 
@@ -153,9 +176,11 @@ export default class AgendaScreen extends Component {
     // Fusione dei 2 array di oggetti
     const myMarkedDates = {...this.state.offerDate,...this.state.commDate}
     return (
+
+      <ScrollView>
+      <View style={{flex: 1, alignItems: "center"}}>
       
-      <View style={{alignItems: "center"}}>
-        <Image  style={{width: 100, height: 100, marginTop: 15,}} 
+        <Image  style={{width: 100, height: 100, marginTop: 10,}} 
                 source={require('../components/images/staffextralogo.png')} 
                 resizeMode='cover' />
         
@@ -163,6 +188,8 @@ export default class AgendaScreen extends Component {
           // Date marking style [simple/period/multi-dot/single]. Default = 'simple'
           markingType={'custom'}
           markedDates={myMarkedDates}
+          onDayPress={(day) => {this.showDayDetail(day,myMarkedDates)}}
+          // onDayPress={(day) => {console.log('CODE:', myMarkedDates[day.dateString].customStyles.key)}}
           theme={{
               backgroundColor: 'green',
               calendarBackground: 'white',
@@ -175,14 +202,30 @@ export default class AgendaScreen extends Component {
               textMonthFontWeight: 'bold',
               textDayFontSize: 16,
               textMonthFontSize: 20,
-              textDayHeaderFontSize: 15
+              textDayHeaderFontSize: 15,
           }}
         />
 
+        <View style={{flex:1, justifyContent: 'flex-end', marginTop: 30}}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View style={{width: 30, height: 30, borderRadius: 75, backgroundColor: this.state.light}}></View>
+            <Text style={{fontSize: 13}} numberOfLines={2} ellipsizeMode='tail'>{this.state.dayDetail}</Text>            
+          </View>
+        </View>
+
+
+
         {/* Per riaggiornare automaticamente la pagina quando la si seleziona da drawer */}
         <NavigationEvents onDidFocus={()=>this.fetchData()} />
+
+
         
       </View>
+      </ScrollView>
+
+      
+
+      
     );
   }
 }

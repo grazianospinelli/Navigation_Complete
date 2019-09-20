@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 import Dialog from "react-native-dialog";
 import {getWeekDay, getYear, getMonth} from './DateUtility';
@@ -57,7 +57,7 @@ export default class DateDetail extends Component {
         var caseStyle='#00d6d6';
         break;
         case(2):
-        var caseStyle=Colors.tertiary;
+        var caseStyle='#fc8803';
         break;
         case(3):
         var caseStyle=Colors.quaternary;
@@ -96,7 +96,7 @@ export default class DateDetail extends Component {
                             <Text style={[styles.notes, {fontWeight: 'bold'}]}>PAGA: </Text>
                             <Text style={[styles.notes, {fontStyle: 'italic',}]}>{comPay}{' €'}</Text>
                         </View>
-                        <View style={{flexDirection: 'row', width: '65%'}}>
+                        <View style={{flexDirection: 'row'}}>
                             <Text style={[styles.notes, {fontWeight: 'bold'}]}>NOTE: </Text>
                             <Text style={[styles.notes, {fontStyle: 'italic'}]} numberOfLines={3} ellipsizeMode='tail'>{comNote?comNote:'  - - -'}</Text>
                         </View>
@@ -120,27 +120,34 @@ export default class DateDetail extends Component {
           onRequestClose={this.props.onModalClosed}
           supportedOrientations={['portrait', 'landscape']}
           isVisible={this.props.selectedDate !== null}
-          animationIn="flipInY"
-          animationOut="flipOutY"
+          // animationIn="flipInY"
+          animationIn="slideInRight"
+          // animationOut="flipOutY"
+          animationOut="slideOutLeft"
           animationInTiming={1000}
           animationOutTiming={1000}
           backdropTransitionInTiming={1000}
-          backdropTransitionOutTiming={1000}
+          backdropTransitionOutTiming={500}
+          style={{}}
         >
+          
           <View style={styles.modalContainer}>
+            <ScrollView>
 
             {modalContent}
 
             <View style={styles.Buttons}>
               <TouchableOpacity onPress={this.props.onModalClosed} style={[styles.modalButton, {borderColor: Colors.tertiary}]}>
-                  <Icon  name="ios-arrow-round-back" size={40} color={Colors.tertiary} />
+                  <Icon  name="ios-arrow-round-back" size={35} color={Colors.tertiary} />
               </TouchableOpacity>
               <TouchableOpacity onPress={this.handleOpenAlert} style={[styles.modalButton, {borderColor: Colors.primary}]}>
-                  <Icon  name="ios-trash" size={35} color={Colors.primary} />
+                  <Icon  name="ios-trash" size={30} color={Colors.primary} />
               </TouchableOpacity>              
             </View>
 
+            </ScrollView>
           </View>
+          
         </Modal>
 
         {this.props.selectedDate !== null ?  
@@ -175,9 +182,10 @@ export default class DateDetail extends Component {
 const styles = StyleSheet.create({
 modalContainer: {
   flex:0,
+  width: '85%',
   backgroundColor: Colors.grey5,    
   borderRadius: 10,
-  justifyContent: 'center',
+  justifyContent: 'center',  
 },
 dateName: {
   flexDirection: "row",
@@ -188,6 +196,7 @@ dateName: {
 Ribbon: {
   width: '100%',
   paddingVertical: 10,
+  paddingHorizontal: 35,
   // height: '30%',
   alignItems: 'center',
   justifyContent: 'center',
@@ -217,8 +226,9 @@ Buttons: {
   marginHorizontal: 50
 },
 showOffer: {
+  width: '100%',
+  paddingHorizontal: 35,
   backgroundColor: Colors.grey4,    
-  borderRadius: 10,
   alignItems: 'center',
   justifyContent: 'center',
   padding: 20    
@@ -231,8 +241,8 @@ notes: {
 modalButton: {
   alignItems: 'center',
   justifyContent: 'center',
-  width:55,
-  height:55,
+  width:45,
+  height:45,
   backgroundColor:'transparent',
   borderRadius:75,
   borderWidth:3,
