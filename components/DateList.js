@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import {months, weekday, convertDate, getWeekDay, getYear, getMonth, isSameMonth, isSameYear } from './DateUtility';
-import * as Colors from '../components/themes/colors';
+import * as Colors from './themes/colors';
 
 
 const RingsImage = () => (

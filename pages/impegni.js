@@ -55,8 +55,11 @@ export default class JobScreen extends Component {
         })
         .then((response) => response.json())
         .then((responseJson)=> {
-          // console.log(responseJson);
-          this.setState({dataSource: responseJson});
+          if (responseJson != 'EMPTY') {
+            this.setState({dataSource: responseJson.reverse()});
+          } else {
+            this.setState({dataSource: responseJson});  
+          }
           this.setState({loading: false});
         })
         .catch(error=>console.log(error)) //to catch the errors if any
@@ -202,6 +205,7 @@ export default class JobScreen extends Component {
                  
     return(
       <View style={styles.container}>
+        {/* Definizione dei 2 modali usati nella pagina: */}
         <DateDetail
             selectedDate={this.state.selectedDate}
             onItemDeleted={this.dateDeletedHandler}
@@ -216,6 +220,7 @@ export default class JobScreen extends Component {
             onHandleAddCommit={this.addCommitHandler}            
             onAddCommitClosed={this.addCommitClosedHandler}
         />
+
         <Text style={styles.pageName}>Lista Impegni</Text>
         
         <ScrollView style={{width: '100%'}} >

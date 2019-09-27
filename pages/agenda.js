@@ -20,7 +20,8 @@ export default class AgendaScreen extends Component {
         commDate: null,
         offerDate: null,
         light: 'white',
-        dayDetail: null        
+        dayDetail: null,
+        dayNote: null,        
       };
 
       LocaleConfig.locales['it'] = {
@@ -48,7 +49,7 @@ export default class AgendaScreen extends Component {
         // Estraiamo l'array delle sole date in base al tipo se commitment oppure joboffer
         // dayArray è un array di oggetti composti da data e luogo di lavoro
         if (type=='comm') {
-          var dayArray=eventDate.map((elem)=>{return ({date: elem.comDate, place: elem.resName})});
+          var dayArray=eventDate.map((elem)=>{return ({date: elem.comDate, place: elem.resName, note: elem.comNote})});
         } else {
           var dayArray=eventDate.map((elem)=>{return ({date: elem.joDate, place: elem.resName})});
         }
@@ -57,7 +58,10 @@ export default class AgendaScreen extends Component {
         // https://stackoverflow.com/questions/50584554/mark-multiple-dates-dynamically-react-native-wix
         var obj = dayArray.reduce((c, v) => Object.assign(c, {[v.date]: {
                               customStyles: {
-                                key: v.place,
+                                key: {
+                                  place: v.place,
+                                  note: v.note,
+                                },
                                 container: {
                                   // backgroundColor: operatore terziario -> Colors.primary se è impegno
                                   backgroundColor: (type=='comm') ? Colors.primary : Colors.secondary,
@@ -78,7 +82,10 @@ export default class AgendaScreen extends Component {
   // markedDates={{  
   //   '2018-03-28': {
   //     AGGIUNTA DA ME LA PROPRIETA' KEY
-  //     key: 'resName',
+  //     key: {
+  //           place: v.place,
+  //           note: v.note,
+  //     },
   //     customStyles: {
   //       container: {
   //         backgroundColor: Colors.primary oppure Colors.secondary
@@ -149,18 +156,19 @@ export default class AgendaScreen extends Component {
     if (dateArray[day.dateString]){
       var dayColor = dateArray[day.dateString].customStyles.container.backgroundColor;
       if (dayColor=='#f24f32') {
-        var dDetail=` IMPEGNO:  ${dateArray[day.dateString].customStyles.key}`
+        var dDetail=` IMPEGNO:  ${dateArray[day.dateString].customStyles.key.place}`;
+        var dNote=dateArray[day.dateString].customStyles.key.note
       }
       else {
-        var dDetail= ' OFFERTE: '+dateArray[day.dateString].customStyles.key
+        var dDetail= ' OFFERTE: '+dateArray[day.dateString].customStyles.key.place
       }            
     }
     else {
       var dDetail= ' GIORNO LIBERO'; 
       var dayColor= Colors.tertiary;
     }
-    this.setState({light: dayColor, dayDetail: dDetail});
-    setTimeout(() => this.setState({light: 'white', dayDetail: null}), 800);
+    this.setState({light: dayColor, dayDetail: dDetail, dayNote:dNote});
+    setTimeout(() => this.setState({light: 'white', dayDetail: null, dayNote: null}), 700);
   }
   
   render() {
@@ -206,11 +214,12 @@ export default class AgendaScreen extends Component {
           }}
         />
 
-        <View style={{flex:1, justifyContent: 'flex-end', marginTop: 30}}>
+        <View style={{flex:1, justifyContent: 'flex-end', alignItems: 'center', marginTop: 30}}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={{width: 30, height: 30, borderRadius: 75, backgroundColor: this.state.light}}></View>
-            <Text style={{fontSize: 13}} numberOfLines={2} ellipsizeMode='tail'>{this.state.dayDetail}</Text>            
+            <Text style={{fontSize: 13}} ellipsizeMode='tail'>{this.state.dayDetail}</Text>            
           </View>
+          <Text style={{fontSize: 12, marginHorizontal: 60}} ellipsizeMode='tail'>{this.state.dayNote}</Text>
         </View>
 
 

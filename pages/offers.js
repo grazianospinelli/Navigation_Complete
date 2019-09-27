@@ -110,6 +110,9 @@ export default class OfferScreen extends Component {
   };
 
   acceptJob = () => {
+    console.log('ID:'+this.state.dataSource[this.state.ActiveSlide].joID);
+    console.log('Date:'+this.state.dataSource[this.state.ActiveSlide].joDate);
+
     fetch(`${IP}/acceptjob.php`,{
       method:'post',
       header:{
@@ -118,7 +121,8 @@ export default class OfferScreen extends Component {
       },
       body:JSON.stringify({
         id: this.state.dataSource[this.state.ActiveSlide].joID,
-        uuid: this.state.uuid
+        uuid: this.state.uuid,
+        date: this.state.dataSource[this.state.ActiveSlide].joDate,
       })
     })
     .then((response) => response.json())
@@ -155,12 +159,12 @@ export default class OfferScreen extends Component {
   }
 
   handleAccept = () => {
-    this.acceptJob;
+    this.acceptJob();
     this.setState({ AcceptAlert: false })
   }
 
   handleReject = () => {
-    this.removeCard;
+    this.removeCard();
     this.setState({ RejectAlert: false })
   }
 
