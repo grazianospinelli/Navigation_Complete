@@ -162,7 +162,7 @@ export default class DateDetail extends Component {
               </Dialog.Description> :
               <Dialog.Description style={{color: 'white'}}>
                   Vuoi davvero cancellare il tuo impegno?
-                  Le aziende sapranno che sei disponibile per lavorare in questa data!
+                  Le aziende sapranno che sei nuovamente disponibile per lavorare in questa data!
               </Dialog.Description> }
 
               <Dialog.Button label="Annulla" onPress={this.handleCloseAlert} />

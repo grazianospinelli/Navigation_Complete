@@ -203,9 +203,10 @@ export default class ProfileScreen extends Component {
                               // L'operatore !!() converte un valore in Boolean
                               name: data['name'], surname: data['surname'], city: data['city'], 
                               telnumber: data['telnumber'], fiscalcode: data['fiscalcode'], birthdate: data['birthdate'],
-                              sex: data['sex'], chef: !!(data['chef']), pizzaman: !!(data['pizzaman']), waiter: !!(data['waiter']),
+                              sex: data['sex'], chef: !!(data['chef']), pizzaman: !!(data['pizzaman']), maitre: !!(data['maitre']),
+                              waiter: !!(data['waiter']), bevandist: !!(data['bevandist']),
                               barman: !!(data['barman']), sommel: !!(data['sommel']), pulizie: !!(data['pulizie']),
-                              animaz: !!(data['animaz']), hostess: !!(data['hostess'])
+                              factotum: !!(data['factotum']), animaz: !!(data['animaz']), hostess: !!(data['hostess'])
                           }}
                           // onSubmit={values => alert(JSON.stringify(values))}
                           onSubmit={values => this.update(values)}
@@ -318,7 +319,7 @@ export default class ProfileScreen extends Component {
                                   
                                   <IconSwitch
                                       label='Cuoco'
-                                      iconName='silverware'
+                                      iconName='silverware-variant'
                                       onValueChange={(val) => setFieldValue("chef", val)}
                                       value={values.chef}
                                   />
@@ -331,6 +332,13 @@ export default class ProfileScreen extends Component {
                                   />
 
                                   <IconSwitch
+                                      label='Direttore/Maitre'
+                                      iconName='tie'
+                                      onValueChange={(val) => setFieldValue("maitre", val)}
+                                      value={values.maitre}
+                                  />
+
+                                  <IconSwitch
                                       label='Cameriere'
                                       iconName='bow-tie'
                                       onValueChange={(val) => setFieldValue("waiter", val)}
@@ -338,8 +346,15 @@ export default class ProfileScreen extends Component {
                                   />  
                                   
                                   <IconSwitch
+                                      label='Bevandista'
+                                      iconName='glass-stange'
+                                      onValueChange={(val) => setFieldValue("bevandist", val)}
+                                      value={values.bevandist}
+                                  />
+
+                                  <IconSwitch
                                       label='Sommelier'
-                                      iconName='bottle-wine'
+                                      iconName='glass-wine'
                                       onValueChange={(val) => setFieldValue("sommel", val)}
                                       value={values.sommel}
                                   />
@@ -352,10 +367,17 @@ export default class ProfileScreen extends Component {
                                   />
 
                                   <IconSwitch
-                                      label='Pulizie'
+                                      label='Pulizie/Lavapiatti'
                                       iconName='broom'
                                       onValueChange={(val) => setFieldValue("pulizie", val)}
                                       value={values.pulizie}
+                                  />
+
+                                  <IconSwitch
+                                      label='Tuttofare'
+                                      iconName='wrench'
+                                      onValueChange={(val) => setFieldValue("factotum", val)}
+                                      value={values.factotum}
                                   />
 
                                   <IconSwitch

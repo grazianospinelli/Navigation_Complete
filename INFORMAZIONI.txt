@@ -68,6 +68,9 @@ Ogni volta che si installano nuove librerie nella App
   adb.exe reverse tcp:8088 tcp:8088
   react-native run-android
 - Riconfigurare l'app sul cellulare con localhost:8088 in Debugging -> Debug server host & port for device
+
+se non funziona più con le nuove versioni di NodeJS il comando react-native start correggere il file di Metro come da:
+https://stackoverflow.com/questions/58117377/react-native-start-giving-invalid-regular-expression-invalid-error
 __________________________________________________________________________________________
 
 DISINSTALLARE LIBRERIA DA PROGETTO REACT-Native

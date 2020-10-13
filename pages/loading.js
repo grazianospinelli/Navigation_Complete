@@ -10,12 +10,7 @@ import LottieView from 'lottie-react-native';
 
 
 export default class AuthLoading extends Component {  
-  // componentDidMount() {
-  //   isSignedIn()
-  //     .then((user) => { this.props.navigation.navigate(user ? 'Drawer' : 'Auth'); })
-  //     .catch(err => alert(`An error occurred:${err}`));
-  // }
-
+ 
   componentDidMount() {
     setTimeout(() => this.verify(), 3000);
   }

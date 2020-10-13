@@ -54,4 +54,5 @@ git ls-tree -r master --name-only
 mettere la lista in list.txt
 
 In PowerShell:
-Get-Content .\list.txt | Foreach-Object { echo $_; echo "`n"; type $_; echo "`n"; } > summa.js
+Get-ChildItem -Path .\ -Name > list.txt
+Get-Content .\list.txt | Foreach-Object { echo "// $_"; echo "`n"; type $_; echo "`n"; echo "// __________________________________________________________________";echo "`n"; } > summa.js

@@ -168,7 +168,7 @@ export default class AgendaScreen extends Component {
       var dayColor= Colors.tertiary;
     }
     this.setState({light: dayColor, dayDetail: dDetail, dayNote:dNote});
-    setTimeout(() => this.setState({light: 'white', dayDetail: null, dayNote: null}), 700);
+    setTimeout(() => this.setState({light: 'white', dayDetail: null, dayNote: null}), 1700);
   }
   
   render() {
