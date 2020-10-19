@@ -1,4 +1,10 @@
- Avviato Powershell come amministratore
+Per installare le APP in fase di sviluppo sul mobile bisogna attivare la modalità sviluppatore.
+Dal menù Impostazioni->Informazioni sul Dispositivo 
+Fare 7 volte TAP sulla voce Numero di build -> questo attiva la modalità Sviluppatore
+Su Impostazioni->Opzioni Sviluppatore->Abilitare Debug USB
+
+Sul PC:
+Avviato Powershell come amministratore
 Installazione Chocolatey: gestore pacchetti windows
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
