@@ -41,9 +41,12 @@ const myvalidationSchema = Yup.object().shape({
   surname: Yup
     .string()
     .max(40,"Troppo Lungo"),
+  prov: Yup
+    .string()
+    .required("Inserire la provincia!"),
   city: Yup
     .string()
-    .max(40,"Troppo Lungo"),
+    .required("Inserire la città!"),    
   telnumber: Yup
     .string()
     .matches(phoneRegExp, { message: 'Numero non valido'}),
@@ -62,6 +65,8 @@ export default class ProfileScreen extends Component {
       uuid: '',
       loading: true,
       dataSource:[],
+      district:[],
+      cities:[],
       profile_image :''
     };
   }
@@ -101,6 +106,9 @@ export default class ProfileScreen extends Component {
           } else {
             this.setState({profile_image:`${IP}/Profiles/profile-placeholder.png`});
           }
+          // Se non si carica la lista delle città non si può popolare il relativo campo del Profilo
+          // nel caso in cui la città è già memorizzata nel DB per l'utente
+          this.loadCities(responseJson['prov']);
           this.setState({loading: false});
         })
         .catch(error=>console.log(error)) //to catch the errors if any
@@ -108,11 +116,62 @@ export default class ProfileScreen extends Component {
         // onSignIn(this.upperEmail,this.md5Password,UUID,userName);
     })
     .catch(error=>console.log(error))
+
+    fetch(`${IP}/getDistrict.php`)
+    .then(res => res.json())
+    .then(resJson => {   
+      if(resJson==='KO'){        
+        alert('Network Error')}
+      else{
+        this.setState({district: resJson});
+        console.log(JSON.stringify(resJson));
+      }
+    })
+    .catch(error=>alert(error));
   }
 
   componentDidMount() {
     this.fetchData();
     FireManager();
+  }
+
+  loadCities = prov => {
+    if(prov!==''){
+      fetch(`${IP}/getCities.php`, {
+        method: "post",
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          provincia: prov        
+        })
+      })
+      .then(res => res.json())
+      .then(resJson => {   
+        if(resJson==='KO'){        
+          alert('Network Error')}
+        else{ 
+          // arriva Array[istat,comune,lat,lng]
+          this.setState({cities: resJson});
+        }
+      })
+      .catch(error => {alert(error)});
+    }
+  }
+
+  findCoord = (city,coord) => {
+    if(city!==''){
+      var elem=this.state.cities.find(x=>((x.comune)===city));
+      // eslint-disable-next-line default-case    
+      switch(coord) {
+      case "lat":      
+        return elem.lat
+      case "lng":      
+        return elem.lng
+      }
+    }
+    return ''
   }
 
   update = (values) => { 
@@ -159,6 +218,8 @@ export default class ProfileScreen extends Component {
     }
   else { }
   }
+
+
   
   render() {
    
@@ -201,12 +262,13 @@ export default class ProfileScreen extends Component {
                         <Formik
                           initialValues={{ 
                               // L'operatore !!() converte un valore in Boolean
-                              name: data['name'], surname: data['surname'], city: data['city'], 
+                              name: data['name'], surname: data['surname'], city: data['city'], prov: data['prov'],
                               telnumber: data['telnumber'], fiscalcode: data['fiscalcode'], birthdate: data['birthdate'],
                               sex: data['sex'], chef: !!(data['chef']), pizzaman: !!(data['pizzaman']), maitre: !!(data['maitre']),
                               waiter: !!(data['waiter']), bevandist: !!(data['bevandist']),
                               barman: !!(data['barman']), sommel: !!(data['sommel']), pulizie: !!(data['pulizie']),
-                              factotum: !!(data['factotum']), animaz: !!(data['animaz']), hostess: !!(data['hostess'])
+                              factotum: !!(data['factotum']), animaz: !!(data['animaz']), hostess: !!(data['hostess']), 
+                              lon: data['lon'], lat: data['lat']
                           }}
                           // onSubmit={values => alert(JSON.stringify(values))}
                           onSubmit={values => this.update(values)}
@@ -238,14 +300,67 @@ export default class ProfileScreen extends Component {
                                     error={touched.surname || submitCount > 0 ? errors.surname : null}
                                     iconName='ios-man'
                                   />
-                                  <IconTextField
+
+                                  <View style={styles.ElemForm}>
+                                  <MaterialIcon style={{ marginBottom: 15, marginRight: 10 }} size={20} name='location-city' />
+                                  <View style={{ flex: 1, alignItems: 'flex-end' }}> 
+                                          <RNPickerSelect
+                                              placeholder = {{
+                                                label: 'Provincia',
+                                                value: '',
+                                                color: 'green',                                                      
+                                              }}
+                                              value={values.prov}
+                                              items={this.state.district.map((option) => ({
+                                                      key: option.sigla_province,
+                                                      value: option.sigla_province,
+                                                      label: option.nome_province}))
+                                              }
+                                              onValueChange={text =>{setFieldValue("prov", text);this.loadCities(text)}}
+                                              onBlur={() => setFieldTouched("prov")}
+                                              textInputProps={{ underlineColor: 'red' }}                                                                                       
+                                          />
+                                    </View>                                  
+                                  </View>
+
+                                  <View style={styles.ElemForm}>
+                                  <MaterialIcon style={{ marginBottom: 15, marginRight: 10 }} size={20} name='home' />
+                                  <View style={{ flex: 1, alignItems: 'flex-end' }}> 
+                                          <RNPickerSelect
+                                              disabled={values.prov===''}
+                                              placeholder = {{
+                                                label: 'Città',
+                                                value: '',
+                                                color: 'green',                                                      
+                                              }}
+                                              value={values.city}
+                                              items={this.state.cities.map((option) => ({
+                                                      key: option.istat,
+                                                      value: option.comune,
+                                                      label: option.comune}))
+                                              }
+                                              onValueChange={text => {
+                                                  setFieldValue("city", text);
+                                                  setFieldValue("lat", this.findCoord(text,"lat"));
+                                                  setFieldValue("lon", this.findCoord(text,"lng"));}                                              
+                                              }
+                                              onBlur={() => setFieldTouched("city")}
+                                              textInputProps={{ underlineColor: 'red' }}                                                                                       
+                                          />
+                                    </View>                                  
+                                  </View>
+
+
+
+                                  {/* <IconTextField
                                     label="Città"
                                     value={values.city}
                                     onChangeText={text => setFieldValue("city", text)}
                                     onBlur={() => setFieldTouched("city")}
                                     error={touched.city || submitCount > 0 ? errors.city : null}
                                     iconName='ios-home'
-                                  />
+                                  /> */}
+
                                   <IconTextField
                                     label="Telefono"
                                     value={values.telnumber}
@@ -254,16 +369,7 @@ export default class ProfileScreen extends Component {
                                     onBlur={() => setFieldTouched("telnumber")}
                                     error={touched.telnumber || submitCount > 0 ? errors.telnumber : null}
                                     iconName='ios-call'
-                                  />
-                                  <IconTextField
-                                    label="Codice Fiscale"
-                                    autoCapitalize='characters'
-                                    value={values.fiscalcode}
-                                    onChangeText={text => setFieldValue("fiscalcode", text)}
-                                    onBlur={() => setFieldTouched("fiscalcode")}
-                                    error={touched.fiscalcode || submitCount > 0 ? errors.fiscalcode : null}
-                                    iconName='ios-card'
-                                  />
+                                  />                                  
                                   
                                   <View style={styles.ElemForm}>	
                                     <MaterialIcon style={{ marginBottom: 10 }} size={20} name='cake' />
@@ -289,7 +395,6 @@ export default class ProfileScreen extends Component {
                                           />
                                     </View>
                                   </View>
-
                                                                     
                                   <View style={styles.ElemForm}>
                                   <Icon style={{ marginBottom: 15, marginRight: 10 }} size={20} name='ios-female' />
@@ -306,9 +411,18 @@ export default class ProfileScreen extends Component {
                                               onBlur={() => setFieldTouched("sex")}
                                               textInputProps={{ underlineColor: 'red' }}                                                                                       
                                           />
-                                    </View>
-                                  
+                                    </View>                                  
                                   </View>
+
+                                  <IconTextField
+                                    label="Codice Fiscale"
+                                    autoCapitalize='characters'
+                                    value={values.fiscalcode}
+                                    onChangeText={text => setFieldValue("fiscalcode", text)}
+                                    onBlur={() => setFieldTouched("fiscalcode")}
+                                    error={touched.fiscalcode || submitCount > 0 ? errors.fiscalcode : null}
+                                    iconName='ios-card'
+                                  />
 
                                   {/* //////////////////////////////////////////////// */}
 
