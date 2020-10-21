@@ -942,5 +942,15 @@ Per visualizzare velocemente tutto il vettore di dati scaricati dal server:
 </ScrollView> 
 ___________________________________________________________________
 
+Per modificare il nome della App:
+https://stackoverflow.com/questions/34794679/change-app-name-in-react-native
+
+Modificare displayName in app.json file
+Modificare app_name in android/app/src/main/res/values/strings.xml
+Poi lanciare i seguenti comandi partendo dalla cartella di progetto:
+cd android
+gradlew.bat clean
+cd ..
+react-native run-android
 
 
