@@ -77,6 +77,15 @@ Ogni volta che si installano nuove librerie nella App
 
 se non funziona più con le nuove versioni di NodeJS il comando react-native start correggere il file di Metro come da:
 https://stackoverflow.com/questions/58117377/react-native-start-giving-invalid-regular-expression-invalid-error
+
+Sostituire nel file c:\Users\Graziano\ExtraStaff\node_modules\metro-config\src\defaults\blacklist.js
+con questo parte di codice:
+var sharedBlacklist = [
+  /node_modules[\/\\]react[\/\\]dist[\/\\].*/,
+  /website\/node_modules\/.*/,
+  /heapCapture\/bundle\.js/,
+  /.*\/__tests__\/.*/
+];
 __________________________________________________________________________________________
 
 DISINSTALLARE LIBRERIA DA PROGETTO REACT-Native
@@ -953,4 +962,9 @@ gradlew.bat clean
 cd ..
 react-native run-android
 
+___________________________________________________________________
 
+Creato account ADMOB collegato a spin.grazy@gmail.com
+
+Nome app: firemess
+ID app: ca-app-pub-4641414830745834~1416907340

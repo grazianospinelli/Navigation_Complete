@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-filename-extension */
 import React, { Component, Fragment } from 'react';
 import { View, StyleSheet, ActivityIndicator, ImageBackground, 
-          TextInput, Image, Text, ScrollView, Button, TouchableOpacity, AsyncStorage } from 'react-native';
+         Image, Text, TextInput, ScrollView, Button, AsyncStorage } from 'react-native';
 import { Card, Divider } from 'react-native-elements';
-// import { TextField } from "react-native-material-textfield";
+// import { TextField, FilledTextField, OutlinedTextField } from 'react-native-material-textfield';
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -18,6 +18,8 @@ import { USER_UUID } from '../components/auth';
 import IP from '../config/IP';
 import * as Colors from '../components/themes/colors';
 
+import placeHolder from '../components/images/profile-placeholder.png'
+const placeHolderUri = Image.resolveAssetSource(placeHolder).uri
 
 const sex = [
   {
@@ -54,7 +56,10 @@ const myvalidationSchema = Yup.object().shape({
     .string()
     .matches(CFRegExp, { message: 'Codice Fiscale non valido'})
     .max(16,"Troppo Lungo")
-    .min(16,"Codice Fiscale non valido")
+    .min(16,"Codice Fiscale non valido"),
+  // description: Yup
+  //   .string()
+  //   .max(300,"Troppo Lungo"),
 });
 
 export default class ProfileScreen extends Component {
@@ -64,6 +69,7 @@ export default class ProfileScreen extends Component {
     this.state = {
       uuid: '',
       loading: true,
+      uploading: false,
       dataSource:[],
       district:[],
       cities:[],
@@ -80,7 +86,7 @@ export default class ProfileScreen extends Component {
 
   
   fetchData = () => {
-      
+    this.setState({loading: true});
     AsyncStorage.getItem(USER_UUID)
     .then((userUuid) => {
         this.setState({uuid: userUuid});
@@ -103,15 +109,16 @@ export default class ProfileScreen extends Component {
           if(!!(responseJson['photo'])){
             // Inserito metodo random per evitare che venga caricata ogni volta la cache dell'immagine
             this.setState({profile_image:`${IP}/Profiles/${userUuid}.jpg?${Math.random()}`});
-          } else {
-            this.setState({profile_image:`${IP}/Profiles/profile-placeholder.png`});
-          }
+          } 
+          // else {
+          //   this.setState({profile_image:`${IP}/Profiles/profile-placeholder.png`});
+          // }
           // Se non si carica la lista delle città non si può popolare il relativo campo del Profilo
           // nel caso in cui la città è già memorizzata nel DB per l'utente
           this.loadCities(responseJson['prov']);
-          this.setState({loading: false});
+          this.setState({loading: false});         
         })
-        .catch(error=>console.log(error)) //to catch the errors if any
+        .catch(error=>{console.log(error);this.setState({loading: false});}) //to catch the errors if any
         
         // onSignIn(this.upperEmail,this.md5Password,UUID,userName);
     })
@@ -124,10 +131,11 @@ export default class ProfileScreen extends Component {
         alert('Network Error')}
       else{
         this.setState({district: resJson});
-        console.log(JSON.stringify(resJson));
+        // console.log(JSON.stringify(resJson));
       }
     })
     .catch(error=>alert(error));
+
   }
 
   componentDidMount() {
@@ -175,6 +183,7 @@ export default class ProfileScreen extends Component {
   }
 
   update = (values) => { 
+    this.setState({uploading: true});
     const myuuid = this.state.uuid;
     values.uuid = myuuid;    
     // console.log(JSON.stringify(values));
@@ -189,8 +198,10 @@ export default class ProfileScreen extends Component {
       // tra i nomi dei componenti dell'oggetto values={name:'', ...} e i nomi dei campi del DB remoto
     })
     .then((response) => response.json())
-    .then((responseJson) => {alert(responseJson);})
-    .catch((error) => {alert(error);});
+    .then((responseJson) => {setTimeout(()=>{this.setState({uploading: false});alert(responseJson);this.fetchData();}, 2000);})
+    .catch((error) => {setTimeout(()=>{this.setState({uploading: false});alert(error)},1500)});
+    
+      
   }
   // In fase di rilascio verificare tutti gli alert !
 
@@ -230,8 +241,9 @@ export default class ProfileScreen extends Component {
          </View>
         )
       }
+
       const data = this.state.dataSource;
-           
+      // console.log(data);
       // console.log(this.state.profile_image);
       
       return(
@@ -244,8 +256,11 @@ export default class ProfileScreen extends Component {
                     photoPickerTitle='Seleziona la Foto:'
                     onResponse={(image) => this.uploadPhoto(image)}
                   >
-                      <Image style={styles.avatar} resizeMode='cover' source={{uri: this.state.profile_image }} />
-                      
+                      {(this.state.profile_image==='')?
+                        <Image style={styles.avatar} resizeMode='cover' source={{uri: placeHolderUri}} />
+                        :
+                        <Image style={styles.avatar} resizeMode='cover' source={{uri: this.state.profile_image }} />
+                      }
                   </PhotoUpload>
                 </ImageBackground>
                 
@@ -268,7 +283,7 @@ export default class ProfileScreen extends Component {
                               waiter: !!(data['waiter']), bevandist: !!(data['bevandist']),
                               barman: !!(data['barman']), sommel: !!(data['sommel']), pulizie: !!(data['pulizie']),
                               factotum: !!(data['factotum']), animaz: !!(data['animaz']), hostess: !!(data['hostess']), 
-                              lon: data['lon'], lat: data['lat']
+                              description: data['description'], lon: data['lon'], lat: data['lat']
                           }}
                           // onSubmit={values => alert(JSON.stringify(values))}
                           onSubmit={values => this.update(values)}
@@ -508,15 +523,42 @@ export default class ProfileScreen extends Component {
                                       value={values.hostess}
                                   />
                                   
+                                  <View style={{marginTop: 15, height: 40, width: '100%', alignItems: 'center', justifyContent:'center', backgroundColor: '#cecece'}}> 
+                                    <Text style={{fontSize: 14, fontWeight: 'bold', color: Colors.grey1}}>DESCRIVITI</Text> 
+                                  </View>
+                                  
+                                  <TextInput
+                                    underlineColorAndroid='transparent'
+                                    style={styles.TextInputStyleClass}
+                                    // label={''}
+                                    placeholder='Descrivi te stesso, cosa sai fare, le tue esperienze nel settore'
+                                    multiline={true}                                    
+                                    // numberOfLines={5}
+                                    maxLength={300}
+                                    value={values.description}
+                                    onChangeText={text => setFieldValue("description", text)}
+                                    onBlur={() => setFieldTouched("description")}
+                                    error={touched.description || submitCount > 0 ? errors.description : null}
+                                  />
+
 
                                   <View marginTop={15} />
-                    
-                                  <Button
-                                    title='Salva Profilo'
-                                    disabled={!isValid}
-                                    onPress={handleSubmit}
-                                    color={Colors.primary}
-                                  />
+                                  
+                                  {(this.state.uploading)?
+                                    <View                                      
+                                      backgroundColor={Colors.primary}
+                                      elevation={3}
+                                    >
+                                      <ActivityIndicator size="large" color="#fff"/>
+                                    </View>
+                                    :
+                                    <Button
+                                      title='Salva Profilo'
+                                      disabled={!isValid}
+                                      onPress={handleSubmit}
+                                      color={Colors.primary}
+                                    />                                                                     
+                                  } 
 
                                   {/* <TouchableOpacity style={styles.buttonContainer} disabled={!isValid} onPress={handleSubmit} >
                                     <Text style={{color: '#fff'}}>SALVA PROFILO</Text> 
@@ -610,6 +652,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff"
-   },
-
+  },
+  TextInputStyleClass:{
+    textAlign: 'left',
+    height: 150,
+    marginTop: 15,
+    borderWidth: 2,
+    borderColor: "#cecece",
+    borderRadius: 15 ,
+    backgroundColor : "#FFFFFF"
+  }
 });
