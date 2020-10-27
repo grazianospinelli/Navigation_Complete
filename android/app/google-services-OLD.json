@@ -25,16 +25,17 @@
         }
       ],
       "services": {
+        "analytics_service": {
+          "status": 1
+        },
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "673527608086-86133jlpol3b6rg3mlc2rrcqku9jbo3f.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
         }
-      },
-      "admob_app_id": "ca-app-pub-4641414830745834~1416907340"
+      }
     }
   ],
   "configuration_version": "1"

@@ -157,8 +157,11 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation "com.google.android.gms:play-services-base:16.0.1"
+    implementation 'com.google.android.gms:play-services-ads:16.0.0'
+    // Verificato su: https://developers.google.com/android/guides/releases
     implementation 'com.google.firebase:firebase-core:16.0.4'
-    implementation "com.google.firebase:firebase-messaging:17.3.4"
+    implementation 'com.google.firebase:firebase-ads:16.0.1'
+    implementation "com.google.firebase:firebase-messaging:17.3.3"
     implementation 'me.leolin:ShortcutBadger:1.1.21@aar' // <-- Add this line if you wish to use badge on Android
 }
 

@@ -323,7 +323,7 @@ export default class ProfileScreen extends Component {
                                               placeholder = {{
                                                 label: 'Provincia',
                                                 value: '',
-                                                color: 'green',                                                      
+                                                // color: 'green',                                                      
                                               }}
                                               value={values.prov}
                                               items={this.state.district.map((option) => ({
@@ -346,7 +346,7 @@ export default class ProfileScreen extends Component {
                                               placeholder = {{
                                                 label: 'Città',
                                                 value: '',
-                                                color: 'green',                                                      
+                                                // color: 'green',                                                      
                                               }}
                                               value={values.city}
                                               items={this.state.cities.map((option) => ({

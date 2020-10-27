@@ -7,7 +7,8 @@ import Dialog from "react-native-dialog";
 import ClipPage from '../components/ClipPage';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import * as Colors from '../components/themes/colors';
-import FireManager from '../components/firemanager.js';
+// import FireManager from '../components/firemanager.js';
+import firebase from 'react-native-firebase';
 import { USER_UUID } from '../components/auth';
 import IP from '../config/IP';
 
@@ -69,6 +70,19 @@ export default class OfferScreen extends Component {
   }
   
   componentDidMount() {
+
+    // const unitId = 'ca-app-pub-3940256099942544/4411468910';
+    const unitId = 'ca-app-pub-4641414830745834/5890822051';
+    const advert = firebase.admob().interstitial(unitId);
+    const AdRequest = firebase.admob.AdRequest;
+    const request = new AdRequest();
+    advert.loadAd(request.build());
+
+    advert.on('onAdLoaded', () => {
+      console.log('Advert ready to show.');
+      advert.show();
+    });
+
     this.fetchData();
     FireManager();
   }

@@ -4,7 +4,8 @@ import {NavigationEvents} from "react-navigation";
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import * as Colors from '../components/themes/colors';
-import FireManager from '../components/firemanager.js';
+// import FireManager from '../components/firemanager.js';
+import firebase from 'react-native-firebase';
 import { USER_UUID } from '../components/auth';
 import IP from '../config/IP';
 
@@ -172,6 +173,20 @@ export default class AgendaScreen extends Component {
   }
   
   render() {
+
+    const Banner = firebase.admob.Banner;
+    const AdRequest = firebase.admob.AdRequest;
+    const request = new AdRequest();
+    const unitId = 'ca-app-pub-4641414830745834/6174410009';
+    // const unitId = 'ca-app-pub-3940256099942544/2934735716';
+
+    // const unitId =
+    //   Platform.OS === 'ios'
+    //     ? 'ca-app-pub-7987914246691031/4248107679'
+    //     : 'ca-app-pub-7987914246691031/5729668166';
+
+    
+
         
     if(this.state.loading){
       return( 
@@ -188,9 +203,22 @@ export default class AgendaScreen extends Component {
       <ScrollView>
       <View style={{flex: 1, alignItems: "center"}}>
       
-        <Image  style={{width: 100, height: 100, marginTop: 10,}} 
+        {/* <Image  style={{width: 100, height: 100, marginTop: 10,}} 
                 source={require('../components/images/staffextralogo.png')} 
-                resizeMode='cover' />
+                resizeMode='cover' /> */}
+
+        <Banner
+          style={{marginBottom: 30}}
+          unitId={unitId}
+          size={'SMART_BANNER'}
+          request={request.build()}
+          onAdLoaded={() => {console.log('Advert loaded');}}
+          onAdFailedToLoad={(error) => {
+            console.log('Advert fail');
+            console.log(error.code);
+            console.log(error.message);
+          }}
+        />
         
         <Calendar
           // Date marking style [simple/period/multi-dot/single]. Default = 'simple'
