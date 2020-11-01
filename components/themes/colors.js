@@ -1,6 +1,6 @@
 export const primary = '#f24f32';
 export const secondary = '#dfdf20';
-// export const secondary = '#e7c717';
+// export const secondary = '#ffdd00';
 export const tertiary = '#30e000';
 export const quaternary = '#ff00ff';
 

@@ -8,34 +8,24 @@ import firebase from 'react-native-firebase';
 import { Formik } from "formik";
 import * as Yup from "yup";
 import * as Animatable from 'react-native-animatable';
-import md5 from 'md5';
 import IP from '../config/IP';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
-import { onSignIn } from "../components/auth";
 import * as Colors from '../components/themes/colors';
 
 const myvalidationSchema = Yup.object().shape({
 	userEmail: Yup
 		.string()
 		.required("↑ Inserire la mail!")
-	  	.email('↑ Email non corretta'),
-	userPassword: Yup
-		.string()
-		.required("↑ Inserire la Password!")
-		.min(8,"↑ Password deve essere almeno 8 caratteri")
+	  	.email('↑ Email non corretta')
 });
 
-
-
-export default class login extends Component {
+export default class Reset extends Component {
 	
 	constructor(props){
 		super(props)
-		this.state={
-			// userEmail:'',
-			// userPassword:'',
-			userToken:'',			
-		}
+		// this.state={
+		// 	userEmail:'',			
+		// }
 	}
 	
 	componentDidMount = async () => {
@@ -65,14 +55,12 @@ export default class login extends Component {
 	}
 
 	
-	login = (values) =>{
+	askReset = (values) =>{
 		
-		const {userEmail, userPassword} = values;
-		const userToken = this.state.userToken;
-		const md5Password = md5(userPassword);
+		const {userEmail} = values;		
 		const upperEmail = userEmail.toUpperCase();
 	  		
-		fetch(`${IP}/login.php`,{
+		fetch(`${IP}/ask-reset-mail.php`,{
 			method:'post',
 			header:{
 				'Accept': 'application/json',
@@ -80,26 +68,20 @@ export default class login extends Component {
 			},
 			body:JSON.stringify({
 				// we will pass our input data to server
-				email: upperEmail,
-				password: md5Password,
-				token: userToken
+				email: upperEmail,				
 			})
 			
 		})
 		.then((response) => response.json())
 		.then((responseJson)=>{
-				if(responseJson == "KO"){
-					alert("Dettagli Errati o Errore di Connessione");
-				}else{
-					alert("Login effettuato con successo");
-					const UUID = responseJson.uuid;
-					const userName = responseJson.name;
-					// alert(UUID+' '+userName);
-					onSignIn(this.upperEmail,this.md5Password,UUID,userName);
-					// redirect to profile page
-					this.props.navigation.navigate("Drawer");
-					
+				if(responseJson == "OK"){
+					alert("Ti è stata inviata una mail con le istruzioni per resettare la tua password!");
 				}
+				else{
+					alert(responseJson);					
+					// redirect to profile page										
+				}
+				this.props.navigation.navigate("Home");
 		})
 		.catch((error)=>{alert(error); throw error;});
 					
@@ -107,8 +89,6 @@ export default class login extends Component {
 	}
 	
   	render() {
-	
-	const { navigate } = this.props.navigation;
 	
 	return(
 	<ImageBackground 
@@ -123,24 +103,23 @@ export default class login extends Component {
 		</View>
 
 		<Formik
-				initialValues={{userEmail:'',userPassword:''}}
-				onSubmit={values => this.login(values)}
+				initialValues={{userEmail:''}}
+				onSubmit={values => this.askReset(values)}
 				validationSchema={myvalidationSchema}
 		>
 		
 		{({ values, errors, setFieldValue, touched, setFieldTouched, isValid, handleSubmit }) => (
 
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-			
 			<View style={styles.container}>
 				<StatusBar backgroundColor='#000' translucent={false} barStyle='light-content' />
 				
 				<TouchableOpacity onPress={handleSubmit}>
 					{ isValid ? 
 					(<Animatable.Text animation="rubberBand" iterationCount="infinite" easing="linear" style={styles.pageName}>
-							{'→Entra←'}
+							{'→Reset←'}
 					</Animatable.Text>):
-					<Text style={styles.pageName}>{'Entra'}</Text>}
+					<Text style={styles.pageName}>{'Reset'}</Text>}
 				</TouchableOpacity>
 
 				<View style={styles.inputForm}>
@@ -156,45 +135,15 @@ export default class login extends Component {
 				<View style={{height: 25, justifyContent: 'flex-start'}}>
 						{(errors.userEmail && touched.userEmail ) && 
 						<Text style={{color:Colors.primary, fontWeight:'bold'}}>{errors.userEmail}</Text>}
-				</View>
-		
-				<View style={styles.inputForm}>	
-					<Icon style={styles.searchIcon} name="lock" size={20} color={errors.userPassword && touched.userPassword ? Colors.primary : 'transparent'} />
-					<TextInput
-						placeholder="Inserisci Password"
-						secureTextEntry={true}
-						value={values.userPassword}
-						style={{borderRadius: 25, width:180}}
-						onChangeText={text => {text.trim(); setFieldValue("userPassword", text)}}
-						onBlur={() => setFieldTouched("userPassword") }
-					/>
-				</View>
-				<View style={{height: 25, justifyContent: 'flex-start'}}>
-						{(errors.userPassword && touched.userPassword ) && 
-						<Text style={{color:Colors.primary, fontWeight:'bold'}}>{errors.userPassword}</Text>}
-				</View>
+				</View>				
 
-				<View style={{ height: 40 }}>
-					<Text>{}</Text>
-				</View>
-
-				<View style={{justifyContent:'flex-end', alignItems:'center'}}>
-					<TouchableOpacity style={styles.button} onPress={() => navigate('Reset')} >
-						<Text style={{color: 'white', fontWeight:'bold'}}>Password dimenticata?</Text>				
-					</TouchableOpacity>
-				</View>
-
-							 
+				<View style={{ height: 40 }}><Text>{}</Text></View>				 
 				
 		    </View>
-			
-			
 		</TouchableWithoutFeedback>
 		)}
 
 		</Formik>
-
-		
 
 	</ImageBackground>
    );
@@ -227,14 +176,7 @@ const styles = StyleSheet.create({
 		borderRadius: 25, 
 		backgroundColor: 'rgba(255,255,255,0.4)',
 	},
-	button:{
-		backgroundColor: Colors.primary,
-		borderRadius: 25, 		
-		width: '50%', 
-		margin: 20, 
-		padding: 7,
-		alignItems:'center'
-	},
+
 	searchIcon: {
 		padding: 10,
 		margin: 0,
@@ -242,4 +184,4 @@ const styles = StyleSheet.create({
 
 });
 
-AppRegistry.registerComponent('login', () => login);
+AppRegistry.registerComponent('Reset', () => Reset);

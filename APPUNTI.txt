@@ -1,4 +1,4 @@
-
+NELLA PAGINA DI CREAZIONE ACCOUNT VANNO RIPORTATI I TERMINI DI ACCETTAZIONE CONDIZIONI E PRIVACY
 
 ogni utente ha la sua tabella con impegni e date
 ogni utente ha una sua tabella date con solo le date impegnate, 
@@ -27,7 +27,7 @@ Se un utente accetta l'offerta, si elimina il record dalla tabella joboffer,
 e tutti gli altri con la stessa data ma di altre sale, e si mette in commitments,
 se l'utente rifiuta si elimina il record dalla tabella joboffer ma potrebbe ritornare la richiesta,
 se l'utente lascia in attesa un'offerta, quando la sala invia richieste, si fa un controllo in tabella joboffer 
-e non si reinvia l'offerta per quell'utente!
+e non si reinvia l'offerta per quell'utente! (LA NUOVA OFFERTA SOVRASCRIVE LA VECCHIA)
 
 
 ogni sala ha la sua tabella annuale con date e per ogni data quante persone ci sono

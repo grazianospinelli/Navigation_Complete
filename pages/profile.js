@@ -20,6 +20,7 @@ import * as Colors from '../components/themes/colors';
 
 import placeHolder from '../components/images/profile-placeholder.png'
 const placeHolderUri = Image.resolveAssetSource(placeHolder).uri
+const accessKeyId='fbgRVwCQFcuwlJRN0v7b33jb5cbWJgIkRzKvfu2seQs'
 
 const sex = [
   {
@@ -62,6 +63,15 @@ const myvalidationSchema = Yup.object().shape({
   //   .max(300,"Troppo Lungo"),
 });
 
+// const getImageFromApiAsync = async () => {
+//   try {
+//     let response = await fetch(`https://api.unsplash.com/photos/random/?client_id=${accessKeyId}&collections=79096724`)
+//     let json = await response.json();
+//     return json.data;
+//   } 
+//   catch (error) {console.error(error)}
+// };
+
 export default class ProfileScreen extends Component {
   // eslint-disable-next-line no-useless-constructor
   constructor(props) {
@@ -73,7 +83,8 @@ export default class ProfileScreen extends Component {
       dataSource:[],
       district:[],
       cities:[],
-      profile_image :''
+      profile_image :'',
+      photoJson: null
     };
   }
   
@@ -83,10 +94,21 @@ export default class ProfileScreen extends Component {
     <Icon  name="ios-person" size={30} color={Colors.secondary} />
     )
   }
-
-  
-  fetchData = () => {
+   
+  fetchImage = () => {
     this.setState({loading: true});
+    fetch(`https://api.unsplash.com/photos/random/?client_id=${accessKeyId}&collections=79096724`)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      this.setState({photoJson: responseJson});
+      this.setState({loading: false});      
+    })
+    .catch(error=>{console.log(error)})
+  }
+
+  fetchData = () => {
+    this.setState({loading: true}); 
+
     AsyncStorage.getItem(USER_UUID)
     .then((userUuid) => {
         this.setState({uuid: userUuid});
@@ -110,19 +132,16 @@ export default class ProfileScreen extends Component {
             // Inserito metodo random per evitare che venga caricata ogni volta la cache dell'immagine
             this.setState({profile_image:`${IP}/Profiles/${userUuid}.jpg?${Math.random()}`});
           } 
-          // else {
-          //   this.setState({profile_image:`${IP}/Profiles/profile-placeholder.png`});
-          // }
+         
           // Se non si carica la lista delle città non si può popolare il relativo campo del Profilo
           // nel caso in cui la città è già memorizzata nel DB per l'utente
           this.loadCities(responseJson['prov']);
           this.setState({loading: false});         
         })
-        .catch(error=>{console.log(error);this.setState({loading: false});}) //to catch the errors if any
-        
-        // onSignIn(this.upperEmail,this.md5Password,UUID,userName);
+        .catch(error=>{console.log(error);this.setState({loading: false});})               
     })
-    .catch(error=>console.log(error))
+    .catch(error=>console.log(error))  
+        
 
     fetch(`${IP}/getDistrict.php`)
     .then(res => res.json())
@@ -138,7 +157,8 @@ export default class ProfileScreen extends Component {
 
   }
 
-  componentDidMount() {
+  componentDidMount() { 
+    this.fetchImage();   
     this.fetchData();
     FireManager();
   }
@@ -230,7 +250,6 @@ export default class ProfileScreen extends Component {
   else { }
   }
 
-
   
   render() {
    
@@ -243,28 +262,32 @@ export default class ProfileScreen extends Component {
       }
 
       const data = this.state.dataSource;
-      // console.log(data);
+      // console.log(this.state.photoJson);
       // console.log(this.state.profile_image);
       
       return(
         
         <View style={styles.container}>
             <ScrollView style={styles.containerscroll}>
+
             <View style={{ height: 220, width: '100%' }} >
-                <ImageBackground source={require('../components/images/saltpepper.jpg')} style={{flex: 1}} resizeMode='cover' >
-                  <PhotoUpload
-                    photoPickerTitle='Seleziona la Foto:'
-                    onResponse={(image) => this.uploadPhoto(image)}
-                  >
-                      {(this.state.profile_image==='')?
-                        <Image style={styles.avatar} resizeMode='cover' source={{uri: placeHolderUri}} />
-                        :
-                        <Image style={styles.avatar} resizeMode='cover' source={{uri: this.state.profile_image }} />
-                      }
-                  </PhotoUpload>
-                </ImageBackground>
-                
+                {/* <ImageBackground source={require('../components/images/saltpepper.jpg')} style={{flex: 1}} resizeMode='cover' > */}
+                {this.state.photoJson ? 
+                  (<ImageBackground source={{ uri: this.state.photoJson.urls.regular }} style={{flex: 1}} resizeMode='cover' >
+                    <PhotoUpload
+                      photoPickerTitle='Seleziona la Foto:'
+                      onResponse={(image) => this.uploadPhoto(image)}
+                    >
+                        {(this.state.profile_image==='')?
+                          <Image style={styles.avatar} resizeMode='cover' source={{uri: placeHolderUri}} />
+                          :
+                          <Image style={styles.avatar} resizeMode='cover' source={{uri: this.state.profile_image }} />
+                        }
+                    </PhotoUpload>
+                  </ImageBackground>) 
+                : null }
             </View>
+
                 <View style={styles.body}>
                   <View style={styles.bodyContent}>
                     <Text style={styles.name}>{data['name']} {data['surname']}</Text>
@@ -365,16 +388,6 @@ export default class ProfileScreen extends Component {
                                     </View>                                  
                                   </View>
 
-
-
-                                  {/* <IconTextField
-                                    label="Città"
-                                    value={values.city}
-                                    onChangeText={text => setFieldValue("city", text)}
-                                    onBlur={() => setFieldTouched("city")}
-                                    error={touched.city || submitCount > 0 ? errors.city : null}
-                                    iconName='ios-home'
-                                  /> */}
 
                                   <IconTextField
                                     label="Telefono"

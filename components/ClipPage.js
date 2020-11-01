@@ -76,8 +76,9 @@ export default class ClipPage extends Component {
 const styles = StyleSheet.create({
     jobStyle: {
         width: '74.72%',
-        height: 310,
-        marginTop: 55,
+        // height: 310,
+        height: '73%',
+        marginTop: '18%',
         backgroundColor: '#e9e9e9',
         borderColor: '#b5b5b5',
         borderBottomWidth: 2,

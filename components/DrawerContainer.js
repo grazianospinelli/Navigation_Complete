@@ -25,14 +25,14 @@ export default class DrawerContainer extends Component {
             <View style={styles.container}>
                 <View style={styles.headerContainer}>
                     <ImageBackground source={require('./images/Background3.jpg')} style={{flex: 1, width: 300, justifyContent: 'center'}} >
-                        <View style={{flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.6)'}}>
+                        <View style={styles.ribbon2}>
                             <Image 
                                 style={styles.drawerImage}
                                 source={require('./images/staffextralogo.png')}
                                 resizeMode='cover'
                             />
                             
-                            <Text style={styles.greet} numberOfLines={1} ellipsizeMode='tail'>C  iao, {this.state.user}</Text>                          
+                            <Text style={styles.greet} numberOfLines={1} ellipsizeMode='tail'>C  iao {(this.state.user).replace(/C/g,"C .")}</Text>                          
                             
                         </View>
                     </ImageBackground>
@@ -63,11 +63,25 @@ const styles = StyleSheet.create({
         flex: 1,    // Con questo copriamo tutto il Drawer di nero
     },
     drawerImage: {
-        margin: 5,
+        // margin: 5,
         height: 110,
         width: 110,
         // borderRadius: 75
     },
+    ribbon: {
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        backgroundColor: 'rgba(0,0,0,0.6)'
+    },
+    ribbon2: {
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        backgroundColor: 'white' ,      
+        width: 280,
+        height: 85,
+        borderRadius: 75,        
+        alignSelf:'center',
+      },
     headerContainer: {
         height: 150,
     },
@@ -77,7 +91,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',        
         color: Colors.primary,
         fontFamily: 'Wildemount Rough',
-		fontSize: 35,		
+		fontSize: 32,		
     },
     headerText: {
         color: Colors.secondary,

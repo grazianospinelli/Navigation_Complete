@@ -968,3 +968,37 @@ Creato account ADMOB collegato a spin.grazy@gmail.com
 
 Nome app: firemess
 ID app: ca-app-pub-4641414830745834~1416907340
+___________________________________________________________________
+
+https://stackoverflow.com/questions/34078354/how-to-disable-landscape-mode-in-react-native-android-dev-mode
+
+disabilitata modalità landscape aggiungendo nel file:
+android/app/src/main/AndroidManifest.xml
+
+la linea:
+<activity
+    android:name=".Activity"
+    android:label="Activity"
+    android:screenOrientation="portrait"
+    android:configChanges="keyboardHidden|orientation|screenSize">
+</activity>
+_________________________________________________________________________
+
+per vedere la versione installata di react-native:
+react-native -v
+_________________________________________________________________________
+
+Per visualizzare una pagina web nella App:
+import { WebView } from 'react-native';
+
+class MyWeb extends Component {
+  render() {
+    return (
+      <WebView
+        source={{uri: 'https://github.com/facebook/react-native'}}
+        style={{marginTop: 20}}
+      />
+    );
+  }
+}
+

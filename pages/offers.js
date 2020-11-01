@@ -71,8 +71,8 @@ export default class OfferScreen extends Component {
   
   componentDidMount() {
 
-    // const unitId = 'ca-app-pub-3940256099942544/4411468910';
-    const unitId = 'ca-app-pub-4641414830745834/5890822051';
+    const unitId = 'ca-app-pub-3940256099942544/4411468910';
+    // const unitId = 'ca-app-pub-4641414830745834/5890822051';
     const advert = firebase.admob().interstitial(unitId);
     const AdRequest = firebase.admob.AdRequest;
     const request = new AdRequest();
@@ -203,7 +203,7 @@ export default class OfferScreen extends Component {
         );
         buttonStripe =(
           <View style={styles.footer}>
-            <View style={{ width: 250, alignItems: 'center', marginBottom: 7}}>              
+            <View style={{ width: '80%', alignItems: 'center', marginBottom: 7}}>              
               <View style={{alignItems: 'center'}}>
                 <Text style={{color: Colors.secondary, fontSize: 10, fontWeight:'bold'}}>Ricarica</Text>
                 <TouchableOpacity style={[styles.button,styles.orange]} onPress={this.reload}>
@@ -367,9 +367,9 @@ const styles = StyleSheet.create({
   },
   emptyJob:
   {
-    width: '74.72%',
-    height: 290,
-    marginTop: 65,    
+    width: '82%',
+    height: '76%',
+    marginTop: '18%',    
     backgroundColor: '#e9e9e9',
     borderColor: '#b5b5b5',
     borderBottomWidth: 2,
@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
     alignItems:'center'
   },
   buttonContainer:{
-    width: 250,
+    width: '70%',
     flexDirection:'row',
     justifyContent: 'space-between',
     marginBottom: 7

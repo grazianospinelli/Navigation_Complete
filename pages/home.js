@@ -12,7 +12,7 @@ export default class home extends Component{
 		<TouchableOpacity 
 			style={{position:'absolute',left:0,top:0,margin: 5}} 
 			onPress={() => BackHandler.exitApp()}>
-				<Icon style={{ padding: 5 }} name="arrow-left-circle" size={25} color={Colors.secondary} />  
+				<Icon style={{ padding: 5 }} name="close" size={25} color={Colors.secondary} />  
 		</TouchableOpacity>);
 
 		
@@ -60,7 +60,8 @@ const styles = StyleSheet.create({
 	},
 	button:{
 		borderRadius: 25, 
-		width:150, 
+		// width:150, 
+		width: '50%', 
 		margin: 20, 
 		padding:5,
 		alignItems:'center'

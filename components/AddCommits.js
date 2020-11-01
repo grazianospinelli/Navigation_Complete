@@ -14,7 +14,7 @@ const myvalidationSchema = Yup.object().shape({
     .required("Inserire Data"),
   comNote: Yup
     .string()
-    .required("Inserire Note")
+    .required("Inserire Descrizione")
     .max(40,"Testo troppo Lungo"),
   comPay: Yup
     .number()
@@ -122,7 +122,7 @@ export default class AddCommit extends Component {
                         style={{flex:1, paddingBottom: 3, height: 30, fontSize: 16}}
                         textAlign='right'
                         // textAlignVertical='bottom'
-                        placeholder="$$$"
+                        placeholder="€€€"
                         keyboardType='numeric'
                         value={values.comPay}
                         onChangeText={(text) => { setFieldValue("comPay", text); this.props.onPayChanged(text) }}
@@ -130,7 +130,7 @@ export default class AddCommit extends Component {
                     </View>
                     { errors.comPay && <Text style={{color: Colors.primary}}>{errors.comPay }</Text> }
 
-                    <Text style={{marginBottom: 5, marginTop: 20, marginLeft: 15, fontSize: 16}}>Note:</Text>
+                    <Text style={{marginBottom: 5, marginTop: 20, marginLeft: 15, fontSize: 16}}>Descrizione:</Text>
                     <TextInput
                         multiline = {true}
                         numberOfLines = {4}
@@ -180,14 +180,14 @@ const styles = StyleSheet.create({
     padding: 30,
     // alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    borderColor: Colors.grey4,
-    borderWidth: 4,
+    // borderColor: Colors.grey4,
+    // borderWidth: 4,
     
   },
   Title: {
     height: 40,      
     backgroundColor: Colors.grey2,    
-    borderRadius: 10,
+    // borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20

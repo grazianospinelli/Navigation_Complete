@@ -12,26 +12,28 @@ import { createSwitchNavigator, createStackNavigator, createAppContainer } from 
 import AuthLoading from './pages/loading';
 import Home from './pages/home';
 import Login from './pages/login';
+import Reset from './pages/reset';
 import Register from './pages/register';
 import Drawer from './drawer';
 
 
 const AuthStack = createStackNavigator(
   {
-    Home: { screen: Home,
-                navigationOptions: {
-                  header: null
-                }
+    Home: { 
+      screen: Home,
+      navigationOptions: { header: null }
     },
-    Login: { screen: Login,
-                navigationOptions: {
-                  header: null
-                } 
+    Login: { 
+      screen: Login,
+      navigationOptions: { header: null } 
     },
-    Register: { screen: Register,
-                navigationOptions: {
-                  header: null
-                }  
+    Reset: { 
+      screen: Reset,
+      navigationOptions: { header: null } 
+    },
+    Register: { 
+      screen: Register,
+      navigationOptions: { header: null }  
     },
   },
   {

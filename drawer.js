@@ -24,40 +24,43 @@ const getDrawerItem = navigation => (
 );
 
 
-const Drawer = createDrawerNavigator({
-  Profile:  { screen: ProfileScreen },
-  Job:      { screen: JobScreen },
-  Agenda:   { screen: AgendaScreen },
-  Offers:    { screen: OfferScreen },
-  Logout:   { screen: LogoutScreen },
-}, 
-{
-  contentComponent: DrawerContainer,
-  drawerWidth: 300,
-  drawerPosition: 'left',
-  contentOptions: {
-    style: {
-      backgroundColor: 'black',
-      flex: 1
-    },
-    activeBackgroundColor: Colors.primary,
-    itemsContainerStyle: {
-      marginVertical: 0,
-    },
-    iconContainerStyle: {
-      opacity: 5
-    },
-    itemStyle :{
-      height : 50,
-      borderBottomWidth: 1,      
-      borderBottomColor: Colors.secondary
-    }
+const Drawer = createDrawerNavigator(
+  {
+    Profile:  { screen: ProfileScreen },
+    Job:      { screen: JobScreen },
+    Agenda:   { screen: AgendaScreen },
+    Offers:    { screen: OfferScreen },
+    Logout:   { screen: LogoutScreen },
   },
-  initialRouteName: 'Profile',
-  drawerOpenRoute: 'DrawerOpen',
-  drawerCloseRoute: 'DrawerClose',
-  drawerToggleRoute: 'DrawerToggle',
-});
+
+  {
+    contentComponent: DrawerContainer,
+    drawerWidth: 300,
+    drawerPosition: 'left',
+    contentOptions: {
+      style: {
+        backgroundColor: 'black',
+        flex: 1
+      },
+      activeBackgroundColor: Colors.primary,
+      itemsContainerStyle: {
+        marginVertical: 0,
+      },
+      iconContainerStyle: {
+        opacity: 5
+      },
+      itemStyle :{
+        height : 50,
+        borderBottomWidth: 1,      
+        borderBottomColor: Colors.secondary
+      }
+    },
+    // initialRouteName: 'Profile',
+    initialRouteName: 'Offers',
+    drawerOpenRoute: 'DrawerOpen',
+    drawerCloseRoute: 'DrawerClose',
+    drawerToggleRoute: 'DrawerToggle',
+  });
 
 
 Drawer.navigationOptions = ({ navigation }) => ({
