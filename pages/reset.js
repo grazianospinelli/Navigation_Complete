@@ -1,60 +1,60 @@
 import React, { Component } from 'react';
 import {
-  AppRegistry,
-  StyleSheet,Text,StatusBar, TouchableWithoutFeedback,
-  View,TouchableOpacity,TextInput,ImageBackground,Keyboard
+  AppRegistry, StyleSheet,
+  Text, StatusBar, Keyboard,TouchableWithoutFeedback,
+  View,TextInput,TouchableOpacity,
+  ImageBackground
 } from 'react-native';
 import firebase from 'react-native-firebase';
 import { Formik } from "formik";
 import * as Yup from "yup";
 import * as Animatable from 'react-native-animatable';
-import IP from '../config/IP';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
+import IP from '../config/IP';
 import * as Colors from '../components/themes/colors';
 
-const myvalidationSchema = Yup.object().shape({
+const myvalidationSchema = Yup.object().shape({	
 	userEmail: Yup
 		.string()
 		.required("↑ Inserire la mail!")
-	  	.email('↑ Email non corretta')
+	 	.email('↑ Email non corretta')	
 });
 
-export default class Reset extends Component {
+export default class reret extends Component {
 	
-	constructor(props){
-		super(props)
-		// this.state={
-		// 	userEmail:'',			
-		// }
-	}
-	
+constructor(props){
+	super(props)
+	// this.state={		
+	// 	userEmail:'', 	
+	// }
+}
+		
 	componentDidMount = async () => {
-        const enabled = await firebase.messaging().hasPermission();
-        if (enabled) {
-            // user has permissions
-        } else {
-            // user doesn't have permission
-            try {
-                await firebase.messaging().requestPermission();
-                // User has authorised
-            } catch (error) {
-                // User has rejected permissions
-                alert('No permission for notification');
-            }
-        }
+		const enabled = await firebase.messaging().hasPermission();
+		if (enabled) {
+			// user has permissions
+		} else {
+			// user doesn't have permission
+			try {
+				await firebase.messaging().requestPermission();
+				// User has authorised
+			} catch (error) {
+				// User has rejected permissions
+				alert('No permission for notification');
+			}
+		}
 
-        const fcmToken = await firebase.messaging().getToken()
-        if (fcmToken) {
-        	// alert(fcmToken);
-        	this.setState({userToken: fcmToken});
-        }
+		const fcmToken = await firebase.messaging().getToken()
+		if (fcmToken) {
+			this.setState({userToken: fcmToken})
+		}
 
-        this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(fcmToken => {
-        	if (fcmToken) {this.setState({userToken: fcmToken})}
-		})  
+		this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(fcmToken => {
+			if (fcmToken) {this.setState({userToken: fcmToken})}
+		})
+			
 	}
 
-	
 	askReset = (values) =>{
 		
 		const {userEmail} = values;		
@@ -78,110 +78,135 @@ export default class Reset extends Component {
 					alert("Ti è stata inviata una mail con le istruzioni per resettare la tua password!");
 				}
 				else{
-					alert(responseJson);					
-					// redirect to profile page										
+					alert(responseJson);													
 				}
+				// redirect to home page		
 				this.props.navigation.navigate("Home");
 		})
 		.catch((error)=>{alert(error); throw error;});
 					
 		Keyboard.dismiss();
 	}
-	
-  	render() {
-	
-	return(
-	<ImageBackground 
-		source={require('../components/images/maid.jpg')}
-		style={styles.backgroundImage}>
 
-		<View style={{justifyContent: 'flex-start',	alignItems: 'flex-start'}}>
-			<TouchableOpacity
-				onPress={() => {this.props.navigation.navigate("Home")}}>
-				<Icon style={{ padding: 10 }} name="arrow-left" padding={15} size={25} color={Colors.primary} />
-			</TouchableOpacity>
-		</View>
+	render() {
+			
+		return (
 
-		<Formik
+			<ImageBackground 
+				source={require('../components/images/barman.jpg')}
+				style={styles.backgroundImage}
+			>
+			<View style={{flex: 0, justifyContent: 'flex-start', alignItems: 'flex-start'}}>
+				<TouchableOpacity
+					style={{alignItems: 'center'}}
+					onPress={() => {this.props.navigation.navigate("Home")}}>
+					<Icon style={{ padding: 10 }} name="arrow-left" size={25} color={Colors.primary} />
+				</TouchableOpacity>
+			</View>
+
+			<Formik
 				initialValues={{userEmail:''}}
+				// onSubmit={values => alert(JSON.stringify(values))}
 				onSubmit={values => this.askReset(values)}
 				validationSchema={myvalidationSchema}
-		>
-		
-		{({ values, errors, setFieldValue, touched, setFieldTouched, isValid, handleSubmit }) => (
+			>
+			
+			{({ values, errors, setFieldValue, touched, setFieldTouched, isValid, handleSubmit }) => (
 
-		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 			<View style={styles.container}>
-				<StatusBar backgroundColor='#000' translucent={false} barStyle='light-content' />
-				
-				<TouchableOpacity onPress={handleSubmit}>
-					{ isValid ? 
-					(<Animatable.Text animation="rubberBand" iterationCount="infinite" easing="linear" style={styles.pageName}>
-							{'→Reset←'}
-					</Animatable.Text>):
-					<Text style={styles.pageName}>{'Reset'}</Text>}
-				</TouchableOpacity>
+					<StatusBar backgroundColor='#000' translucent={false} barStyle='light-content' />
 
-				<View style={styles.inputForm}>
+					<TouchableOpacity onPress={handleSubmit}>
+						{ isValid ? 
+						(<Animatable.Text animation="rubberBand" iterationCount="infinite" easing="ease-out" style={styles.pageName}>
+								{'→Reset←'}
+						</Animatable.Text>):
+						<Text style={styles.pageName}>{'Reset'}</Text>}
+					</TouchableOpacity>
+		
+					<View style={{height: 25, marginTop: '5%', justifyContent: 'flex-start'}}>
+						<Text style={{color:Colors.primary, fontWeight:'bold'}}>{'Inserisci la mail con cui ti sei registrato:'}</Text>
+					</View>
+
+					<View style={styles.inputForm}>
 					<Icon style={styles.searchIcon} name="envelope" size={20} color={errors.userEmail && touched.userEmail ? Colors.primary : 'transparent'}  />		
 					<TextInput
-						placeholder="Inserisci Email"
-						value={values.userEmail}
-						style={{borderRadius: 25, width:180}}
-						onChangeText={text => {text.trim(); setFieldValue("userEmail", text)}}
-						onBlur={() => setFieldTouched("userEmail")}							
+						placeholder="Inserisci la tua Email"
+						style={{borderRadius: 25, width:220}}
+						onChangeText={text => { text.trim(); setFieldValue("userEmail", text)}}
+						onBlur={() => setFieldTouched("userEmail")}
 					/>
-				</View>
-				<View style={{height: 25, justifyContent: 'flex-start'}}>
+					</View>
+		
+					
+					<View style={{height: 25, justifyContent: 'flex-start'}}>
 						{(errors.userEmail && touched.userEmail ) && 
 						<Text style={{color:Colors.primary, fontWeight:'bold'}}>{errors.userEmail}</Text>}
-				</View>				
+					</View>			
+					
 
-				<View style={{ height: 40 }}><Text>{}</Text></View>				 
-				
-		    </View>
-		</TouchableWithoutFeedback>
-		)}
+					
+			</View>
+			</TouchableWithoutFeedback>
+			)}
 
-		</Formik>
+			</Formik>
 
-	</ImageBackground>
-   );
-  }
+			<View style={{ height: '30%' }}><Text>{}</Text></View>
+							
+			</ImageBackground>
+	
+		);
+	}
+
 }
 
 const styles = StyleSheet.create({
-	backgroundImage: {
-		flex: 1,
-		resizeMode: 'cover', // or 'stretch'
-	},
+
 	container: {
 		flex: 1,
 		justifyContent: 'center',
-		alignItems: 'center',		
+		alignItems: 'center',
+		// backgroundColor: '#F5FCFF',
 	},
-	pageName:{
-		marginBottom: 40,
-		color: Colors.primary,
-		fontFamily: 'Wildemount Rough',
-		fontSize: 80,		
+
+	backgroundImage: {
+		flex: 1,
+		justifyContent: 'center',
+		resizeMode: 'cover', // or 'stretch'
 	},
+
 	inputForm: {
 		flexDirection: 'row',
 		justifyContent: 'flex-start',
 		alignItems: 'center',
+		//backgroundColor: 'transparent',
+		width:280,
 		height: 40,
-		width:250,
-		margin:1,
+		margin: 1,
 		borderRadius: 25, 
+		//borderWidth:1,
+		//borderColor: 'gray',
 		backgroundColor: 'rgba(255,255,255,0.4)',
+	},
+	
+	pageName:{
+		marginBottom: 30,
+		// marginTop: '15%',
+		justifyContent: 'flex-start',
+		alignItems: 'center',
+		color: Colors.primary,
+		fontFamily: 'Wildemount Rough',
+		fontSize: 55,		
 	},
 
 	searchIcon: {
 		padding: 10,
-		margin: 0,
+		// margin: 10,
 	},	
 
+  
 });
 
-AppRegistry.registerComponent('Reset', () => Reset);
+AppRegistry.registerComponent('reset', () => reset);

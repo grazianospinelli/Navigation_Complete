@@ -1,35 +1,45 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
-  AppRegistry,
-  StyleSheet,
+  AppRegistry, CheckBox, Linking, StyleSheet,
   Text, StatusBar, Keyboard,TouchableWithoutFeedback,
-  View,TextInput,TouchableOpacity,
+  View,TextInput,TouchableOpacity, ScrollView, SafeAreaView,
   ImageBackground
 } from 'react-native';
 import md5 from 'md5';
 import uuidv4 from 'uuid/v4';
 import firebase from 'react-native-firebase';
+import moment from "moment";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import * as Animatable from 'react-native-animatable';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import IP from '../config/IP';
 import * as Colors from '../components/themes/colors';
+import { colors } from 'react-native-elements';
 
 const myvalidationSchema = Yup.object().shape({
 	userName: Yup
 		.string()
-		.required("↑ Inserire il nome!")
+		.required("↑ Inserisci il Tuo Nome!")
 		.min(2,"↑ Nome non valido")
-		.max(30,"↑ Nome troppo Lungo"),
+		.max(30,"↑ Nome troppo Lungo")
+		.matches(/^[aA-zZ]+$/, "↑ Solo lettere senza spazi"),
 	userEmail: Yup
 		.string()
-		.required("↑ Inserire la mail!")
+		.required("↑ Inserisci la tua email!")
 	  	.email('↑ Email non corretta'),
 	userPassword: Yup
 		.string()
-		.required("↑ Inserire la Password!")
-		.min(8,"↑ Password deve essere almeno 8 caratteri")
+		.required("↑ Inserisci la Password!")
+		.matches(/^[aA-zZ0-9]+$/, "↑ Solo lettere e numeri senza spazi")
+		.min(8,"↑ Password deve essere almeno 8 caratteri"),
+	confirmPassword: Yup
+		.string()
+		.required("↑ Ripeti la Password")
+		.oneOf([Yup.ref("userPassword")], "Le 2 Password devono coincidere"),
+	checkBox1: Yup
+		.bool()
+		.oneOf([true]),
 });
 
 export default class register extends Component {
@@ -40,7 +50,9 @@ constructor(props){
 		userName:'',
 		userEmail:'', 
 		userPassword:'',		
-		userToken:'',			
+		userToken:'',
+		checkBox1: false,
+		checkBox2: false
 	}
 }
 		
@@ -71,11 +83,13 @@ constructor(props){
 	}
 
 	userRegister = (values) =>{				
-		const {userName,userEmail,userPassword} = values;
+		const {userName,userEmail,userPassword, checkBox2} = values;
 		const userToken = this.state.userToken;
 		const md5Password = md5(userPassword);
 		const upperEmail = userEmail.toUpperCase();
 		const myuuid = uuidv4();
+		const today = moment(new Date(), "DD-MM-YYYY").format("YYYY-MM-DD");
+		const consens = (checkBox2)? 1 : 0;		
 				
 		fetch(`${IP}/register.php`, {
 			method: 'POST',
@@ -87,7 +101,9 @@ constructor(props){
 				uuid: myuuid,
 				name: userName,
 				email: upperEmail,
-				password: md5Password
+				password: md5Password,
+				regdate: today,							
+				consens: consens
 			})
 		})
 		.then((response) => response.json())
@@ -100,8 +116,9 @@ constructor(props){
 			body: JSON.stringify({
 				uuid: myuuid,
 				token: userToken,
-				email: upperEmail})
+				email: upperEmail,
 			})
+		})
 		.then((response) => response.json())
 		.then((responseData) => {alert(responseData); this.props.navigation.navigate("Home");})
 		.catch((err) => {alert(err)});		
@@ -115,16 +132,16 @@ constructor(props){
 				source={require('../components/images/chef.jpg')}
 				style={styles.backgroundImage}
 			>
-			<View style={{flex: 0, justifyContent: 'flex-start', alignItems: 'flex-start'}}>
+			
+			<View style={{justifyContent: 'flex-start',	alignItems: 'flex-start', marginBottom: 15}}>
 				<TouchableOpacity
-					style={{alignItems: 'center'}}
 					onPress={() => {this.props.navigation.navigate("Home")}}>
-					<Icon style={{ padding: 10 }} name="arrow-left" size={25} color={Colors.primary} />
+					<Icon style={{ padding: 10 }} name="arrow-left" padding={15} size={25} color={Colors.primary} />
 				</TouchableOpacity>
 			</View>
 
 			<Formik
-				initialValues={{userName:'',userEmail:'',userPassword:''}}
+				initialValues={{userName:'',userEmail:'',userPassword:'',confirmPassword:'',checkBox1: false, checkBox2: false}}
 				// onSubmit={values => alert(JSON.stringify(values))}
 				onSubmit={values => this.userRegister(values)}
 				validationSchema={myvalidationSchema}
@@ -132,22 +149,18 @@ constructor(props){
 			
 			{({ values, errors, setFieldValue, touched, setFieldTouched, isValid, handleSubmit }) => (
 
-			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+			
+			
+			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>			
 			<View style={styles.container}>
-					<StatusBar backgroundColor='#000' translucent={false} barStyle='light-content' />
-
-					<TouchableOpacity onPress={handleSubmit}>
-						{ isValid ? 
-						(<Animatable.Text animation="rubberBand" iterationCount="infinite" easing="ease-out" style={styles.pageName}>
-								{'→Registrati←'}
-						</Animatable.Text>):
-						<Text style={styles.pageName}>{'Registrati'}</Text>}
-					</TouchableOpacity>
-
+					<StatusBar backgroundColor='#000' translucent={false} barStyle='light-content' />					
+					
+					
+					<ScrollView contentContainerStyle={styles.contentContainer} >
 					<View style={styles.inputForm}>	
 					<Icon style={styles.searchIcon} name="user" size={20} color={errors.userName && touched.userName ? Colors.primary : 'transparent'}  />			
 					<TextInput
-						placeholder="Inserisci il Nome"
+						placeholder="Inserisci il Tuo Nome"
 						style={{borderRadius: 25, width:220}}	
 						underlineColorAndroid="transparent"
 						value={values.userName}
@@ -194,9 +207,73 @@ constructor(props){
 						<Text style={{color:Colors.primary, fontWeight:'bold'}}>{errors.userPassword}</Text>}
 					</View>
 
+					<View style={styles.inputForm}>	
+					<Icon style={styles.searchIcon} name="lock" size={20} color={errors.confirmPassword && touched.confirmPassword ? Colors.primary : 'transparent'} />
+					<TextInput
+						placeholder="Conferma la Password"
+						secureTextEntry={true}
+						style={{borderRadius: 25, width:220}}
+						onChangeText={text => { text.trim(); setFieldValue("confirmPassword", text)}}
+						onBlur={() => setFieldTouched("confirmPassword") }
+					/>
+					</View>
+
+					<View style={{height: 25, justifyContent: 'flex-start'}}>
+						{(errors.confirmPassword && touched.confirmPassword ) && 
+						<Text style={{color:Colors.primary, fontWeight:'bold'}}>{errors.confirmPassword}</Text>}
+					</View>
+
+					<View style={styles.terms}>	
+						<View style={styles.insideTerms}>					
+							<CheckBox
+								disabled={false}
+								value={values.checkBox1}
+								onValueChange={(newValue) => setFieldValue("checkBox1",newValue)}
+								// style={{backgroundColor: Colors.primary}}
+							/>
+							{/* https://stackoverflow.com/questions/36284453 */}
+							<View style={{marginLeft: 10, flexShrink: 1}}>
+								<Text 
+									style={{flexShrink: 1}}
+									onPress={() => {this.props.navigation.navigate("Privacy")}}
+									// onPress={() => Linking.openURL('https://www.jobby.works/privacy-policy')}
+								>
+									{'Dichiaro di aver letto i Termini e Condizioni ExtraStaff e l\'informativa Privacy ad essi allegata e di accettarne le condizioni.'}
+								</Text>
+								<Text style={{color: (errors.checkBox1)? Colors.primary:'black', fontWeight: "bold"}}>{'OBBLIGATORIO'}</Text>
+							</View>
+						</View>
+						<View style={styles.insideTerms}>					
+							<CheckBox
+								disabled={false}
+								value={values.checkBox2}
+								onValueChange={(newValue) => setFieldValue("checkBox2",newValue)}								
+							/>						
+							<View style={{marginLeft: 10, flexShrink: 1}}>
+								<Text style={{flexShrink: 1}}>
+									{'Dichiaro di acconsentire al trattamento per finalità di marketing e a ricevere comunicazioni commerciali mirate.'}
+								</Text>
+							</View>
+						</View>
+					</View>
+
+					<TouchableOpacity onPress={handleSubmit}>
+						{ isValid ? 
+						(<Animatable.Text animation="rubberBand" iterationCount="infinite" easing="ease-out" style={styles.pageName}>
+								{'→Registrati←'}
+						</Animatable.Text>):
+						<Text style={styles.pageName}>{'Registrati'}</Text>}
+					</TouchableOpacity>
+
+					</ScrollView>
 					
 			</View>
 			</TouchableWithoutFeedback>
+			
+
+			
+			
+
 			)}
 
 			</Formik>
@@ -212,8 +289,7 @@ constructor(props){
 
 const styles = StyleSheet.create({
 
-	container: {
-		flex: 1,
+	container: {		
 		justifyContent: 'center',
 		alignItems: 'center',
 		// backgroundColor: '#F5FCFF',
@@ -223,6 +299,10 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		resizeMode: 'cover', // or 'stretch'
+	},
+	contentContainer: {
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 
 	inputForm: {
@@ -240,12 +320,29 @@ const styles = StyleSheet.create({
 	},
 	
 	pageName:{
+		marginTop: 20,
 		marginBottom: 30,
 		justifyContent: 'flex-start',
 		alignItems: 'center',
 		color: Colors.primary,
 		fontFamily: 'Wildemount Rough',
 		fontSize: 55,		
+	},
+
+	terms:{
+		width: '90%',
+		justifyContent: 'center',
+		alignItems: 'flex-start',
+		backgroundColor: 'rgba(255,255,255,0.4)',
+		borderRadius: 15, 
+	},
+
+	insideTerms:{
+		padding: 5,
+		flexDirection: 'row',
+		justifyContent: 'flex-start',
+		alignItems: 'center',
+		
 	},
 
 	searchIcon: {

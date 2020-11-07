@@ -3,16 +3,17 @@
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
+import { createSwitchNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
 
 import firebase from 'react-native-firebase';
 import { Notification, NotificationOpen } from 'react-native-firebase';
-
-import { createSwitchNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
 
 import AuthLoading from './pages/loading';
 import Home from './pages/home';
 import Login from './pages/login';
 import Reset from './pages/reset';
+import Privacy  from './pages/privacy';
+import Terms  from './pages/termsandconditions';
 import Register from './pages/register';
 import Drawer from './drawer';
 
@@ -35,6 +36,14 @@ const AuthStack = createStackNavigator(
       screen: Register,
       navigationOptions: { header: null }  
     },
+    Privacy: { 
+      screen: Privacy,
+      navigationOptions: { header: null }  
+    },
+    Terms: { 
+      screen: Terms,
+      navigationOptions: { header: null }  
+    },
   },
   {
     initialRouteName: 'Home',
@@ -55,7 +64,7 @@ const AppNavigator = createSwitchNavigator({
 
 const Container = createAppContainer(AppNavigator);
 
-export default class App extends React.Component {
+export default class App extends Component {
   render() {
     return (
           <Container />
