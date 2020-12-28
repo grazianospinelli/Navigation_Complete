@@ -164,7 +164,7 @@ constructor(props){
 						style={{borderRadius: 25, width:220}}	
 						underlineColorAndroid="transparent"
 						value={values.userName}
-						onChangeText={text => setFieldValue("userName", text)}
+						onChangeText={text => setFieldValue("userName", text.trim())}
 						onBlur={() => setFieldTouched("userName")}													
 					/>
 					</View>
@@ -180,7 +180,7 @@ constructor(props){
 					<TextInput
 						placeholder="Inserisci la tua Email"
 						style={{borderRadius: 25, width:220}}
-						onChangeText={text => { text.trim(); setFieldValue("userEmail", text)}}
+						onChangeText={text => setFieldValue("userEmail", text.trim())}
 						onBlur={() => setFieldTouched("userEmail")}
 					/>
 					</View>
@@ -197,7 +197,7 @@ constructor(props){
 						placeholder="Inserisci la Password"
 						secureTextEntry={true}
 						style={{borderRadius: 25, width:220}}
-						onChangeText={text => { text.trim(); setFieldValue("userPassword", text)}}
+						onChangeText={text => setFieldValue("userPassword", text.trim())}
 						onBlur={() => setFieldTouched("userPassword") }
 					/>
 					</View>
@@ -213,7 +213,7 @@ constructor(props){
 						placeholder="Conferma la Password"
 						secureTextEntry={true}
 						style={{borderRadius: 25, width:220}}
-						onChangeText={text => { text.trim(); setFieldValue("confirmPassword", text)}}
+						onChangeText={text => setFieldValue("confirmPassword", text.trim())}
 						onBlur={() => setFieldTouched("confirmPassword") }
 					/>
 					</View>

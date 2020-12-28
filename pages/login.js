@@ -149,7 +149,7 @@ export default class login extends Component {
 						placeholder="Inserisci Email"
 						value={values.userEmail}
 						style={{borderRadius: 25, width:180}}
-						onChangeText={text => {text.trim(); setFieldValue("userEmail", text)}}
+						onChangeText={text => setFieldValue("userEmail", text.trim())}
 						onBlur={() => setFieldTouched("userEmail")}							
 					/>
 				</View>
@@ -165,7 +165,7 @@ export default class login extends Component {
 						secureTextEntry={true}
 						value={values.userPassword}
 						style={{borderRadius: 25, width:180}}
-						onChangeText={text => {text.trim(); setFieldValue("userPassword", text)}}
+						onChangeText={text => setFieldValue("userPassword", text.trim())}
 						onBlur={() => setFieldTouched("userPassword") }
 					/>
 				</View>
