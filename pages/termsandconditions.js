@@ -42,11 +42,8 @@ export default class terms extends Component {
         	if (fcmToken) {this.setState({userToken: fcmToken})}
 		})  
 	}
-
-	
 		
   	render() {
-
 	return (
 		<View style = {styles.container}>			
 
@@ -62,8 +59,6 @@ export default class terms extends Component {
 		   
 		</View>
 	 )
-	
-
   }
 }
 

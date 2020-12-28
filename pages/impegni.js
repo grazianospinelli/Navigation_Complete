@@ -222,6 +222,7 @@ export default class JobScreen extends Component {
         />
 
         <Text style={styles.pageName}>Lista Impegni</Text>
+        <NavigationEvents onDidFocus={()=>this.fetchData()} />
         
         <ScrollView style={{width: '100%'}} >
         

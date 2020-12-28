@@ -10,6 +10,8 @@ import Icon from "react-native-vector-icons/Ionicons";
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IconTextField from '../components/IconTextField';
 import IconSwitch from '../components/IconSwitch';
+import { Rating } from 'react-native-ratings';
+import * as Progress from 'react-native-progress';
 import RNPickerSelect from 'react-native-picker-select';
 import DatePicker from 'react-native-datepicker'
 import PhotoUpload from 'react-native-photo-upload';
@@ -23,14 +25,20 @@ const placeHolderUri = Image.resolveAssetSource(placeHolder).uri
 const accessKeyId='fbgRVwCQFcuwlJRN0v7b33jb5cbWJgIkRzKvfu2seQs'
 
 const sex = [
-  {
-    label: 'Uomo',
-    value: 'U',
-  },
-  {
-    label: 'Donna',
-    value: 'D',
-  },
+  {label: 'Uomo', value: 'U'},
+  {label: 'Donna', value: 'D'},
+];
+
+const languages = [
+  {label: 'Nessuna', value: ''},
+  {label: 'Arabo', value: 'Arabo'},
+  {label: 'Cinese', value: 'Cinese'},
+  {label: 'Francese', value: 'Francese'},
+  {label: 'Giapponese', value: 'Giapponese'},
+  {label: 'Inglese', value: 'Inglese'},
+  {label: 'Russo', value: 'Russo'}, 
+  {label: 'Spagnolo', value: 'Spagnolo'}, 
+  {label: 'Tedesco', value: 'Tedesco'},  
 ];
 
 const phoneRegExp = /^[0-9]{8,15}$/
@@ -138,7 +146,7 @@ export default class ProfileScreen extends Component {
           this.loadCities(responseJson['prov']);
           this.setState({loading: false});         
         })
-        .catch(error=>{console.log(error);this.setState({loading: false});})               
+        .catch(error=>{console.log(error);this.setState({loading: true});})               
     })
     .catch(error=>console.log(error))  
         
@@ -153,7 +161,7 @@ export default class ProfileScreen extends Component {
         // console.log(JSON.stringify(resJson));
       }
     })
-    .catch(error=>alert(error));
+    .catch(error=>console.log(error));
 
   }
 
@@ -250,6 +258,25 @@ export default class ProfileScreen extends Component {
   else { }
   }
 
+
+  Total(infoUser) {
+    return (infoUser.star1+infoUser.star2+infoUser.star3+infoUser.star4+infoUser.star5)
+  }
+
+  calcRating(infoUser) {
+    var Tot=this.Total(infoUser)
+    var Sum=(infoUser.star1+(infoUser.star2*2)+(infoUser.star3*3)+(infoUser.star4*4)+(infoUser.star5*5))
+    if (Tot!==0){return (Sum/Tot)}
+    return 0
+  }
+
+  starRating(value,infoUser){
+    var Tot=this.Total(infoUser)
+    if (Tot!==0){return (value/Tot)}
+    return 0
+  }
+
+
   
   render() {
    
@@ -290,8 +317,21 @@ export default class ProfileScreen extends Component {
 
                 <View style={styles.body}>
                   <View style={styles.bodyContent}>
-                    <Text style={styles.name}>{data['name']} {data['surname']}</Text>
+                    <Text style={styles.name}>{data['name']} {data['surname']}</Text>                    
                     <Text style={styles.info}>{data['email'] ? data['email'].toLowerCase() : null }</Text>
+                    {/* <Text style={styles.info}>{'Voto: '+this.calcRating(data)+' su un totale di '+this.Total(data)+' servizi'}</Text> */}
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                      <Rating
+                        ratingColor='#f1c40f'
+                        ratingCount={5}
+                        imageSize={30}
+                        readonly
+                        startingValue={this.calcRating(data)}
+                        style={{ marginTop: 8 }}
+                        fractions={10}
+                      />
+                      <Text style={styles.rating}>{this.calcRating(data)+'/5'}</Text>
+                    </View>
                       <Card 
                         containerStyle={{width: '100%'}}
                         titleStyle={{padding: 10, backgroundColor: '#cecece'}}
@@ -305,7 +345,8 @@ export default class ProfileScreen extends Component {
                               sex: data['sex'], chef: !!(data['chef']), pizzaman: !!(data['pizzaman']), maitre: !!(data['maitre']),
                               waiter: !!(data['waiter']), bevandist: !!(data['bevandist']),
                               barman: !!(data['barman']), sommel: !!(data['sommel']), pulizie: !!(data['pulizie']),
-                              factotum: !!(data['factotum']), animaz: !!(data['animaz']), hostess: !!(data['hostess']), 
+                              factotum: !!(data['factotum']), animaz: !!(data['animaz']), hostess: !!(data['hostess']),
+                              language1: data['language1'], language2: data['language2'],
                               description: data['description'], lon: data['lon'], lat: data['lat']
                           }}
                           // onSubmit={values => alert(JSON.stringify(values))}
@@ -437,9 +478,9 @@ export default class ProfileScreen extends Component {
                                               items={sex}
                                               onValueChange={text => setFieldValue("sex", text)}
                                               onBlur={() => setFieldTouched("sex")}
-                                              textInputProps={{ underlineColor: 'red' }}                                                                                       
+                                              textInputProps={{ underlineColor: 'red' }}
                                           />
-                                    </View>                                  
+                                    </View>
                                   </View>
 
                                   <IconTextField
@@ -535,9 +576,49 @@ export default class ProfileScreen extends Component {
                                       onValueChange={(val) => setFieldValue("hostess", val)}
                                       value={values.hostess}
                                   />
+
+                                  <View style={{marginTop: 15, height: 40, width: '100%', alignItems: 'center', justifyContent:'center', backgroundColor: '#cecece'}}> 
+                                    <Text style={{fontSize: 14, fontWeight: 'bold', color: Colors.grey1}}>PARLI BENE ALTRE LINGUE?</Text> 
+                                  </View>
+
+                                  <View style={styles.ElemForm}>
+                                  <MaterialIcon style={{ marginBottom: 15, marginRight: 10 }} size={20} name='language' />
+                                  <View style={{ flex: 1, alignItems: 'flex-end' }}> 
+                                          <RNPickerSelect
+                                              placeholder = {{
+                                                label: 'Lingua...',
+                                                value: '',
+                                                color: 'green',                                                      
+                                              }}
+                                              value={values.language1}
+                                              items={languages}
+                                              onValueChange={text => setFieldValue("language1", text)}
+                                              onBlur={() => setFieldTouched("language1")}
+                                              textInputProps={{ underlineColor: 'red' }}
+                                          />
+                                    </View>
+                                  </View>
+
+                                  <View style={styles.ElemForm}>
+                                  <MaterialIcon style={{ marginBottom: 15, marginRight: 10 }} size={20} name='language' />
+                                  <View style={{ flex: 1, alignItems: 'flex-end' }}> 
+                                          <RNPickerSelect
+                                              placeholder = {{
+                                                label: 'Altra Lingua...',
+                                                value: '',
+                                                color: 'green',                                                      
+                                              }}
+                                              value={values.language2}
+                                              items={languages}
+                                              onValueChange={text => setFieldValue("language2", text)}
+                                              onBlur={() => setFieldTouched("language2")}
+                                              textInputProps={{ underlineColor: 'red' }}
+                                          />
+                                    </View>
+                                  </View>
                                   
                                   <View style={{marginTop: 15, height: 40, width: '100%', alignItems: 'center', justifyContent:'center', backgroundColor: '#cecece'}}> 
-                                    <Text style={{fontSize: 14, fontWeight: 'bold', color: Colors.grey1}}>DESCRIVITI</Text> 
+                                    <Text style={{fontSize: 14, fontWeight: 'bold', color: Colors.grey1}}>SCRIVI DI TE</Text> 
                                   </View>
                                   
                                   <TextInput
@@ -553,6 +634,54 @@ export default class ProfileScreen extends Component {
                                     onBlur={() => setFieldTouched("description")}
                                     error={touched.description || submitCount > 0 ? errors.description : null}
                                   />
+
+                                  <View style={{marginTop: 15, height: 40, width: '100%', alignItems: 'center', justifyContent:'center', backgroundColor: '#cecece'}}> 
+                                    <Text style={{fontSize: 14, fontWeight: 'bold', color: Colors.grey1}}>LE TUE STATISTICHE</Text> 
+                                  </View>
+                                  <View style={styles.statForm}>
+                                    <Text style={{fontSize: 14, color: Colors.grey1}}>{'Totale Voti Ricevuti:  '+this.Total(data)}</Text>
+                                  </View>
+                                  <View style={styles.statForm}>
+                                    <Text style={{fontSize: 14, color: Colors.grey1}}>{'Media:   '}</Text>
+                                    <Rating
+                                      ratingColor='#f1c40f'
+                                      ratingCount={5}
+                                      imageSize={15}
+                                      readonly
+                                      startingValue={this.calcRating(data)}
+                                      fractions={10}
+                                    />
+                                    <Text style={{fontSize: 14, color: Colors.grey1, marginLeft: 10}}>{this.calcRating(data)+'/5'}</Text>
+                                  </View>
+                                  
+                                  <View style={styles.statForm}>
+                                    <Text style={[styles.statText, {marginRight: 10}]}>{'5 Stelle'}</Text>
+                                    <Progress.Bar progress={this.starRating(data.star5,data)} width={150} color='#f1c40f'/>
+                                    <Text style={[styles.statText, {marginLeft: 10}]}>{data.star5+' Voti'}</Text>
+                                  </View>
+                                  <View style={styles.statForm}>
+                                    <Text style={[styles.statText, {marginRight: 10}]}>{'4 Stelle'}</Text>
+                                    <Progress.Bar progress={this.starRating(data.star4,data)} width={150} color='#f1c40f'/>
+                                    <Text style={[styles.statText, {marginLeft: 10}]}>{data.star4+' Voti'}</Text>
+                                  </View>
+                                  <View style={styles.statForm}>
+                                    <Text style={[styles.statText, {marginRight: 10}]}>{'3 Stelle'}</Text>
+                                    <Progress.Bar progress={this.starRating(data.star3,data)} width={150} color='#f1c40f'/>
+                                    <Text style={[styles.statText, {marginLeft: 10}]}>{data.star3+' Voti'}</Text>
+                                  </View>
+                                  <View style={styles.statForm}>
+                                    <Text style={[styles.statText, {marginRight: 10}]}>{'2 Stelle'}</Text>
+                                    <Progress.Bar progress={this.starRating(data.star2,data)} width={150} color='#f1c40f'/>
+                                    <Text style={[styles.statText, {marginLeft: 10}]}>{data.star2+' Voti'}</Text>
+                                  </View>
+                                  <View style={styles.statForm}>
+                                    <Text style={[styles.statText, {marginRight: 10}]}>{'1 Stelle'}</Text>
+                                    <Progress.Bar progress={this.starRating(data.star1,data)} width={150} color='#f1c40f'/>
+                                    <Text style={[styles.statText, {marginLeft: 10}]}>{data.star1+' Voti'}</Text>
+                                  </View>
+                                  <View style={styles.statForm}>
+                                    <Text style={{fontSize: 14, color: Colors.grey1}}>{'Impegni Disdetti:  '+data.canceledcom}</Text>
+                                  </View>
 
 
                                   <View marginTop={15} />
@@ -626,11 +755,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: .2,
     borderColor: 'gray',
   },
-  name:{
-    fontSize:22,
-    color:"#FFFFFF",
-    fontWeight:'600',
-  },
+  // name:{
+  //   fontSize:22,
+  //   color:"#FFFFFF",
+  //   fontWeight:'600',
+  // },
   body:{
     marginTop:40,
   },
@@ -647,8 +776,14 @@ const styles = StyleSheet.create({
   info:{
     fontSize:16,
     color: Colors.tertiary,
-    marginTop:10
+    marginTop:7
   },
+  rating:{
+    fontSize:16,
+    color:'#f1c40f',
+    fontWeight: 'bold',
+    marginLeft:5    
+  },  
   buttonContainer: {
     marginTop:10,
     height:45,
@@ -659,6 +794,19 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius:30,    
     backgroundColor: Colors.primary
+  },
+  statForm: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center', 
+    height: 30,
+    borderBottomWidth: .2,
+    borderColor: 'gray',
+  },
+  statText: {
+    fontSize: 12, 
+    fontWeight: 'bold', 
+    color: Colors.grey1
   },
   loader:{
     flex: 1,

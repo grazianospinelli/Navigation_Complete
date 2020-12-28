@@ -883,6 +883,10 @@ ___________________________________________________________________
 PER MODIFICARE UNO CARATTERISTICA DI UNO STYLE LASCIANDO TUTTE LE ALTRE INVARIATE:
 
 style={[styles.button, { backgroundColor: Colors.secondary }]}>
+
+STILE CONDIZIONALE E SOMMA DI STILI
+
+style={[styles.childRow, styles.button, item.value ? styles.btnActive : styles.btnInActive]}
 ___________________________________________________________________
 
 VISUALIZZAZIONE RAPIDA ARRAY:
@@ -905,6 +909,9 @@ npm install react-native-view-overflow --save
 react-native link react-native-view-overflow
 
 npm install react-native-card-flip --save
+
+npm install react-native-invertible-scroll-view --save
+npm install react-native-prompt --save
 
 ___________________________________________________________________
 

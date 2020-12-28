@@ -1,10 +1,13 @@
 import React from 'react';
 import { createDrawerNavigator } from 'react-navigation';
+import Icon from "react-native-vector-icons/SimpleLineIcons";
 import NavBarItem from './components/common/NavBarItem';
 import DrawerContainer from './components/DrawerContainer';
 import ProfileScreen from './pages/profile';
 import OfferScreen from './pages/offers';
 import JobScreen from './pages/impegni';
+// import MessageScreen from './pages/messages';
+import MessNavStack from './pages/messagestack';
 import AgendaScreen from './pages/agenda';
 import LogoutScreen from './pages/logout';
 import * as Colors from './components/themes/colors';
@@ -23,13 +26,19 @@ const getDrawerItem = navigation => (
   />
 );
 
-
 const Drawer = createDrawerNavigator(
   {
     Profile:  { screen: ProfileScreen },
-    Job:      { screen: JobScreen },
-    Agenda:   { screen: AgendaScreen },
-    Offers:    { screen: OfferScreen },
+    Offers:   { screen: OfferScreen },
+    Job:      { screen: JobScreen },    
+    Agenda:   { screen: AgendaScreen },    
+    Message:  { 
+      screen: MessNavStack,
+      navigationOptions: {
+        drawerLabel: "Messaggi",
+        drawerIcon: () =>(<Icon  name="bubble" size={20} color={Colors.secondary} />)                  
+      }
+    },
     Logout:   { screen: LogoutScreen },
   },
 
@@ -55,8 +64,7 @@ const Drawer = createDrawerNavigator(
         borderBottomColor: Colors.secondary
       }
     },
-    // initialRouteName: 'Profile',
-    initialRouteName: 'Offers',
+    initialRouteName: 'Profile',    
     drawerOpenRoute: 'DrawerOpen',
     drawerCloseRoute: 'DrawerClose',
     drawerToggleRoute: 'DrawerToggle',

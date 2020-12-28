@@ -153,7 +153,7 @@ export default class AddCommit extends Component {
                         <TouchableOpacity onPress={this.props.onAddCommitClosed} style={[styles.modalButton, {backgroundColor: Colors.primary}]}>
                             <Icon  name="ios-close" size={35} color='white' />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={handleSubmit} style={[styles.modalButton, {backgroundColor: Colors.secondary}]}>
+                        <TouchableOpacity onPress={handleSubmit} style={[styles.modalButton, {backgroundColor: Colors.tertiary}]}>
                             <Icon  name="ios-add" size={35} color='white' />
                         </TouchableOpacity>
 
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   Title: {
     height: 40,      
     backgroundColor: Colors.grey2,    
-    // borderRadius: 10,
+    borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20

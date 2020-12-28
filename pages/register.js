@@ -233,12 +233,22 @@ constructor(props){
 							/>
 							{/* https://stackoverflow.com/questions/36284453 */}
 							<View style={{marginLeft: 10, flexShrink: 1}}>
-								<Text 
-									style={{flexShrink: 1}}
-									onPress={() => {this.props.navigation.navigate("Privacy")}}
-									// onPress={() => Linking.openURL('https://www.jobby.works/privacy-policy')}
-								>
-									{'Dichiaro di aver letto i Termini e Condizioni ExtraStaff e l\'informativa Privacy ad essi allegata e di accettarne le condizioni.'}
+								<Text style={{flexShrink: 1}}>
+									<Text>{'Dichiaro di aver letto i '}</Text>
+									<Text 
+										style={{flexShrink: 1, fontWeight: "bold"}}
+										onPress={() => {this.props.navigation.navigate("Terms")}}
+										// onPress={() => Linking.openURL('https://www.jobby.works/privacy-policy')}
+									>
+										{'Termini e Condizioni ExtraStaff'}
+									</Text>
+									<Text>{' e l\''}</Text>
+									<Text 
+										style={{flexShrink: 1, fontWeight: "bold"}}
+										onPress={() => {this.props.navigation.navigate("Privacy")}}
+									>
+										{'Informativa Privacy'}</Text>
+									<Text>{' ad essi allegata e di accettarne le condizioni.'}</Text>
 								</Text>
 								<Text style={{color: (errors.checkBox1)? Colors.primary:'black', fontWeight: "bold"}}>{'OBBLIGATORIO'}</Text>
 							</View>

@@ -1,10 +1,12 @@
 import React, { Component, Fragment } from "react";
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, AsyncStorage } from "react-native";
 import Modal from "react-native-modal";
 import Dialog from "react-native-dialog";
 import {getWeekDay, getYear, getMonth} from './DateUtility';
 import Icon from "react-native-vector-icons/Ionicons";
 import * as Colors from './themes/colors';
+import { USER_UUID } from '../components/auth';
+import IP from '../config/IP';
 
 // Trasformato DateDetail da funzione a classe Componente
 // Quando si costruisce un componente avente delle proprietà, 
@@ -12,7 +14,7 @@ import * as Colors from './themes/colors';
 // nel metodo render() le props si richiamano con this.props.
 
 const Separator = (colorSep) => (
-    <View style={{width: '70%', height: 2, backgroundColor: colorSep, marginVertical: 20 }} />
+    <View style={{width: '80%', height: 2, backgroundColor: colorSep, marginVertical: 15 }} />
 );
 
 export default class DateDetail extends Component {
@@ -20,9 +22,51 @@ export default class DateDetail extends Component {
   constructor(props){
     super(props)
     this.state={
-      showAlert: false
+      showAlert: false,
+      showSendMess: false,
+      newMessage: '',
+      restaurantImage: null
     }
     modalContent = null;
+  }
+
+  handleOpenSendMess = () => {
+    this.setState({ showSendMess: true })
+  }
+
+  handleCloseSendMess = () => {
+    this.setState({ showSendMess: false })
+  }
+
+  handleSendMessage = () => {
+    const {selectedDate: { comDate, resUUID }} = this.props;
+    var message = this.state.newMessage;
+		if (message) {
+      AsyncStorage.getItem(USER_UUID)
+      .then((userUUID) => {
+        fetch(`${IP}/setMessages.php`,{
+          method:'post',
+          header:{
+            'Accept': 'application/json',
+            'Content-type': 'application/json'
+          },
+          body:JSON.stringify({
+            touuid: resUUID,
+            fromuuid: userUUID,
+            date: comDate,
+            text: message					
+          })
+        })
+        .then((response) => response.json())
+        .then((responseData) => {
+          console.log(responseData); 
+          this.setState({ showSendMess: false });
+          this.setState({ newMessage: ''})
+        })
+        .catch(error=>console.log(error)) // network error
+      })
+      .catch(error=>console.log(error)) // storage error    
+    }
   }
   
   handleOpenAlert = () => {
@@ -47,7 +91,14 @@ export default class DateDetail extends Component {
   
   render() {
     if (this.props.selectedDate) {
-      const {selectedDate: { comID, comDate, comTime, comPay, comMansion, comNote, resName, resAddress, resCity, resProv, resTel }} = this.props;
+      const {selectedDate: { comID, comDate, comTime, comPay, comMansion, comNote, resUUID, resName, resAddress, resCity, resProv, resTel, resPhoto }} = this.props;
+      var currentDate=new Date();
+      var jobDate=new Date(comDate);
+      if(!!(resPhoto)){
+        restaurantImage=`${IP}/Profiles/${resUUID}.jpg`
+      } else {
+        restaurantImage=`${IP}/Profiles/restaurant-placeholder.jpg`
+      }
       
       switch((comID % 4)) {
         case(0):
@@ -78,16 +129,17 @@ export default class DateDetail extends Component {
               <Text style={styles.title} numberOfLines={2}> {resName} </Text>
               { resName!=='Impegno Personale' ? 
                 (<Fragment>
-                <Text style={styles.subtitle} numberOfLines={2}> {resAddress} </Text>
-                <Text style={styles.subtitle}> {resCity+' - ('}
-                {resProv?resProv:'--'}{')'} </Text>                       
-                <Text style={styles.subtitle}>{'Tel: '+resTel}</Text>
+                  <Image style={styles.avatar} resizeMode='cover' source={{uri: `${restaurantImage}` }}/>
+                  <Text style={styles.subtitle} numberOfLines={2}> {resAddress} </Text>
+                  <Text style={styles.subtitle}> {resCity+' - ('}
+                  {resProv?resProv:'--'}{')'} </Text>                       
+                  <Text style={styles.subtitle}>{'Tel: '+resTel}</Text>
                 </Fragment>) : null
               }
           </View>
 
           <View style={styles.showOffer}>
-                        <Text style={[styles.notes, {fontSize: 15, fontWeight: 'bold', marginBottom: 5}]}>{comMansion.toUpperCase()}</Text> 
+                        {(comMansion)?<Text style={[styles.notes, {fontSize: 15, fontWeight: 'bold', marginBottom: 5}]}>{comMansion.toUpperCase()}</Text>:null}
                         <View style={{flexDirection: 'row'}}>
                             <Text style={[styles.notes, {fontWeight: 'bold'}]}>ORE: </Text>
                             <Text style={[styles.notes, {fontStyle: 'italic',}]}>{comTime.substr(0,5)}</Text>                            
@@ -98,12 +150,17 @@ export default class DateDetail extends Component {
                         </View>
                         <View style={{flexDirection: 'row'}}>
                             <Text style={[styles.notes, {fontWeight: 'bold'}]}>NOTE: </Text>
-                            <Text style={[styles.notes, {fontStyle: 'italic'}]} numberOfLines={3} ellipsizeMode='tail'>{comNote?comNote:'  - - -'}</Text>
+                            <Text style={[styles.notes, {fontStyle: 'italic'}]} numberOfLines={5} ellipsizeMode='tail'>{comNote?comNote:'  - - -'}</Text>
                         </View>
           </View>
-
-          {Separator(caseStyle)}
-           
+          { resName!=='Impegno Personale' &&
+            <TouchableOpacity 
+                disabled={(jobDate<currentDate)} 
+                onPress={this.handleOpenSendMess} 
+                style={[styles.sendButton, jobDate>=currentDate ? styles.btnActive : styles.btnInActive]}>
+                <Text style={{color: 'white', fontSize: 12, fontWeight: 'bold'}}>{'INVIA MESSAGGIO'}</Text>
+            </TouchableOpacity> }
+          {Separator(caseStyle)}               
           
         </View>
       );
@@ -113,8 +170,7 @@ export default class DateDetail extends Component {
 
     return (
 
-      <Fragment>
-        
+      <Fragment>        
 
         <Modal
           onRequestClose={this.props.onModalClosed}
@@ -140,9 +196,9 @@ export default class DateDetail extends Component {
               <TouchableOpacity onPress={this.props.onModalClosed} style={[styles.modalButton, {borderColor: Colors.tertiary}]}>
                   <Icon  name="ios-arrow-round-back" size={35} color={Colors.tertiary} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={this.handleOpenAlert} style={[styles.modalButton, {borderColor: Colors.primary}]}>
+              {(jobDate>=currentDate)?<TouchableOpacity onPress={this.handleOpenAlert} style={[styles.modalButton, {borderColor: Colors.primary}]}>
                   <Icon  name="ios-trash" size={30} color={Colors.primary} />
-              </TouchableOpacity>              
+              </TouchableOpacity>:null}              
             </View>
 
             </ScrollView>
@@ -157,8 +213,8 @@ export default class DateDetail extends Component {
               { this.props.selectedDate.resName!=='Impegno Personale' ? 
               <Dialog.Description style={{color: 'white'}}>
                   Vuoi davvero cancellare il tuo impegno?
-                  Verrai rimosso dalla squadra di lavoro di questa data,
-                  creando un disagio per la sala!
+                  Verrai rimosso dalla squadra di questa data, creando un disagio per il datore di lavoro! 
+                  Questa App ti assegna automaticamente il punteggio di 1 stella e registra la tua disdetta.
               </Dialog.Description> :
               <Dialog.Description style={{color: 'white'}}>
                   Vuoi davvero cancellare il tuo impegno?
@@ -171,7 +227,22 @@ export default class DateDetail extends Component {
           </Fragment> 
           : null}
 
-        
+          <Dialog.Container contentStyle={{backgroundColor: 'rgba(0, 0, 0, 0.8)', borderRadius: 15}} visible={this.state.showSendMess} >
+              <Dialog.Title style={styles.sendMessTitle}>Invia Messaggio</Dialog.Title>              
+              <Dialog.Description style={{color: 'white'}}>
+                  Invia un messaggio al datore di lavoro relativo a questa data:
+              </Dialog.Description>
+
+              <Dialog.Input
+                style = {styles.inputMessage}
+                placeholder = {'Scrivi un messaggio'}
+                value = {this.state.newMessage}
+                maxLength={199}
+                onChangeText = {(text) => this.setState({newMessage: text})} />
+
+              <Dialog.Button label="Annulla" onPress={this.handleCloseSendMess} />
+              <Dialog.Button label="INVIA" onPress={this.handleSendMessage} />
+          </Dialog.Container>
 
       </Fragment>
       
@@ -191,7 +262,7 @@ dateName: {
   flexDirection: "row",
   alignItems: 'center',
   justifyContent: 'center',
-  margin: 20
+  margin: 10
 },
 Ribbon: {
   width: '100%',
@@ -202,9 +273,19 @@ Ribbon: {
   justifyContent: 'center',
   marginBottom: 20
 },
+avatar: {
+  flex: 0,
+  width: 130,
+  height: 130,
+  borderRadius: 75,
+  borderWidth: 3,
+  borderColor: "white",
+  marginVertical:5,
+  alignSelf:'center',
+},
 title: {
   color: 'white',
-  fontFamily: 'Abecedary',
+  // fontFamily: 'Abecedary',
   paddingHorizontal: 5,
   fontSize: 20,
   fontWeight: 'bold',
@@ -223,7 +304,7 @@ Buttons: {
   justifyContent: 'space-between',
   alignItems: 'center',
   marginBottom: 20,
-  marginHorizontal: 50
+  marginHorizontal: 40
 },
 showOffer: {
   width: '100%',
@@ -235,7 +316,7 @@ showOffer: {
 },
 notes: {    
   color: Colors.grey1,
-  fontSize: 15,        
+  fontSize: 14,        
   textAlign: 'center',
 },
 modalButton: {
@@ -246,12 +327,36 @@ modalButton: {
   backgroundColor:'transparent',
   borderRadius:75,
   borderWidth:3,
-  marginTop: 20
+  marginTop: 5
 },
+sendButton: {
+  marginTop: 15,
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '50%',
+  height:30,  
+  borderRadius:75,
+},
+btnActive: {
+backgroundColor: Colors.tertiary 
+},
+btnInActive: {
+  backgroundColor: Colors.grey4 
+  },
 dialogTitle:{
   color:Colors.primary, 
   fontSize: 25, 
-  fontFamily: 'Abecedary', 
+  // fontFamily: 'Abecedary', 
   fontWeight:'bold'
-  }  
+  },
+  sendMessTitle:{
+    color:Colors.tertiary, 
+    fontSize: 20,    
+    fontWeight:'bold'
+  },
+  inputMessage: {
+		alignItems: 'center',		
+    justifyContent: 'center',
+    backgroundColor: 'white'
+	},
 });
