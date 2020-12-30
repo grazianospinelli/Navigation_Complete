@@ -1,10 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, ActivityIndicator, AsyncStorage, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ActivityIndicator, AsyncStorage, ScrollView, StyleSheet, Image } from 'react-native';
 import {NavigationEvents} from "react-navigation";
-import Icon from "react-native-vector-icons/SimpleLineIcons";
-import * as Colors from '../components/themes/colors';
 import firebase from 'react-native-firebase';
 import Accordion from '../components/Accordion';
+import * as Colors from '../components/themes/colors';
 import { USER_UUID } from '../components/auth';
 import IP from '../config/IP';
 
@@ -136,8 +135,13 @@ export default class MessageScreen extends Component {
         })
         .then((response) => response.json())
         .then((responseJson)=> {
-          console.log(responseJson);
-          this.setState({dataSource: this.composeData(responseJson)});
+          // console.log(responseJson);
+          if (typeof(responseJson)==='string') {
+            this.setState({dataSource: responseJson})
+          }
+          else { 
+            this.setState({dataSource: this.composeData(responseJson)});            
+          }
           this.setState({loading: false});          
         })
         .catch(error=>console.log(error)) // fetch error
@@ -175,15 +179,12 @@ export default class MessageScreen extends Component {
     const request = new AdRequest();
     // const unitId = 'ca-app-pub-4641414830745834/6174410009';
     const unitId = 'ca-app-pub-3940256099942544/2934735716';
-
     // const unitId =
     //   Platform.OS === 'ios'
     //     ? 'ca-app-pub-7987914246691031/4248107679'
     //     : 'ca-app-pub-7987914246691031/5729668166';
 
-    
-
-        
+            
     if(this.state.loading){
       return( 
         <View style={styles.loader}> 
@@ -197,10 +198,18 @@ export default class MessageScreen extends Component {
 
         <Text style={styles.pageName}>Messaggi Ricevuti</Text>
         
-        <ScrollView style={{width: '100%'}} >
-            { this.renderAccordions() }
-            <View style={styles.bottomContainer} />
-        </ScrollView>
+        {(this.state.dataSource === 'EMPTY') ?
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <View style={styles.emptyMess}>
+              <Image style={{width: 120, height: 120, marginTop: 30, marginBottom: 20}} source={require('../components/images/staffextralogo.png')} resizeMode='cover' />  
+              <Text style={{fontFamily: 'Abecedary', fontSize: 30, marginBottom: 30}}> Nessun Messaggio</Text>
+            </View>
+          </View>
+        :
+          <ScrollView style={{width: '100%'}} >
+              { this.renderAccordions() }
+              <View style={styles.bottomContainer} />
+          </ScrollView>}
                   
         {/* Per riaggiornare automaticamente la pagina quando la si seleziona da drawer */}
         <NavigationEvents onDidFocus={()=>this.fetchData()} />
@@ -226,12 +235,13 @@ export default class MessageScreen extends Component {
 
 
 const styles = StyleSheet.create({
-  loader:{
+  loader: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff"
    },
+   // bottomConteiner utilizzato per allungare la lista e far intervenire lo scrolling
    bottomContainer: {
     height: 100,
     flex:1
@@ -241,5 +251,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
     textAlign: 'center',
+  },
+  emptyMess: {
+    width: '100%',
+    height: '70%',    
+    backgroundColor: '#e9e9e9',
+    borderColor: '#b5b5b5',
+    borderWidth: 2,    
+    // borderStyle: 'dashed',
+    // borderRadius: 1,
+    justifyContent: 'center',
+    alignItems: 'center',    
   },
 });

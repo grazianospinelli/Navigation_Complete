@@ -51,7 +51,7 @@ export default class ClipPage extends Component {
                     <Text style={{paddingVertical: 5, fontWeight: 'bold', fontSize: 12, color: caseStyle}}>RICERCA:</Text>
 
                     <View style={styles.showOffer}>
-                        {(joMansion)?<Text style={[styles.notes, {fontSize: 15, fontWeight: 'bold', marginBottom: 5}]}>{joMansion.toUpperCase()}</Text>:null}
+                        {(joMansion)?<Text style={[styles.notes, {fontSize: 14, fontWeight: 'bold', marginBottom: 5}]}>{joMansion.toUpperCase()}</Text>:null}
                         <View style={{flexDirection: 'row'}}>
                             <Text style={[styles.notes, {fontWeight: 'bold'}]}>ORE: </Text>
                             <Text style={[styles.notes, {fontStyle: 'italic',}]}>{joTime.substr(0,5)}</Text>                            
@@ -97,9 +97,9 @@ const styles = StyleSheet.create({
     },
     title: {
         color: 'white',
-        fontFamily: 'Abecedary',
+        // fontFamily: 'Abecedary',
         paddingHorizontal: 5,
-        fontSize: 20,
+        fontSize: 17,
         fontWeight: 'bold',
         textAlign: 'center',
         // letterSpacing: 0.5,
