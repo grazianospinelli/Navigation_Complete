@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import * as Colors from '../components/themes/colors';
-import InvertibleScrollView from 'react-native-invertible-scroll-view';
+// import InvertibleScrollView from 'react-native-invertible-scroll-view';
 import { NavigationEvents } from 'react-navigation';
 import moment from "moment";
 
@@ -56,7 +56,8 @@ export default class ChatScreen extends Component {
 	}
 	
 	scrollToTheBottom() {
-		this.refs.list.getScrollResponder().scrollTo({y: 0});
+		// this.refs.list.getScrollResponder().scrollTo({y: 0});
+		this.refs.list.scrollToEnd()
 	}
 
 	getMessages(showProgressBar) {		
@@ -181,7 +182,10 @@ export default class ChatScreen extends Component {
 		);
 	}
 		
-  	render() {	
+  	render() {
+		
+		var currentDate=new Date();
+      	var chatDate=new Date(this.state.date);
 
 		if (this.state.loading) {
 			return (
@@ -220,14 +224,16 @@ export default class ChatScreen extends Component {
 						style = {styles.listView} 
 					/>
 					<View style = {styles.inputAndSendView}>
-					<TextInput 
+					<TextInput
+						editable={!(chatDate<currentDate)}  
 						ref = {'newMessage'}
 						style = {styles.inputMessage}
-						placeholder = {'Scrivi un messaggio'}
+						placeholder = {(chatDate<currentDate)?'CHAT DISABILITATA PER DATE PASSATE':'Scrivi un messaggio'}
 						text = {this.state.newMessage}
 						maxLength={199}
 						onChangeText = {(e) => this.setState({newMessage: e})} />
-					<TouchableHighlight 
+					<TouchableHighlight
+						disabled={(chatDate<currentDate)}  
 						style = {styles.sendButton}
 						onPress = {() => this.sendNewMessage()}> 
 						<Text style = {styles.whiteText}>
@@ -289,7 +295,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		flex: 1,
 		justifyContent: 'center',
-		textAlign: 'center',
+		textAlign: 'left',
 	},
 	inputView: {
 		alignItems: 'center',
