@@ -73,40 +73,9 @@ export default class JobScreen extends Component {
   }
  
   dateDeletedHandler = () => {
-
-    fetch(`${IP}/delcommitments.php`,{
-      method:'post',
-      header:{
-        'Accept': 'application/json',
-        'Content-type': 'application/json'
-      },
-      body:JSON.stringify({
-        id: this.state.selectedDate.comID,
-        uuid: this.state.uuid
-      })
-    })
-    .then((response) => response.json())
-    .then((responseJson)=> {
-      alert(responseJson);
-      if (responseJson == 'OK') {
-        
-        alert('Lista impegni aggiornata');
-        
         this.setState({selectedDate: null});
         this.fetchData();
-        // this.setState(prevState => {
-        //   return {
-        //     dataSource: prevState.dataSource.filter(date => {
-        //       return date.comID !== prevState.selectedDate.comID;
-        //     }),
-        //     selectedDate: null            
-        //   };
-        // });
-        
-      }
-      else {alert('Errore aggiornamento lista impegni')}
-    })
-    .catch(error=>console.log(error))
+       
   };
 
   modalClosedHandler = () => {

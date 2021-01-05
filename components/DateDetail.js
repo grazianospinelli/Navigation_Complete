@@ -78,14 +78,39 @@ export default class DateDetail extends Component {
   }
 
   handleDeleteAlert = () => {
-      // this.props.onItemDeleted non veniva richiamato dentro questa funzione
-      // solo aggiungendo () in coda alla funzione viene richiamato.
-      // senza parentesi viene passata direttamente la funzione come prop da impegni a DateDetail
-      // ma se viene messa in un altra funzione come in questo caso non va.
-      // con le parentesi invece si effettua una chiamata alla funzione nel componente padre
-      // ma probabilemente c'è un calo di prestazioni.
-      this.props.onItemDeleted();
-      this.setState({showAlert: false});    
+      const {selectedDate: { comID }} = this.props; // Doppio destructuring
+      
+      AsyncStorage.getItem(USER_UUID)
+      .then((userUUID) => {
+      fetch(`${IP}/delcommitments.php`,{
+        method:'post',
+        header:{
+          'Accept': 'application/json',
+          'Content-type': 'application/json'
+        },
+        body:JSON.stringify({
+          id: comID,
+          uuid: userUUID
+        })
+      })
+      .then((response) => response.json())
+      .then((responseJson)=> {
+        // alert(responseJson);
+        if (responseJson == 'OK') {
+          
+          alert('Lista impegni aggiornata');
+          this.props.onItemDeleted();
+          this.setState({showAlert: false});
+          
+        }
+        else {alert('Errore aggiornamento lista impegni')}
+      })
+      .catch(error=>console.log(error)) // network error    
+      // this.props.onItemDeleted();
+      // this.setState({showAlert: false});
+    })
+    .catch(error=>console.log(error)) // storage error  
+         
   }
 
   
