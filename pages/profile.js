@@ -22,7 +22,9 @@ import * as Colors from '../components/themes/colors';
 
 import placeHolder from '../components/images/profile-placeholder.png'
 const placeHolderUri = Image.resolveAssetSource(placeHolder).uri
-const accessKeyId='fbgRVwCQFcuwlJRN0v7b33jb5cbWJgIkRzKvfu2seQs'
+
+// Unsplash Access Key Inutilizzata
+// const accessKeyId='fbgRVwCQFcuwlJRN0v7b33jb5cbWJgIkRzKvfu2seQs'
 
 const sex = [
   {label: 'Uomo', value: 'U'},
@@ -71,14 +73,7 @@ const myvalidationSchema = Yup.object().shape({
   //   .max(300,"Troppo Lungo"),
 });
 
-// const getImageFromApiAsync = async () => {
-//   try {
-//     let response = await fetch(`https://api.unsplash.com/photos/random/?client_id=${accessKeyId}&collections=79096724`)
-//     let json = await response.json();
-//     return json.data;
-//   } 
-//   catch (error) {console.error(error)}
-// };
+const image = { uri: `${IP}/Assets/cover/image${Math.floor(Math.random()*110)}.jpg` };
 
 export default class ProfileScreen extends Component {
   // eslint-disable-next-line no-useless-constructor
@@ -92,7 +87,7 @@ export default class ProfileScreen extends Component {
       district:[],
       cities:[],
       profile_image :'',
-      photoJson: null
+      // photoJson: null  // usato per verificare download da Unsplash
     };
   }
   
@@ -103,17 +98,7 @@ export default class ProfileScreen extends Component {
     )
   }
    
-  fetchImage = () => {
-    this.setState({loading: true});
-    fetch(`https://api.unsplash.com/photos/random/?client_id=${accessKeyId}&collections=79096724`)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      this.setState({photoJson: responseJson});
-      this.setState({loading: false});      
-    })
-    .catch(error=>{console.log(error)})
-  }
-
+  
   fetchData = () => {
     this.setState({loading: true}); 
 
@@ -165,8 +150,21 @@ export default class ProfileScreen extends Component {
 
   }
 
+
+  // fetchImage = () => {
+  //   Usato per scaricare immagine da Unsplash che la fornisce incapsulata in un JSON con altre informazioni tipo l'autore
+  //   this.setState({loading: true});
+  //   fetch(`https://api.unsplash.com/photos/random/?client_id=${accessKeyId}&collections=79096724`)    
+  //   .then((response) => response.json())
+  //   .then((responseJson) => {      
+  //     this.setState({photoJson: responseJson});
+  //     this.setState({loading: false});      
+  //   })
+  //   .catch(error=>{console.log(error)})
+  // }
+
   componentDidMount() { 
-    this.fetchImage();   
+    // this.fetchImage();   
     this.fetchData();
     FireManager();
   }
@@ -279,7 +277,7 @@ export default class ProfileScreen extends Component {
 
   
   render() {
-   
+      
       if(this.state.loading){
        return( 
          <View style={styles.loader}> 
@@ -298,9 +296,10 @@ export default class ProfileScreen extends Component {
             <ScrollView style={styles.containerscroll}>
 
             <View style={{ height: 220, width: '100%' }} >
-                {/* <ImageBackground source={require('../components/images/saltpepper.jpg')} style={{flex: 1}} resizeMode='cover' > */}
-                {this.state.photoJson ? 
-                  (<ImageBackground source={{ uri: this.state.photoJson.urls.regular }} style={{flex: 1}} resizeMode='cover' >
+                <ImageBackground source={image} style={{flex: 1}} resizeMode='cover' >
+                {/* {this.state.photoJson ? 
+                  (
+                  <ImageBackground source={{ uri: this.state.photoJson.urls.regular }} style={{flex: 1}} resizeMode='cover' > */}
                     <PhotoUpload
                       photoPickerTitle='Seleziona la Foto:'
                       onResponse={(image) => this.uploadPhoto(image)}
@@ -311,8 +310,9 @@ export default class ProfileScreen extends Component {
                           <Image style={styles.avatar} resizeMode='cover' source={{uri: this.state.profile_image }} />
                         }
                     </PhotoUpload>
-                  </ImageBackground>) 
-                : null }
+                  </ImageBackground>
+                  {/* ) 
+                : null } */}
             </View>
 
                 <View style={styles.body}>
