@@ -8,10 +8,15 @@ import * as Yup from "yup";
 import Icon from "react-native-vector-icons/Ionicons";
 import * as Colors from '../components/themes/colors';
 
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
 const myvalidationSchema = Yup.object().shape({
   comDate: Yup
-    .string()
-    .required("Inserire Data"),
+    // .string()
+    .date()
+    .required("Inserire Data")
+    .min(today, "Non si può usare una data passata"),
   comNote: Yup
     .string()
     .required("Inserire Descrizione")
@@ -54,6 +59,8 @@ export default class AddCommit extends Component {
               <Text style={{color: 'white', fontWeight: "bold", fontSize: 20 }}>Impegno Personale</Text>
             </View>
 
+            <View style={styles.container}>
+
             <Formik
               initialValues={{comNote: '', comDate: '', comTime: '', comPay: ''}}
               onSubmit={this.props.onHandleAddCommit}
@@ -78,13 +85,13 @@ export default class AddCommit extends Component {
                                   androidMode='spinner'
                                   format="DD-MM-YYYY"
                                   minDate="01-01-1940"
-                                  maxDate="01-01-2030"
+                                  maxDate="01-01-2050"
                                   confirmBtnText="Conferma"
                                   cancelBtnText="Indietro"
                                   customStyles={{                                              
                                     dateInput: { borderWidth: 0, alignItems: 'flex-end' }                                                
                                   }}
-                                  onDateChange={(date) => { setFieldValue("comDate", date);
+                                  onDateChange={(date) => { setFieldValue("comDate",  moment(date, "DD-MM-YYYY").toDate());
                                                 const convdate = moment(date, "DD-MM-YYYY").format("YYYY-MM-DD");
                                                 this.props.onDateChanged(convdate);} 
                                   }
@@ -153,7 +160,7 @@ export default class AddCommit extends Component {
                         <TouchableOpacity onPress={this.props.onAddCommitClosed} style={[styles.modalButton, {backgroundColor: Colors.primary}]}>
                             <Icon  name="ios-close" size={35} color='white' />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={handleSubmit} style={[styles.modalButton, {backgroundColor: Colors.tertiary}]}>
+                        <TouchableOpacity onPress={handleSubmit} style={[styles.modalButton, isValid ? styles.submitActiveB : styles.submitInactiveB]}>
                             <Icon  name="ios-add" size={35} color='white' />
                         </TouchableOpacity>
 
@@ -163,7 +170,7 @@ export default class AddCommit extends Component {
               </Fragment>
               )}
             </Formik> 
-          
+            </View>
         </View>
         </ScrollView>
       </Modal>
@@ -177,20 +184,30 @@ const styles = StyleSheet.create({
     // height: '70%',
     backgroundColor: Colors.grey5,    
     borderRadius: 15,
-    padding: 30,
+    // padding: 30,
     // alignItems: 'flex-start',
     justifyContent: 'flex-start',
     // borderColor: Colors.grey4,
-    // borderWidth: 4,
-    
+    // borderWidth: 4,    
+  },
+  container: {
+    paddingHorizontal: 30,
   },
   Title: {
+    marginTop: 30,
+    marginBottom: 10,
     height: 40,      
     backgroundColor: Colors.grey2,    
-    borderRadius: 15,
+    // borderRadius: 15,
+    width: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20
+    justifyContent: 'center',    
+  },
+  submitActiveB: {
+    backgroundColor: Colors.tertiary
+  },
+  submitInactiveB: {
+    backgroundColor: Colors.grey4
   },
   dateName: {
     fontWeight: "bold",
@@ -221,6 +238,6 @@ const styles = StyleSheet.create({
     width: 60, 
     height: 60, 
     borderRadius: 75,
-    marginTop: 15
+    marginVertical: 20,
   }
 });
