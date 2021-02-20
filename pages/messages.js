@@ -151,7 +151,7 @@ export default class MessageScreen extends Component {
   
   componentDidMount() {
     this.fetchData();    
-    FireManager();    
+    // FireManager();    
   }
   
   renderAccordions=()=> {

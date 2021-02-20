@@ -84,7 +84,7 @@ export default class OfferScreen extends Component {
     });
 
     this.fetchData();
-    FireManager();
+    // FireManager();
   }
 
   reload = () => {

@@ -186,6 +186,7 @@ export default class ChatScreen extends Component {
 		
 		var currentDate=new Date();
       	var chatDate=new Date(this.state.date);
+		chatDate.setDate(chatDate.getDate() + 1);
 
 		if (this.state.loading) {
 			return (

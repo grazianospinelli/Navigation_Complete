@@ -26,17 +26,19 @@ FireManager = async () => {
         const notification: Notification = notificationOpen.notification;
         if (notification.body!==undefined) {
             alert(notification.body);
+            console.log(notification);
         } else {
             var seen = [];
-            alert(JSON.stringify(notification.data, function(key, val) {
-                if (val != null && typeof val == "object") {
-                    if (seen.indexOf(val) >= 0) {
-                        return;
-                    }
-                    seen.push(val);
-                }
-                return val;
-            }));
+            console.log(notification);
+            // alert(JSON.stringify(notification.data, function(key, val) {
+            //     if (val != null && typeof val == "object") {
+            //         if (seen.indexOf(val) >= 0) {
+            //             return;
+            //         }
+            //         seen.push(val);
+            //     }
+            //     return val;
+            // }));
         }
         firebase.notifications().removeDeliveredNotification(notification.notificationId);
     }
@@ -132,15 +134,15 @@ FireManager = async () => {
             // }));
         } else {
             var seen = [];
-            alert(JSON.stringify(notification.data, function(key, val) {
-                if (val != null && typeof val == "object") {
-                    if (seen.indexOf(val) >= 0) {
-                        return;
-                    }
-                    seen.push(val);
-                }
-                return val;
-            }));
+            // alert(JSON.stringify(notification.data, function(key, val) {
+            //     if (val != null && typeof val == "object") {
+            //         if (seen.indexOf(val) >= 0) {
+            //             return;
+            //         }
+            //         seen.push(val);
+            //     }
+            //     return val;
+            // }));
         }
         firebase.notifications().removeDeliveredNotification(notification.notificationId);
     });  

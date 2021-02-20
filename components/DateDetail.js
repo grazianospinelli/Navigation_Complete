@@ -119,6 +119,7 @@ export default class DateDetail extends Component {
       const {selectedDate: { comID, comDate, comTime, comPay, comMansion, comNote, resUUID, resName, resAddress, resCity, resProv, resTel, resPhoto }} = this.props;
       var currentDate=new Date();
       var jobDate=new Date(comDate);
+      jobDate.setDate(jobDate.getDate() + 1);
       if(!!(resPhoto)){
         restaurantImage=`${IP}/Profiles/${resUUID}.jpg`
       } else {

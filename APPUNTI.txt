@@ -67,3 +67,15 @@ PER RICOMPILARE:
 >react-native run-android
 Ogni volta che si installa una nuova libreria bisogna ricompilare l'app
 Per fare il reload dal cell bisogna scuoterlo e scegliare RELOAD dal menù che compare
+
+Modificato Android.manifest.xml con:
+<activity android:name=".MainActivity" _android:launchMode="singleTask"_ ... /> invece di "singleTop"
+
+@TODO
+Nella APP sullo star rating applicate .toFixed(2)
+aprire la chat nello stesso giorno: var EventDate=new Date(params.date);EventDate.setDate(EventDate.getDate() + 1);
+Risolvere Notifiche in APP
+google.original_priority google.delivered_priority
+https://stackoverflow.com/questions/54745608/how-to-get-particular-value-from-notification-remotemessage-android
+Eliminare il messaggio Alert da tutte le pagine dell'APP
+INSERIRE RECEPTION/UFFICIO

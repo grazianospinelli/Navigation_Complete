@@ -15,7 +15,7 @@ import * as Progress from 'react-native-progress';
 import RNPickerSelect from 'react-native-picker-select';
 import DatePicker from 'react-native-datepicker'
 import PhotoUpload from 'react-native-photo-upload';
-import FireManager from '../components/firemanager.js';
+// import FireManager from '../components/firemanager.js';
 import { USER_UUID } from '../components/auth';
 import IP from '../config/IP';
 import * as Colors from '../components/themes/colors';
@@ -166,7 +166,7 @@ export default class ProfileScreen extends Component {
   componentDidMount() { 
     // this.fetchImage();   
     this.fetchData();
-    FireManager();
+    // FireManager();
   }
 
   loadCities = prov => {
@@ -330,7 +330,7 @@ export default class ProfileScreen extends Component {
                         style={{ marginTop: 8 }}
                         fractions={10}
                       />
-                      <Text style={styles.rating}>{this.calcRating(data)+'/5'}</Text>
+                      <Text style={styles.rating}>{this.calcRating(data).toFixed(2)+'/5'}</Text>
                     </View>
                       <Card 
                         containerStyle={{width: '100%'}}
@@ -342,8 +342,8 @@ export default class ProfileScreen extends Component {
                               // L'operatore !!() converte un valore in Boolean
                               name: data['name'], surname: data['surname'], city: data['city'], prov: data['prov'],
                               telnumber: data['telnumber'], fiscalcode: data['fiscalcode'], birthdate: data['birthdate'],
-                              sex: data['sex'], chef: !!(data['chef']), pizzaman: !!(data['pizzaman']), maitre: !!(data['maitre']),
-                              waiter: !!(data['waiter']), bevandist: !!(data['bevandist']),
+                              sex: data['sex'], chef: !!(data['chef']), pizzaman: !!(data['pizzaman']), officer: !!(data['officer']),
+                              maitre: !!(data['maitre']), waiter: !!(data['waiter']), bevandist: !!(data['bevandist']),
                               barman: !!(data['barman']), sommel: !!(data['sommel']), pulizie: !!(data['pulizie']),
                               factotum: !!(data['factotum']), animaz: !!(data['animaz']), hostess: !!(data['hostess']),
                               language1: data['language1'], language2: data['language2'],
@@ -515,6 +515,13 @@ export default class ProfileScreen extends Component {
                                   />
 
                                   <IconSwitch
+                                      label='Ufficio/Reception'
+                                      iconName='phone-classic'
+                                      onValueChange={(val) => setFieldValue("officer", val)}
+                                      value={values.officer}
+                                  />
+
+                                  <IconSwitch
                                       label='Direttore/Maitre'
                                       iconName='tie'
                                       onValueChange={(val) => setFieldValue("maitre", val)}
@@ -651,7 +658,7 @@ export default class ProfileScreen extends Component {
                                       startingValue={this.calcRating(data)}
                                       fractions={10}
                                     />
-                                    <Text style={{fontSize: 14, color: Colors.grey1, marginLeft: 10}}>{this.calcRating(data)+'/5'}</Text>
+                                    <Text style={{fontSize: 14, color: Colors.grey1, marginLeft: 10}}>{this.calcRating(data).toFixed(2)+'/5'}</Text>
                                   </View>
                                   
                                   <View style={styles.statForm}>

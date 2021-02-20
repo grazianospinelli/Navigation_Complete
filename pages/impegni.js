@@ -7,7 +7,7 @@ import DateList from "../components/DateList";
 import DateDetail from "../components/DateDetail";
 import AddCommit from "../components/AddCommits";
 import * as Colors from '../components/themes/colors';
-import FireManager from '../components/firemanager.js';
+// import FireManager from '../components/firemanager.js';
 import { USER_UUID } from '../components/auth';
 import IP from '../config/IP';
 
@@ -69,7 +69,7 @@ export default class JobScreen extends Component {
   
   componentDidMount() {
     this.fetchData();
-    FireManager();
+    // FireManager();
   }
  
   dateDeletedHandler = () => {

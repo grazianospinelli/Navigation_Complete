@@ -150,7 +150,7 @@ export default class AgendaScreen extends Component {
   
   componentDidMount() {
     this.fetchData();
-    FireManager();    
+    // FireManager();    
   }
   
   showDayDetail = (day,dateArray) => {

@@ -1,9 +1,7 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable react/jsx-filename-extension */
 import React, { Component } from 'react';
-import {
-  View, Text, StatusBar, StyleSheet, ImageBackground,
-} from 'react-native';
+import { View, Text, StatusBar, StyleSheet, ImageBackground } from 'react-native';
 import { isSignedIn } from '../components/auth';
 import * as Colors from '../components/themes/colors';
 import LottieView from 'lottie-react-native';
@@ -11,16 +9,16 @@ import LottieView from 'lottie-react-native';
 
 export default class AuthLoading extends Component {  
  
-  componentDidMount() {
-    setTimeout(() => this.verify(), 3000);
-  }
+  componentDidMount(){
+    setTimeout(() => this.verify(), 3000);    
+  }  
 
-  verify = () => {
+  verify() {
     isSignedIn()
       .then((user) => { this.props.navigation.navigate(user ? 'Drawer' : 'Auth'); })
       .catch(err => alert(`Errore: ${err}`));
   }
-
+  
   render() {
     return (
       
