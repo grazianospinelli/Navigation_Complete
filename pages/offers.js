@@ -124,8 +124,8 @@ export default class OfferScreen extends Component {
   };
 
   acceptJob = () => {
-    console.log('ID:'+this.state.dataSource[this.state.ActiveSlide].joID);
-    console.log('Date:'+this.state.dataSource[this.state.ActiveSlide].joDate);
+    // console.log('ID:'+this.state.dataSource[this.state.ActiveSlide].joID);
+    // console.log('Date:'+this.state.dataSource[this.state.ActiveSlide].joDate);
 
     fetch(`${IP}/acceptjob.php`,{
       method:'post',

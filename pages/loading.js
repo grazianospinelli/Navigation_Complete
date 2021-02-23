@@ -15,7 +15,8 @@ export default class AuthLoading extends Component {
 
   verify() {
     isSignedIn()
-      .then((user) => { this.props.navigation.navigate(user ? 'Drawer' : 'Auth'); })
+      // .then((user) => { this.props.navigation.navigate(user ? 'Drawer' : 'Auth'); })
+      .then((user) => { this.props.navigation.navigate(user ? 'Tutorial' : 'Auth'); })
       .catch(err => alert(`Errore: ${err}`));
   }
   
@@ -38,7 +39,7 @@ export default class AuthLoading extends Component {
         </View>
 
         <View style={{justifyContent: 'flex-end', alignItems: 'center', backgroundColor: 'black'}}>
-          <Text style={{color: Colors.secondary, fontWeight: 'bold'}}>Copyright Graziano Spinelli 2019 ©</Text>
+          <Text style={{color: Colors.secondary, fontWeight: 'bold'}}>Copyright ExtraStaff 2020 ©</Text>
         </View>
 
       </ImageBackground>

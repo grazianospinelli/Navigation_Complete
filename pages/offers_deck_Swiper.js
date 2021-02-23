@@ -88,13 +88,13 @@ export default class OfferScreen extends Component {
         if ((this.state.dataSource.length - 1) == 0) {
             this.setState({dataSource: 'EMPTY'});            
           } else {
-            console.log('ID:'+this.state.ActiveSlide)
-            console.log(this.state.dataSource)
+            // console.log('ID:'+this.state.ActiveSlide)
+            // console.log(this.state.dataSource)
             // this.setState(prevState => ({ list: prevState.list.slice(1) })); togli il primo
             let temp = this.state.dataSource.slice()
             temp.splice(this.state.ActiveSlide, 1)
             this.setState({dataSource: temp})
-            console.log(this.state.dataSource)
+            // console.log(this.state.dataSource)
           }
 
       }

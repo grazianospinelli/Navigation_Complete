@@ -7,6 +7,7 @@ import { createSwitchNavigator, createStackNavigator, createAppContainer } from 
 import firebase from 'react-native-firebase';
 import { Notification, NotificationOpen } from 'react-native-firebase';
 import AuthLoading from './pages/loading';
+import introTutorial from './pages/tutorial';
 import Home from './pages/home';
 import Login from './pages/login';
 import Reset from './pages/reset';
@@ -53,11 +54,13 @@ const AppStack = createStackNavigator({ Drawer: { screen: Drawer } });
 
 const AppNavigator = createSwitchNavigator({
   Loading: AuthLoading,
+  Tutorial: introTutorial,
   Drawer: AppStack,
   Auth: AuthStack,
 },
 {
   initialRouteName: 'Loading',
+  // initialRouteName: 'Tutorial',
 });
 
 const Container = createAppContainer(AppNavigator);
@@ -93,7 +96,7 @@ export default class App extends Component {
         const notification: Notification = notificationOpen.notification;
         if ((notification._data.message!==undefined)) {
             alert(notification._data.message);
-            console.log(notification);
+            // console.log(notification);
         } else {                        
             console.log(notification);            
         }
@@ -107,7 +110,7 @@ export default class App extends Component {
     firebase.messaging().subscribeToTopic('news1');
 
     this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification: Notification) => {
-      console.log("onNotificationDisplayed")
+      // console.log("onNotificationDisplayed")
       if ((notification.body!==undefined)) {
         alert(notification.body);          
       }
@@ -119,8 +122,8 @@ export default class App extends Component {
     // FOREGROUND
     this.notificationListener = firebase.notifications().onNotification((notification: Notification) => {
         // Process your notification as required
-        console.log('get Message');
-        console.log(notification);
+        // console.log('get Message');
+        // console.log(notification);
         notification
             .android.setChannelId('test-channel')
             .android.setSmallIcon('ic_launcher');

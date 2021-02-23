@@ -913,6 +913,7 @@ npm install react-native-card-flip --save
 npm install react-native-invertible-scroll-view --save
 npm install react-native-prompt --save
 
+npm i react-native-app-intro-slider --save
 ___________________________________________________________________
 
 GENERARE ARRAY DI NUMERI:

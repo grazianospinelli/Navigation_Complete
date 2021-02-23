@@ -21,8 +21,8 @@ export default class AgendaScreen extends Component {
         commDate: null,
         offerDate: null,
         light: 'white',
-        dayDetail: null,
-        dayNote: null,        
+        dayDetail: [],
+        dayNote: null,              
       };
 
       LocaleConfig.locales['it'] = {
@@ -54,27 +54,70 @@ export default class AgendaScreen extends Component {
         } else {
           var dayArray=eventDate.map((elem)=>{return ({date: elem.joDate, place: elem.resName})});
         }
+        // console.log(dayArray);
         // componiamo l'oggetto da passare a markedDates di Calendar contente array di date e stile per data
         // key aggiunta e usata per immagazzinare per quella data il luogo di lavoro relativo alla data stessa
         // https://stackoverflow.com/questions/50584554/mark-multiple-dates-dynamically-react-native-wix
-        var obj = dayArray.reduce((c, v) => Object.assign(c, {[v.date]: {
-                              customStyles: {
-                                key: {
-                                  place: v.place,
-                                  note: v.note,
-                                },
-                                container: {
-                                  // backgroundColor: operatore terziario -> Colors.primary se è impegno
-                                  backgroundColor: (type=='comm') ? Colors.primary : Colors.secondary,
-                                  elevation: 4
-                                },
-                                text: {
-                                  color: 'white',
-                                  fontWeight: 'bold'
-                                },
-                              },
-                            } 
-        }), {});
+
+        // var obj = dayArray.reduce((c, v) => Object.assign(c, {
+        //                     [v.date]: {
+        //                         customStyles: {
+        //                           key: {
+        //                             place: v.place,
+        //                             note: v.note,
+        //                           },
+        //                           container: {
+        //                             // backgroundColor: operatore terziario -> Colors.primary se è impegno
+        //                             backgroundColor: (type=='comm') ? Colors.primary : Colors.secondary,
+        //                             elevation: 4
+        //                           },
+        //                           text: {
+        //                             color: 'white',
+        //                             fontWeight: 'bold'
+        //                           },
+        //                         },
+        //                     } 
+        // }), {});
+        
+
+      /////////////////////////////////////////////////////////////
+        var obj={}
+        var objElem={}
+        var arrPlace=[]
+        for (let i=0; i<dayArray.length;i++){
+          var keyElem=dayArray[i].date
+          objElem[`${keyElem}`]={
+                                  customStyles: {
+                                    key: {
+                                      place: '',
+                                      note: '',
+                                    },
+                                    container: {                                          
+                                      backgroundColor: (type=='comm') ? Colors.primary : Colors.secondary,
+                                      elevation: 4
+                                    },
+                                    text: {
+                                      color: 'white',
+                                      fontWeight: 'bold'
+                                    },
+                                  },
+                                }
+          arrPlace.push(dayArray[i].place)
+          if(i<dayArray.length-1){            
+            if (dayArray[i].date!==dayArray[i+1].date){
+              objElem[`${keyElem}`].customStyles.key.place=arrPlace
+              objElem[`${keyElem}`].customStyles.key.note=dayArray[i].note            
+              Object.assign(obj,objElem)
+              arrPlace=[]
+            }
+          }
+          else {
+            objElem[`${keyElem}`].customStyles.key.place=arrPlace
+            objElem[`${keyElem}`].customStyles.key.note=dayArray[i].note            
+            Object.assign(obj,objElem)
+          }
+        }
+      ////////////////////////////////////////////////////////
         
       }
       return obj;
@@ -84,8 +127,8 @@ export default class AgendaScreen extends Component {
   //   '2018-03-28': {
   //     AGGIUNTA DA ME LA PROPRIETA' KEY
   //     key: {
-  //           place: v.place,
-  //           note: v.note,
+  //           place: [place],
+  //           note: note,
   //     },
   //     customStyles: {
   //       container: {
@@ -153,23 +196,24 @@ export default class AgendaScreen extends Component {
     // FireManager();    
   }
   
-  showDayDetail = (day,dateArray) => {
+  showDayDetail = (day,dateArray) => {    
+    var dDetail=[]
     if (dateArray[day.dateString]){
       var dayColor = dateArray[day.dateString].customStyles.container.backgroundColor;
       if (dayColor=='#f24f32') {
-        var dDetail=` IMPEGNO:  ${dateArray[day.dateString].customStyles.key.place}`;
+        dDetail[0]=` IMPEGNO:  ${dateArray[day.dateString].customStyles.key.place[0]}`;
         var dNote=dateArray[day.dateString].customStyles.key.note
       }
       else {
-        var dDetail= ' OFFERTE: '+dateArray[day.dateString].customStyles.key.place
+        dDetail=dateArray[day.dateString].customStyles.key.place.map((elem)=>{return (' OFFERTA: '+elem)})
       }            
     }
     else {
-      var dDetail= ' GIORNO LIBERO'; 
+      dDetail[0] = ' GIORNO LIBERO'; 
       var dayColor= Colors.tertiary;
     }
-    this.setState({light: dayColor, dayDetail: dDetail, dayNote:dNote});
-    setTimeout(() => this.setState({light: 'white', dayDetail: null, dayNote: null}), 1200);
+    this.setState({light: dayColor, dayDetail: [...dDetail], dayNote:dNote});
+    setTimeout(() => this.setState({light: 'white', dayDetail: [], dayNote: null}), 1300);    
   }
   
   render() {
@@ -243,10 +287,14 @@ export default class AgendaScreen extends Component {
         />
 
         <View style={{flex:1, justifyContent: 'flex-end', alignItems: 'center', marginTop: 30}}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+
+          {this.state.dayDetail.map(elem=>
+          <View key={elem} style={{flexDirection: 'row', alignItems: 'center'}}>          
             <View style={{width: 30, height: 30, borderRadius: 75, backgroundColor: this.state.light}}></View>
-            <Text style={{fontSize: 13}} ellipsizeMode='tail'>{this.state.dayDetail}</Text>            
-          </View>
+            <Text style={{fontSize: 13}} ellipsizeMode='tail'>{elem}</Text>
+          </View>)
+          }
+
           <Text style={{fontSize: 12, marginHorizontal: 60}} ellipsizeMode='tail'>{this.state.dayNote}</Text>
         </View>
 

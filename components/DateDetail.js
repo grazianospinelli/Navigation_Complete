@@ -59,7 +59,7 @@ export default class DateDetail extends Component {
         })
         .then((response) => response.json())
         .then((responseData) => {
-          console.log(responseData); 
+          // console.log(responseData); 
           this.setState({ showSendMess: false });
           this.setState({ newMessage: ''})
         })

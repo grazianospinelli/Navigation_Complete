@@ -67,7 +67,7 @@ constructor(props){
 				// User has authorised
 			} catch (error) {
 				// User has rejected permissions
-				alert('No permission for notification');
+				alert('Nessun permesso fornito per ricevere Notifiche');
 			}
 		}
 
@@ -107,21 +107,29 @@ constructor(props){
 			})
 		})
 		.then((response) => response.json())
-		.then((responseJson) => {alert(responseJson);})
+		.then((responseJson) => {
+			if(responseJson==='OK'){
+
+				fetch(`${IP}/RegisterDevice.php`, {
+					method: 'POST',
+					headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						uuid: myuuid,
+						token: userToken,
+						email: upperEmail,
+					})
+				})
+				.then((response) => response.json())
+				.then((responseData) => {alert(responseData)})
+				.catch((err) => {alert(err)});
+
+			}
+			else {alert(responseJson)}
+		})
 		.catch((error) => {alert(error)});
 
-		fetch(`${IP}/RegisterDevice.php`, {
-			method: 'POST',
-			headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				uuid: myuuid,
-				token: userToken,
-				email: upperEmail,
-			})
-		})
-		.then((response) => response.json())
-		.then((responseData) => {alert(responseData); this.props.navigation.navigate("Home");})
-		.catch((err) => {alert(err)});		
+		this.props.navigation.navigate("Home");
+				
 	}
 
 	render() {

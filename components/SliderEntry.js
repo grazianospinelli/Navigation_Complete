@@ -12,7 +12,7 @@ export default class SliderEntry extends Component {
     }
 
     componentWillMount() {
-        console.log(this.props.even);
+        // console.log(this.props.even);
         switch(this.props.even) {
             case(0):
             this.setState({caseStyle: styles.textContainer1});

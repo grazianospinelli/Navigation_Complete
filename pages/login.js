@@ -97,7 +97,8 @@ export default class login extends Component {
 					// alert(UUID+' '+userName);
 					onSignIn(this.upperEmail,this.md5Password,UUID,userName);
 					// redirect to profile page
-					this.props.navigation.navigate("Drawer");
+					// this.props.navigation.navigate("Drawer");
+					this.props.navigation.navigate("Tutorial");
 					
 				}
 		})

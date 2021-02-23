@@ -16,7 +16,7 @@ const getDrawerItem = navigation => (
   <NavBarItem
     iconName = "bars"
     onPress={() => {
-      console.log(navigation.state);
+      // console.log(navigation.state);
       if (!navigation.state.isDrawerOpen) {
         navigation.openDrawer();
       } else {

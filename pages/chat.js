@@ -80,7 +80,7 @@ export default class ChatScreen extends Component {
 		.then((responseData) => {
 		if (showProgressBar)
 			this.hideProgressBar();
-		console.log(responseData);
+		// console.log(responseData);
 		var messagesCopy = responseData;
 		var oldMessagesNumber = this.state.messages.length;
 		// messagesCopy.reverse();
@@ -97,7 +97,7 @@ export default class ChatScreen extends Component {
 	sendNewMessage() {
 	var message = this.state.newMessage;
 		if (message) {
-			console.log(this.state.messages)
+			// console.log(this.state.messages)
 			this.refs['newMessage'].setNativeProps({text: ''});
 			var messagesCopy = this.state.messages.slice();			
 			messagesCopy.push({mesID: Math.random(), mesFromUUID: this.state.userUUID, mesToUUID: this.state.restUUID, mesText: message})

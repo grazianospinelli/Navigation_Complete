@@ -118,7 +118,7 @@ export default class JobScreen extends Component {
   addCommitHandler = () => {
     
         this.setState({loading: true});
-        console.log(this.state);
+        // console.log(this.state);
         
         fetch(`${IP}/uploadcommitments.php`,{
           method:'post',
