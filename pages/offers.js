@@ -1,14 +1,13 @@
 import React, { Component, Fragment } from 'react';
-import {  View, ActivityIndicator, Text, Image, AsyncStorage, Dimensions,
-          ImageBackground, ScrollView, TouchableOpacity, StyleSheet  } from 'react-native';
+import { View, ActivityIndicator, Text, Image, AsyncStorage, Dimensions, ImageBackground, TouchableOpacity, StyleSheet } from 'react-native';
 import {NavigationEvents} from "react-navigation";
+import firebase from 'react-native-firebase';
+import { Notification } from 'react-native-firebase';
 import Carousel from 'react-native-snap-carousel';
 import Dialog from "react-native-dialog";
 import ClipPage from '../components/ClipPage';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import * as Colors from '../components/themes/colors';
-// import FireManager from '../components/firemanager.js';
-import firebase from 'react-native-firebase';
 import { USER_UUID } from '../components/auth';
 import IP from '../config/IP';
 
@@ -29,10 +28,10 @@ export default class OfferScreen extends Component {
       viewportHeight: height,
     };
 
-    Dimensions.addEventListener('change', (e) => {
-      const { width, height } = e.window;
-      this.setState({viewportWidth: width, viewportHeight: height});
-    })
+    // Dimensions.addEventListener('change', (e) => {
+    //   const { width, height } = e.window;
+    //   this.setState({viewportWidth: width, viewportHeight: height});
+    // })
 
   }
   
@@ -81,6 +80,12 @@ export default class OfferScreen extends Component {
     advert.on('onAdLoaded', () => {
       console.log('Advert ready to show.');
       advert.show();
+    });
+
+    this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification: Notification) => {      
+      if ((notification.body!==undefined)) {
+        this.fetchData();         
+      }      
     });
 
     this.fetchData();

@@ -8,7 +8,7 @@ const slides = [
   {
     key: 'zero',
     title: 'Benvenuto !',
-    text: 'ExtraStaff è la prima APP dedicata\n a chi lavora nella ristorazione\n e cerca un extra o un posto fisso\nL\'App è completamente gratuita\n perchè visualizza Pubblicità\nL\'APP riceve le Offerte di Lavoro dai ristoratori\nche sono iscritti al Portale www.ExtraStaff.it',
+    text: 'ExtraStaff è la prima App dedicata\n a chi lavora nella ristorazione\n e cerca un extra o un posto fisso\nL\'App è completamente gratuita\n perchè visualizza Pubblicità\nL\'App riceve le Offerte di Lavoro dai ristoratori\nche sono iscritti al Portale www.ExtraStaff.it',
     image: require('../components/images/staffextralogo.png'),
     backgroundColor: Colors.primary,
     // imageStyle: styles.intro,
@@ -32,7 +32,7 @@ const slides = [
   {
     key: 'three',
     title: 'Le tue Offerte!',
-    text: 'Scorri per selezionare l\'offerta che ti piace\nSe accetti, l\'offerta diventerà un impegno\n e non riceverai più offerte per quel giorno\nSe non rispetti o disdici un impegno riceverai 1 stella!',
+    text: 'Scorri per selezionare l\'offerta che ti piace\nSe accetti, l\'offerta diventerà un impegno\n e non riceverai più offerte per quel giorno\nSe non rispetti o disdici un impegno riceverai 1 stella!\nRicarica per visualizzare nuove offerte!',
     image: require('../components/images/offers.jpg'),
     backgroundColor: '#696969',
     // imageStyle: styles.image,
@@ -48,7 +48,7 @@ const slides = [
   {
     key: 'five',
     title: 'Ecco un Impegno',
-    text: 'Qui compaiono le info principali come ora e paga\nDa qui puoi inviare un messaggio al datore di lavoro\nSe premi sul Cestino puoi disdire\nma verrai penalizzato con 1 stella',
+    text: 'Qui compaiono le info principali come ora e paga\nDa qui puoi inviare un messaggio al datore di lavoro\nSe premi sul Cestino puoi disdire l\'impegno\nma verrai penalizzato con 1 stella',
     image: require('../components/images/imp-123.png'),
     backgroundColor: '#696969',
     // imageStyle: styles.image,
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   image: {
     width: 400,
     height: 390,
-    marginVertical: 10,
+    marginVertical: 5,
     resizeMode: 'contain'
   },
   intro: {

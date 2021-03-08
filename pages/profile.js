@@ -687,6 +687,9 @@ export default class ProfileScreen extends Component {
                                     <Text style={[styles.statText, {marginLeft: 10}]}>{data.star1+' Voti'}</Text>
                                   </View>
                                   <View style={styles.statForm}>
+                                    <Text style={{fontSize: 14, color: Colors.grey1}}>{'Impegni Accettati:  '+data.totcom}</Text>
+                                  </View>
+                                  <View style={styles.statForm}>
                                     <Text style={{fontSize: 14, color: Colors.grey1}}>{'Impegni Disdetti:  '+data.canceledcom}</Text>
                                   </View>
 

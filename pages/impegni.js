@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator, Text, ScrollView, AsyncStorage } from 'react-native';
 import {NavigationEvents} from "react-navigation";
+import firebase from 'react-native-firebase';
+import { Notification } from 'react-native-firebase';
 import ActionButton from 'react-native-action-button';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import DateList from "../components/DateList";
@@ -68,14 +70,20 @@ export default class JobScreen extends Component {
   }
   
   componentDidMount() {
+    // Quando arriva una notifica firebase ricarica i dati degli Impegni
+    this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification: Notification) => {      
+      if ((notification.body!==undefined)) {
+        this.fetchData();         
+      }      
+    });
+    
     this.fetchData();
-    // FireManager();
+
   }
  
   dateDeletedHandler = () => {
         this.setState({selectedDate: null});
-        this.fetchData();
-       
+        this.fetchData();       
   };
 
   modalClosedHandler = () => {
@@ -210,13 +218,16 @@ export default class JobScreen extends Component {
                 >
                     <Icon name="pencil" style={styles.actionButtonIcon} />
                 </ActionButton.Item>
+
+                {/* <ActionButton.Item 
+                      buttonColor={Colors.tertiary} 
+                      title="Aggiorna" 
+                      onPress={() => this.fetchData()}                  
+                >
+                    <Icon name="reload" style={styles.actionButtonIcon} />
+                </ActionButton.Item> */}
                 
-                {/* 
-                Da utilizzare per aggiungere un pulsante in più
-                <ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() => {}}>
-                  <Icon name="md-done-all" style={styles.actionButtonIcon} />
-                </ActionButton.Item> 
-                */}
+                
                 
           </ActionButton>
         
