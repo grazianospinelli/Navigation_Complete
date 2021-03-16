@@ -50,7 +50,8 @@ export default class AddCommit extends Component {
           animationInTiming={1000}
           animationOutTiming={1000}
           backdropTransitionInTiming={1000}
-          backdropTransitionOutTiming={1000} 
+          backdropTransitionOutTiming={1000}
+          style={{marginTop: 80}} 
       >
         <ScrollView>
         <View style={styles.modalContainer}>
@@ -238,6 +239,7 @@ const styles = StyleSheet.create({
     width: 60, 
     height: 60, 
     borderRadius: 75,
-    marginVertical: 20,
+    marginTop: 8,
+    marginBottom: 20,
   }
 });

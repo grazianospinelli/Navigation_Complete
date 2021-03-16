@@ -11,7 +11,7 @@ export default class ClipPage extends Component {
     
     render () {
         // Assegnazione di tipo DESTRUCTURED ES6
-        const { data: { joID, joDate, joTime, joPay, joNote, joMansion, resName, resAddress, resCity, resProv, resTel }, even} = this.props;
+        const { data: { joID, joDate, joTime, joPay, joNote, joMansion, resName, resAddress, resCity, resProv, resTel, resTel2 }, even} = this.props;
 
         switch(even) {
             case(0):
@@ -46,6 +46,7 @@ export default class ClipPage extends Component {
                         <Text style={styles.subtitle}> {resCity+' - ('}
                         {resProv?resProv:'--'}{')'} </Text>                       
                         <Text style={styles.subtitle}>{'Tel: '+resTel}</Text>
+                        {resTel2?<Text style={styles.subtitle}>{'Tel: '+resTel2}</Text>:null}
                     </View>
 
                     <Text style={{paddingVertical: 5, fontWeight: 'bold', fontSize: 12, color: caseStyle}}>RICERCA:</Text>

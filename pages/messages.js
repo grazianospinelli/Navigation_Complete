@@ -63,7 +63,13 @@ export default class MessageScreen extends Component {
 
 
     var output = [];
-    if(array){      
+    if(array){
+      
+      array.sort((a,b) => 
+            (a.mesFromUUID > b.mesFromUUID) ? -1 : ((b.mesFromUUID > a.mesFromUUID) ? 1 : 
+                (a.mesDate > b.mesDate) ? -1 : ((b.mesDate > a.mesDate) ? 1 : 0))
+      )
+
       var j=0
       var tot = 0
       var tot2 = 0

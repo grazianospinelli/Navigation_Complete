@@ -78,8 +78,7 @@ export default class ChatScreen extends Component {
 		})
 		.then((response) => response.json())		
 		.then((responseData) => {
-		if (showProgressBar)
-			this.hideProgressBar();
+		if (showProgressBar) this.hideProgressBar();
 		// console.log(responseData);
 		var messagesCopy = responseData;
 		var oldMessagesNumber = this.state.messages.length;
@@ -214,7 +213,9 @@ export default class ChatScreen extends Component {
 						<Text style={styles.badgeText}>{'Evento del '+moment(this.state.date).format("DD-MM-YYYY")}</Text>
 					</View>
 				</View>	
-				<View style = {styles.contentContainer}>					
+				<View style = {styles.contentContainer}>
+
+					{(this.state.data!=='EMPTY')?
 					<FlatList
 						ref = "list"
 						onContentSizeChange={()=> this.refs.list.scrollToEnd()}
@@ -224,6 +225,8 @@ export default class ChatScreen extends Component {
 						keyExtractor={item => item.mesID.toString()}
 						style = {styles.listView} 
 					/>
+					:<View style = {styles.listView}/>}
+
 					<View style = {styles.inputAndSendView}>
 					<TextInput
 						editable={!(chatDate<currentDate)}  

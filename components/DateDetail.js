@@ -116,7 +116,7 @@ export default class DateDetail extends Component {
   
   render() {
     if (this.props.selectedDate) {
-      const {selectedDate: { comID, comDate, comTime, comPay, comMansion, comNote, resUUID, resName, resAddress, resCity, resProv, resTel, resPhoto }} = this.props;
+      const {selectedDate: { comID, comDate, comTime, comPay, comMansion, comNote, resUUID, resName, resAddress, resCity, resProv, resTel, resTel2, resPhoto }} = this.props;
       var currentDate=new Date();
       var jobDate=new Date(comDate);
       jobDate.setDate(jobDate.getDate() + 1);
@@ -160,6 +160,7 @@ export default class DateDetail extends Component {
                   <Text style={styles.subtitle}> {resCity+' - ('}
                   {resProv?resProv:'--'}{')'} </Text>                       
                   <Text style={styles.subtitle}>{'Tel: '+resTel}</Text>
+                  {resTel2?<Text style={styles.subtitle}>{'Tel: '+resTel2}</Text>:null}
                 </Fragment>) : null
               }
           </View>
