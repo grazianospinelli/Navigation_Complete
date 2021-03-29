@@ -19,7 +19,7 @@ const ListItem = props => (
         </View>
         <View style={{flexDirection: 'column'}}>
           <View style={{flexDirection: 'row'}}>
-            <View style={styles.showDay}>
+            <View style={[styles.showDay, (getWeekDay(props.dateNum)==='Dom')?styles.showDayHoly:styles.showDayWeek]}>
               <Text style={{fontSize: 25, color: '#fff',}}> {props.dateNum.split('-')[2]} </Text>
               <Text style={{color: '#fff'}}> {getWeekDay(props.dateNum)} </Text>
             </View>
@@ -161,11 +161,16 @@ const styles = StyleSheet.create({
   },
   showDay: {
     width: 55,
-    height: 55,
-    backgroundColor: Colors.grey2,    
+    height: 55,        
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',    
+  },
+  showDayWeek: {
+    backgroundColor: Colors.grey2,
+  },
+  showDayHoly: {
+    backgroundColor: Colors.primary,
   },
   showText: {
     color: '#fff',
