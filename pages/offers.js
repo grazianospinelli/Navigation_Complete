@@ -70,8 +70,8 @@ export default class OfferScreen extends Component {
   
   componentDidMount() {
 
-    const unitId = 'ca-app-pub-3940256099942544/4411468910';
-    // const unitId = 'ca-app-pub-4641414830745834/5890822051';
+    // const unitId = 'ca-app-pub-3940256099942544/4411468910';
+    const unitId = 'ca-app-pub-4641414830745834/5890822051';
     const advert = firebase.admob().interstitial(unitId);
     const AdRequest = firebase.admob.AdRequest;
     const request = new AdRequest();

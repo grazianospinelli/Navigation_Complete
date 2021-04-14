@@ -58,7 +58,7 @@ export default class privacy extends Component {
 				</TouchableOpacity>
 			</View>
 
-			<WebView source = {{ uri: 'https://www.ilpneumatico.net/policy.htm' }} />	
+			<WebView source = {{ uri: 'https://www.extrastaff.it/privacy.htm' }} />	
 		   
 		</View>
 	 )

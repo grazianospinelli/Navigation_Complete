@@ -183,8 +183,8 @@ export default class MessageScreen extends Component {
     const Banner = firebase.admob.Banner;
     const AdRequest = firebase.admob.AdRequest;
     const request = new AdRequest();
-    // const unitId = 'ca-app-pub-4641414830745834/6174410009';
-    const unitId = 'ca-app-pub-3940256099942544/2934735716';
+    const unitId = 'ca-app-pub-4641414830745834/8096286092';
+    // const unitId = 'ca-app-pub-3940256099942544/2934735716';
     // const unitId =
     //   Platform.OS === 'ios'
     //     ? 'ca-app-pub-7987914246691031/4248107679'

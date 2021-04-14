@@ -166,7 +166,7 @@ constructor(props){
 					
 					<ScrollView contentContainerStyle={styles.contentContainer} >
 					<View style={styles.inputForm}>	
-					<Icon style={styles.searchIcon} name="user" size={20} color={errors.userName && touched.userName ? Colors.primary : 'transparent'}  />			
+					<Icon style={styles.searchIcon} name="user" size={20} color={errors.userName && touched.userName ? Colors.primary : Colors.grey1}  />			
 					<TextInput
 						placeholder="Inserisci il Tuo Nome"
 						style={{borderRadius: 25, width:220}}	
@@ -184,7 +184,7 @@ constructor(props){
 					
 
 					<View style={styles.inputForm}>
-					<Icon style={styles.searchIcon} name="envelope" size={20} color={errors.userEmail && touched.userEmail ? Colors.primary : 'transparent'}  />		
+					<Icon style={styles.searchIcon} name="envelope" size={20} color={errors.userEmail && touched.userEmail ? Colors.primary : Colors.grey1}  />		
 					<TextInput
 						placeholder="Inserisci la tua Email"
 						style={{borderRadius: 25, width:220}}
@@ -200,7 +200,7 @@ constructor(props){
 					</View>
 					
 					<View style={styles.inputForm}>	
-					<Icon style={styles.searchIcon} name="lock" size={20} color={errors.userPassword && touched.userPassword ? Colors.primary : 'transparent'} />
+					<Icon style={styles.searchIcon} name="lock" size={20} color={errors.userPassword && touched.userPassword ? Colors.primary : Colors.grey1} />
 					<TextInput
 						placeholder="Inserisci la Password"
 						secureTextEntry={true}
@@ -216,7 +216,7 @@ constructor(props){
 					</View>
 
 					<View style={styles.inputForm}>	
-					<Icon style={styles.searchIcon} name="lock" size={20} color={errors.confirmPassword && touched.confirmPassword ? Colors.primary : 'transparent'} />
+					<Icon style={styles.searchIcon} name="lock" size={20} color={errors.confirmPassword && touched.confirmPassword ? Colors.primary : Colors.grey1} />
 					<TextInput
 						placeholder="Conferma la Password"
 						secureTextEntry={true}

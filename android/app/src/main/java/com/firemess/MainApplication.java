@@ -5,7 +5,7 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.entria.views.RNViewOverflowPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
+
 import com.rnfs.RNFSPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.imagepicker.ImagePickerPackage;
@@ -39,8 +39,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new RNViewOverflowPackage(),
-            new LinearGradientPackage(),
-            new RNFetchBlobPackage(),
+            new LinearGradientPackage(),            
             new RNFSPackage(),
             new ImageResizerPackage(),
             new ImagePickerPackage(),

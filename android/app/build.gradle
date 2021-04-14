@@ -108,8 +108,18 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        ndk {
-            abiFilters "armeabi-v7a", "x86"
+        // ndk {
+        //     abiFilters "armeabi-v7a", "x86"
+        // }
+    }
+    signingConfigs {
+        release {
+            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+                storeFile file(MYAPP_UPLOAD_STORE_FILE)
+                storePassword MYAPP_UPLOAD_STORE_PASSWORD
+                keyAlias MYAPP_UPLOAD_KEY_ALIAS
+                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+            }
         }
     }
     splits {
@@ -117,13 +127,14 @@ android {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
             universalApk false  // If true, also generate a universal APK
-            include "armeabi-v7a", "x86"
+            include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
     buildTypes {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
@@ -131,7 +142,7 @@ android {
         variant.outputs.each { output ->
             // For each separate APK per architecture, set a unique version code as described here:
             // http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
-            def versionCodes = ["armeabi-v7a":1, "x86":2]
+            def versionCodes = ["armeabi-v7a":1, "x86":2, "arm64-v8a": 3, "x86_64": 4]
             def abi = output.getFilter(OutputFile.ABI)
             if (abi != null) {  // null for the universal-debug, universal-release variants
                 output.versionCodeOverride =
@@ -142,16 +153,15 @@ android {
 }
 
 dependencies {    
-    compile project(':react-native-view-overflow')
-    compile project(':react-native-linear-gradient')
-    compile project(':rn-fetch-blob')
-    compile project(':react-native-fs')
-    compile project(':react-native-image-resizer')
-    compile project(':react-native-image-picker')
-    compile project(':lottie-react-native')
-    compile project(':react-native-vector-icons')
-    compile project(':react-native-gesture-handler')
-    compile project(':react-native-firebase')
+    implementation project(':react-native-view-overflow')
+    implementation project(':react-native-linear-gradient')    
+    implementation project(':react-native-fs')
+    implementation project(':react-native-image-resizer')
+    implementation project(':react-native-image-picker')
+    implementation project(':lottie-react-native')
+    implementation project(':react-native-vector-icons')
+    implementation project(':react-native-gesture-handler')
+    implementation project(':react-native-firebase')
     implementation project(':react-native-firebase')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"

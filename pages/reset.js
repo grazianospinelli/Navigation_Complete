@@ -130,7 +130,7 @@ constructor(props){
 					</View>
 
 					<View style={styles.inputForm}>
-					<Icon style={styles.searchIcon} name="envelope" size={20} color={errors.userEmail && touched.userEmail ? Colors.primary : 'transparent'}  />		
+					<Icon style={styles.searchIcon} name="envelope" size={20} color={errors.userEmail && touched.userEmail ? Colors.primary : Colors.grey1}  />		
 					<TextInput
 						placeholder="Inserisci la tua Email"
 						style={{borderRadius: 25, width:220}}

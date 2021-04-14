@@ -71,11 +71,100 @@ Per fare il reload dal cell bisogna scuoterlo e scegliare RELOAD dal menù che c
 Modificato Android.manifest.xml con:
 <activity android:name=".MainActivity" _android:launchMode="singleTask"_ ... /> invece di "singleTop"
 
-@TODO
-Nella APP sullo star rating applicate .toFixed(2)
-aprire la chat nello stesso giorno: var EventDate=new Date(params.date);EventDate.setDate(EventDate.getDate() + 1);
-Risolvere Notifiche in APP
-google.original_priority google.delivered_priority
-https://stackoverflow.com/questions/54745608/how-to-get-particular-value-from-notification-remotemessage-android
-Eliminare il messaggio Alert da tutte le pagine dell'APP
-INSERIRE RECEPTION/UFFICIO
+__________________________________________________________________
+
+UPGRADE DA VERSIONE 0.57.5 A 0.59.1
+seguita la guida: https://www.youtube.com/watch?v=b15qTD9HXa8
+
+rimossi:
+react-native-card-flip
+react-native-gifted-form
+rn-fetch-blob
+
+npm install react-native@0.59.1 --save
+react-native upgrade --legacy
+
+inizializzato a parte un progetto 0.59.1 e confrontati i file principali col vecchio
+
+modificato C:\Users\Graziano\ExtraStaff\android\gradle\wrapper\gradle-wrapper.properties
+inserendo gradle-5.1.1-all.zip
+commentato in build gradle task wrapper
+aggiornato Lottie alla versione 2.6.0
+
+ricompilato tutto ma dava problemi non trovando il file index alla partenza.
+eliminata cartella node e reinstallato con npm i 
+lanciato in finestra a parte react-native start -- --reset-cache
+e rifatta la compilazione con react-native run-android nel cmd Amministratore
+
+__________________________________________________________________
+
+PER REIMPOSTARE METRO BUNDLER DOPO LA REINSTALLAZIONE DI node_modules
+
+react-native start --reset-cache
+se da error Invalid regular expression si modifica il file:
+\node_modules\metro-config\src\defaults\blacklist.js 
+e si cambia il codice seguente:
+var sharedBlacklist = [
+    /node_modules[/\\]react[/\\]dist[/\\].*/,
+con 
+    /node_modules[\/\\]react[\/\\]dist[\/\\].*/,
+
+__________________________________________________________________
+
+PER LA PUBBLICAZIONE SU PLAY STORE 
+seguita la guida:
+https://archive.reactnative.dev/docs/0.57/signed-apk-android
+
+cd android
+gradlew.bat bundleRelease to generate an app bundle (.aab file) 
+gradlew.bat clean per ripartire da zero
+To install a release on your emulator, use react-native run-android --variant=release.
+gradlew assembleRelease to generate an apk (.apk file). da errore però
+
+per aggiornare le API per pubblicazione alla ver. 29:
+https://www.reactnativeschool.com/how-to-upgrade-react-native-app-to-api-level-29
+aggiornare android/build.gradle
+compileSdkVersion era 27
+targetSdkVersion era 26
+
+buildscript {
+    ext {
+        buildToolsVersion = "28.0.3"
+        minSdkVersion = 16
+        compileSdkVersion = 29
+        targetSdkVersion = 29
+    }
+    // ...
+}
+
+Aperto Android studio sulla cartella android dentro ExtraStaff.
+Aggiornato progetto da File-> Sync project with Gradle.
+
+build->generate signed apk
+si blocca dicendo:
+Generating signed Bundle requires you to update Android Gradle plugin to version 3.2.0
+Richiesto update su Android Studio
+Aggiornato progetto da File-> Sync project with Gradle.
+
+Le nuove release devono avere versionCode e versionName crescenti e differenti dalle vecchie release per il Play Store.
+Si aggiornano nel file ExtraStaff\android\app\build.gradle nella sezione android {...defaultConfig {} }
+
+Per creare la versione a 64bit della APP inserito in ExtraStaff\android\app\build.gradle nella sezione android {...defaultConfig {} }
+ndk {abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"}
+Aggiornato progetto da File-> Sync project with Gradle.
+gradlew.bat bundleRelease da terminale
+Il file si trova in ExtraStaff\android\app\build\outputs\bundle\release
+
+la generazione del bundle e dell'APK non funziona in fase release
+gradlew assembleRelease per generare apk (.apk file) da errore risolto 
+modificando build.gradle di react-native-imapge-picker aggiornato a versione 29 
+
+Quando Android Studio aggiorna le versioni di Gradle Plugin e non compila più
+bisogna rimuovere c:\users\Graziano\.gradle
+rimosso anche AppData\local\Android
+Reinstallato Android Studio
+
+___________________________________________________________________
+
+
+
