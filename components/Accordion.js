@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import { View, TouchableOpacity, Image, Text, FlatList, StyleSheet, 
-        LayoutAnimation, Platform, UIManager, AsyncStorage} from "react-native";
+        LayoutAnimation, Platform, UIManager} from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 import * as Colors from './themes/colors';
 import Icon from "react-native-vector-icons/MaterialIcons";
 import moment from "moment";

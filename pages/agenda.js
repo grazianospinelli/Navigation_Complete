@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Image, Text, ActivityIndicator, AsyncStorage, ScrollView, StyleSheet } from 'react-native';
+import { View, Image, Text, ActivityIndicator, ScrollView, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {NavigationEvents} from "react-navigation";
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import Icon from "react-native-vector-icons/SimpleLineIcons";

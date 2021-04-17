@@ -91,15 +91,17 @@ inserendo gradle-5.1.1-all.zip
 commentato in build gradle task wrapper
 aggiornato Lottie alla versione 2.6.0
 
-ricompilato tutto ma dava problemi non trovando il file index alla partenza.
-eliminata cartella node e reinstallato con npm i 
+ricompilato tutto ma dava problemi non trovando il file index alla partenza. 
 lanciato in finestra a parte react-native start -- --reset-cache
-e rifatta la compilazione con react-native run-android nel cmd Amministratore
-
+e riavviata l'applicazione da cellulare
 __________________________________________________________________
 
 PER REIMPOSTARE METRO BUNDLER DOPO LA REINSTALLAZIONE DI node_modules
 
+Quando per risolvere conflitti si cancella la cartella node_modules
+e poi si fa npm install per reinstallare tutti i moduli presenti in package.json 
+
+quando al terminde della reinstallazione dell cartella node_modules si fa l'istruzione:
 react-native start --reset-cache
 se da error Invalid regular expression si modifica il file:
 \node_modules\metro-config\src\defaults\blacklist.js 
@@ -118,7 +120,8 @@ https://archive.reactnative.dev/docs/0.57/signed-apk-android
 cd android
 gradlew.bat bundleRelease to generate an app bundle (.aab file) 
 gradlew.bat clean per ripartire da zero
-To install a release on your emulator, use react-native run-android --variant=release.
+To install a release on your emulator, use: 
+react-native run-android --variant=release
 gradlew assembleRelease to generate an apk (.apk file). da errore però
 
 per aggiornare le API per pubblicazione alla ver. 29:
@@ -138,6 +141,8 @@ buildscript {
 }
 
 Aperto Android studio sulla cartella android dentro ExtraStaff.
+Da Android Studio->Tools->System Settings->Android SDK->Android 10->Spunta su Show Package Detail
+Spunta per scaricare su: SDK Platform 29, Source Android 29, Intel x86 Atom_64
 Aggiornato progetto da File-> Sync project with Gradle.
 
 build->generate signed apk
@@ -149,15 +154,17 @@ Aggiornato progetto da File-> Sync project with Gradle.
 Le nuove release devono avere versionCode e versionName crescenti e differenti dalle vecchie release per il Play Store.
 Si aggiornano nel file ExtraStaff\android\app\build.gradle nella sezione android {...defaultConfig {} }
 
-Per creare la versione a 64bit della APP inserito in ExtraStaff\android\app\build.gradle nella sezione android {...defaultConfig {} }
-ndk {abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"}
-Aggiornato progetto da File-> Sync project with Gradle.
 gradlew.bat bundleRelease da terminale
 Il file si trova in ExtraStaff\android\app\build\outputs\bundle\release
 
 la generazione del bundle e dell'APK non funziona in fase release
 gradlew assembleRelease per generare apk (.apk file) da errore risolto 
-modificando build.gradle di react-native-imapge-picker aggiornato a versione 29 
+modificando build.gradle di react-native-image-picker aggiornato a versione 29 
+
+L'App non parte perchè non iclude nel bundleRelease il file index.android.bundle che si genera con il comando:
+yarn react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle
+una volta generato si va nella cartella android e si da il comando:
+gradlew.bat assembleRelease
 
 Quando Android Studio aggiorna le versioni di Gradle Plugin e non compila più
 bisogna rimuovere c:\users\Graziano\.gradle
@@ -166,5 +173,26 @@ Reinstallato Android Studio
 
 ___________________________________________________________________
 
+INSTALLATI NUOVI MODULI COMMUNITY:
+npm install -S @react-native-community/async-storage@1.7.1
+react-native link @react-native-community/async-storage
 
+Quando viene installata un nuovo modulo
+i suoi sorgenti finiscono in node_modules con una sua cartella android e suoi file gradle per la compilazione in fase finale
+se si effettua il linking vengono modificati i file:
+1 - android\settings.gradle
+include ':@react-native-community_async-storage'
+project(':@react-native-community_async-storage').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-community/async-storage/android')
 
+2 - android\app\build.gradle
+dependencies {    
+    implementation project(':@react-native-community_async-storage')
+
+3 - android\app\src\main\java\com\firemess\MainApplication.java
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
+return Arrays.<ReactPackage>asList(       
+            new AsyncStoragePackage(),
+L'import viene fatto usando il nome package contenuto nel file: 
+node_modules\@react-native-community\async-storage\android\src\main\AndroidManifest.xml
+che in questo caso è com.reactnativecommunity.asyncstorage seguito da . e da un modulo .java presente nella cartella sottostante \java\com\..
+node_modules\@react-native-community\async-storage\android\src\main\java\com\reactnativecommunity\asyncstorage\AsyncStoragePackage.java

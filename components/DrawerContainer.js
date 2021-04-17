@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { DrawerItems, SafeAreaView } from 'react-navigation';
-import { Text, View, StyleSheet, ImageBackground, Image, ScrollView, AsyncStorage } from 'react-native';
+import { Text, View, StyleSheet, ImageBackground, Image, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { USER_NAME } from './auth';
 import * as Colors from './themes/colors';
 

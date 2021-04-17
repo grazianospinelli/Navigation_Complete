@@ -73,7 +73,9 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.js"
+    entryFile: "index.js",
+    bundleCommand: "ram-bundle",
+    extraPackagerArgs: ["--indexed-ram-bundle"],
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -106,8 +108,8 @@ android {
         applicationId "com.firemess"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         // ndk {
         //     abiFilters "armeabi-v7a", "x86"
         // }
@@ -154,7 +156,8 @@ android {
 
 dependencies {    
     implementation project(':react-native-view-overflow')
-    implementation project(':react-native-linear-gradient')    
+    implementation project(':react-native-linear-gradient')
+    implementation project(':@react-native-community_async-storage')  
     implementation project(':react-native-fs')
     implementation project(':react-native-image-resizer')
     implementation project(':react-native-image-picker')

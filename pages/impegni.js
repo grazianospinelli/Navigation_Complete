@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, ActivityIndicator, Text, ScrollView, AsyncStorage } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Text, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {NavigationEvents} from "react-navigation";
 import firebase from 'react-native-firebase';
 import { Notification } from 'react-native-firebase';

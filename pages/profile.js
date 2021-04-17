@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-filename-extension */
 import React, { Component, Fragment } from 'react';
 import { View, StyleSheet, ActivityIndicator, ImageBackground, 
-         Image, Text, TextInput, ScrollView, Button, AsyncStorage } from 'react-native';
+         Image, Text, TextInput, ScrollView, Button } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { Card, Divider } from 'react-native-elements';
 // import { TextField, FilledTextField, OutlinedTextField } from 'react-native-material-textfield';
 import { Formik } from "formik";

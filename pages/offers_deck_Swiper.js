@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { ImageBackground, View, ActivityIndicator, Text, Image, AsyncStorage, TouchableOpacity, StyleSheet } from 'react-native';
+import { ImageBackground, View, ActivityIndicator, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {NavigationEvents} from "react-navigation";
 // import Swiper from 'react-native-deck-swiper';
 import LinearGradient from 'react-native-linear-gradient';

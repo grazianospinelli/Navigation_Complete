@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, ActivityIndicator, AsyncStorage, ScrollView, StyleSheet, Image } from 'react-native';
+import { View, Text, ActivityIndicator, ScrollView, StyleSheet, Image } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {NavigationEvents} from "react-navigation";
 import firebase from 'react-native-firebase';
 import Accordion from '../components/Accordion';

@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, AsyncStorage } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image, StyleSheet} from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 import Modal from "react-native-modal";
 import Dialog from "react-native-dialog";
 import {getWeekDay, getYear, getMonth} from './DateUtility';
