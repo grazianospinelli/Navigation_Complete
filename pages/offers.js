@@ -222,7 +222,7 @@ export default class OfferScreen extends Component {
     } 
     else {
       offerComponent = (
-        <Fragment>
+        <View style={styles.carousel}>
           <Carousel
               ref={(c) => { this._carousel = c; }}
               data={this.state.dataSource}
@@ -240,7 +240,7 @@ export default class OfferScreen extends Component {
               loop={false}
               onSnapToItem={(index) => this.setState({ ActiveSlide: index }) }
           />         
-        </Fragment>
+        </View>
       );
       buttonStripe =(
         <View style={styles.footer}>
@@ -281,7 +281,7 @@ export default class OfferScreen extends Component {
     if(this.state.loading){
       return(
         <View style={{flex: 1}}>
-          <ImageBackground source={require('../components/images/clipdesk.jpg')} style={styles.backgroundImage} >
+          <ImageBackground source={require('../components/images/Wood.png')} style={styles.backgroundImage} imageStyle={{ resizeMode: 'repeat' }} >
             <View style={styles.loader}> 
               <ActivityIndicator size="large" color="#0c9"/>
             </View>
@@ -296,17 +296,19 @@ export default class OfferScreen extends Component {
     
     return(
      
-      <View style={{flex: 1}}>
-              
-          <ImageBackground source={require('../components/images/clipdesk.jpg')} style={styles.backgroundImage} >
+      <View style={{flex: 1}}>              
+          <ImageBackground source={require('../components/images/Wood.png')} style={styles.backgroundImage} imageStyle={{ resizeMode: 'repeat' }}>
 
             <View style={{flex: 0, justifyContent: 'flex-start', alignItems: 'center'}}>
                 <Text style={styles.title}>{'Offerte di Lavoro'}</Text>
                 {backPage}
-            </View>
-
+            </View>            
+            
             <View style={styles.clipboard}>
-                {offerComponent}
+              <View style={styles.notepage}>
+                <Image style={styles.cliphook} source={require('../components/images/cliphook.png')} resizeMode='cover' />                
+              </View>
+              {offerComponent}
             </View>
 
             {buttonStripe}
@@ -344,17 +346,51 @@ export default class OfferScreen extends Component {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1,
-    // height: '100%',
+    // flex: 1,
+    height: '100%',
+    // width: '100%',
 		// justifyContent: 'center',
-    resizeMode: 'cover',
-    // resizeMode: 'contain', 
+    // resizeMode: 'repeat',
+    // resizeMode: 'stretch',
+    // resizeMode: 'center', 
 	},
   clipboard: {
-    flex: 1,
+    // flex: 1,
+    backgroundColor: '#000',    
     justifyContent: 'flex-start',
-    marginLeft: '9.36%',
+    marginTop: '5%',
+    marginLeft: '8%',
+    paddingLeft: 13,
+    paddingRight: 13,
+    height: '70%',
+    width: '81.9%'
     // alignItems: 'center',
+  },
+  notepage: {
+    flex: 0,
+    backgroundColor: '#fff',    
+    justifyContent: 'flex-start',
+    marginTop: '5%',    
+    height: '90%',
+    // marginBottom: 30
+    // alignItems: 'center',
+  },
+  carousel: {
+    flex: 0,
+    position:'absolute',
+    marginTop: -18,
+    paddingLeft: 13,
+    height: '113%'
+  },
+  cliphook: {
+    flex:0,
+    position:'absolute',
+    marginTop: -21,
+    marginLeft: '22%',
+    resizeMode: "contain",
+    backgroundColor: 'transparent',
+    width: 120, 
+    height: 50,
   },
   title: {
     paddingVertical: 10,
@@ -386,6 +422,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',    
   },
   footer:{
+    marginTop: 10,
     justifyContent:'flex-end',
     alignItems:'center'
   },
@@ -433,7 +470,7 @@ const styles = StyleSheet.create({
     borderColor:Colors.primary,
   },
   loader:{
-    // flex: 1,
+    flex: 0,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "transparent"

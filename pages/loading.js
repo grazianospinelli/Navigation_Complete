@@ -39,7 +39,7 @@ export default class AuthLoading extends Component {
         </View>
 
         <View style={{justifyContent: 'flex-end', alignItems: 'center', backgroundColor: 'black'}}>
-          <Text style={{color: Colors.secondary, fontWeight: 'bold'}}>Copyright ExtraStaff 2020 ©</Text>
+          <Text style={{color: Colors.secondary, fontWeight: 'bold'}}>Copyright ExtraStaff 2021 ©</Text>
         </View>
 
       </ImageBackground>

@@ -231,9 +231,9 @@ const styles = StyleSheet.create({
 	button:{
 		backgroundColor: Colors.primary,
 		borderRadius: 25, 		
-		width: '50%', 
+		// width: '65%', 
 		margin: 20, 
-		padding: 7,
+		padding: 10,
 		alignItems:'center'
 	},
 	searchIcon: {

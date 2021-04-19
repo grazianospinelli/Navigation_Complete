@@ -145,14 +145,12 @@ Da Android Studio->Tools->System Settings->Android SDK->Android 10->Spunta su Sh
 Spunta per scaricare su: SDK Platform 29, Source Android 29, Intel x86 Atom_64
 Aggiornato progetto da File-> Sync project with Gradle.
 
+OPZIONALE
 build->generate signed apk
 si blocca dicendo:
 Generating signed Bundle requires you to update Android Gradle plugin to version 3.2.0
 Richiesto update su Android Studio
 Aggiornato progetto da File-> Sync project with Gradle.
-
-Le nuove release devono avere versionCode e versionName crescenti e differenti dalle vecchie release per il Play Store.
-Si aggiornano nel file ExtraStaff\android\app\build.gradle nella sezione android {...defaultConfig {} }
 
 gradlew.bat bundleRelease da terminale
 Il file si trova in ExtraStaff\android\app\build\outputs\bundle\release
@@ -171,6 +169,15 @@ bisogna rimuovere c:\users\Graziano\.gradle
 rimosso anche AppData\local\Android
 Reinstallato Android Studio
 
+RILASCIO NUOVE VERSIONI 
+Le nuove release devono avere versionCode e versionName crescenti e differenti dalle vecchie release per il Play Store.
+Si aggiornano nel file ExtraStaff\android\app\build.gradle nella sezione android {...defaultConfig {} }
+cd android
+gradlew.bat clean
+del android/app/src/main/assets/index.android.bundle
+yarn react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle
+gradlew.bat assembleRelease
+gradlew.bat bundleRelease
 ___________________________________________________________________
 
 INSTALLATI NUOVI MODULI COMMUNITY:
