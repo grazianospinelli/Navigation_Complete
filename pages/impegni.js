@@ -59,6 +59,7 @@ export default class JobScreen extends Component {
         .then((response) => response.json())
         .then((responseJson)=> {
           if (responseJson != 'EMPTY') {
+            // console.log(responseJson);
             this.setState({dataSource: responseJson.reverse()});
           } else {
             this.setState({dataSource: responseJson});  

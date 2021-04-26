@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { View, Text, TouchableOpacity, ScrollView, Image, StyleSheet} from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image, Linking, StyleSheet} from "react-native";
 import AsyncStorage from '@react-native-community/async-storage';
 import Modal from "react-native-modal";
 import Dialog from "react-native-dialog";
@@ -29,6 +29,11 @@ export default class DateDetail extends Component {
       restaurantImage: null
     }
     modalContent = null;
+  }
+
+  handleMap = () => {
+    const {selectedDate: { resLat, resLon }} = this.props;
+    Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${resLat},${resLon}`)
   }
 
   handleOpenSendMess = () => {
@@ -117,7 +122,8 @@ export default class DateDetail extends Component {
   
   render() {
     if (this.props.selectedDate) {
-      const {selectedDate: { comID, comDate, comTime, comPay, comMansion, comNote, resUUID, resName, resAddress, resCity, resProv, resTel, resTel2, resPhoto }} = this.props;
+      // console.log(this.props.selectedDate);
+      const {selectedDate: { comID, comDate, comTime, comPay, comMansion, comNote, resUUID, resName, resAddress, resCity, resProv, resTel, resTel2, resPosition, resPhoto }} = this.props;
       var currentDate=new Date();
       var jobDate=new Date(comDate);
       jobDate.setDate(jobDate.getDate() + 1);
@@ -165,6 +171,13 @@ export default class DateDetail extends Component {
                 </Fragment>) : null
               }
           </View>
+
+          { resPosition===1 &&
+            <TouchableOpacity                 
+                onPress={this.handleMap} 
+                style={styles.mapButton}>
+                <Text style={{color: 'white', fontSize: 12, fontWeight: 'bold'}}>{'MAPPA'}</Text>
+            </TouchableOpacity> }
 
           <View style={styles.showOffer}>
                         {(comMansion)?<Text style={[styles.notes, {fontSize: 15, fontWeight: 'bold', marginBottom: 5}]}>{comMansion.toUpperCase()}</Text>:null}
@@ -279,112 +292,121 @@ export default class DateDetail extends Component {
 }
 
 const styles = StyleSheet.create({
-modalContainer: {
-  flex:0,
-  width: '85%',
-  backgroundColor: Colors.grey5,    
-  borderRadius: 10,
-  justifyContent: 'center',  
-},
-dateName: {
-  flexDirection: "row",
-  alignItems: 'center',
-  justifyContent: 'center',
-  margin: 10
-},
-Ribbon: {
-  width: '100%',
-  paddingVertical: 10,
-  paddingHorizontal: 35,
-  // height: '30%',
-  alignItems: 'center',
-  justifyContent: 'center',
-  marginBottom: 20
-},
-avatar: {
-  flex: 0,
-  width: 130,
-  height: 130,
-  borderRadius: 75,
-  borderWidth: 3,
-  borderColor: "white",
-  marginVertical:5,
-  alignSelf:'center',
-},
-title: {
-  color: 'white',
-  // fontFamily: 'Abecedary',
-  paddingHorizontal: 5,
-  fontSize: 20,
-  fontWeight: 'bold',
-  textAlign: 'center',
-  // letterSpacing: 0.5,
-},
-subtitle: {
-  paddingHorizontal: 5,
-  color: 'white',
-  fontSize: 12,
-  fontStyle: 'italic',
-  textAlign: 'center',
-},
-Buttons: {
-  flexDirection: "row",
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 20,
-  marginHorizontal: 40
-},
-showOffer: {
-  width: '100%',
-  paddingHorizontal: 35,
-  backgroundColor: Colors.grey4,    
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: 20    
-},
-notes: {    
-  color: Colors.grey1,
-  fontSize: 14,        
-  textAlign: 'center',
-},
-modalButton: {
-  alignItems: 'center',
-  justifyContent: 'center',
-  width:45,
-  height:45,
-  backgroundColor:'transparent',
-  borderRadius:75,
-  borderWidth:3,
-  marginTop: 5
-},
-sendButton: {
-  marginTop: 15,
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '50%',
-  height:30,  
-  borderRadius:75,
-},
-btnActive: {
-backgroundColor: Colors.tertiary 
-},
-btnInActive: {
-  backgroundColor: Colors.grey4 
+  modalContainer: {
+    flex:0,
+    width: '85%',
+    backgroundColor: Colors.grey5,    
+    borderRadius: 10,
+    justifyContent: 'center',  
   },
-dialogTitle:{
-  color:Colors.primary, 
-  fontSize: 25, 
-  // fontFamily: 'Abecedary', 
-  fontWeight:'bold'
+  dateName: {
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10
   },
-  sendMessTitle:{
-    color:Colors.tertiary, 
-    fontSize: 20,    
+  Ribbon: {
+    width: '100%',
+    paddingVertical: 10,
+    paddingHorizontal: 35,
+    // height: '30%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 15
+  },
+  avatar: {
+    flex: 0,
+    width: 130,
+    height: 130,
+    borderRadius: 75,
+    borderWidth: 3,
+    borderColor: "white",
+    marginVertical:5,
+    alignSelf:'center',
+  },
+  title: {
+    color: 'white',
+    // fontFamily: 'Abecedary',
+    paddingHorizontal: 5,
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    // letterSpacing: 0.5,
+  },
+  subtitle: {
+    paddingHorizontal: 5,
+    color: 'white',
+    fontSize: 12,
+    fontStyle: 'italic',
+    textAlign: 'center',
+  },
+  Buttons: {
+    flexDirection: "row",
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+    marginHorizontal: 40
+  },
+  showOffer: {
+    width: '100%',
+    paddingHorizontal: 35,
+    backgroundColor: Colors.grey4,    
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20    
+  },
+  notes: {    
+    color: Colors.grey1,
+    fontSize: 14,        
+    textAlign: 'center',
+  },
+  modalButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width:45,
+    height:45,
+    backgroundColor:'transparent',
+    borderRadius:75,
+    borderWidth:3,
+    marginTop: 5
+  },
+  sendButton: {
+    marginTop: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '50%',
+    height:30,  
+    borderRadius:75,
+  },
+  mapButton: {
+    backgroundColor: Colors.tertiary,
+    marginBottom: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '50%',
+    height:30,  
+    borderRadius:75,
+  },
+  btnActive: {
+    backgroundColor: Colors.tertiary 
+  },
+  btnInActive: {
+    backgroundColor: Colors.grey4 
+  },
+  dialogTitle:{
+    color:Colors.primary, 
+    fontSize: 25, 
+    // fontFamily: 'Abecedary', 
     fontWeight:'bold'
   },
-  inputMessage: {
-		alignItems: 'center',		
-    justifyContent: 'center',
-    backgroundColor: 'white'
-	},
+    sendMessTitle:{
+      color:Colors.tertiary, 
+      fontSize: 20,    
+      fontWeight:'bold'
+  },
+    inputMessage: {
+      alignItems: 'center',		
+      justifyContent: 'center',
+      backgroundColor: 'white'
+  },
 });
