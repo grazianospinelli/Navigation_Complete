@@ -178,6 +178,13 @@ del android/app/src/main/assets/index.android.bundle
 yarn react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle
 gradlew.bat assembleRelease
 gradlew.bat bundleRelease
+
+Prelevare la bundleRelease da C:\Users\Graziano\ExtraStaff\android\app\build\outputs\bundle\release
+Caricare la bundleRelease su Google Play Console al link:
+https://play.google.com/console/u/0/developers/5986304918028995690/app/4974245147905713371/tracks/internal-testing
+Crea nuova release in alto a DX
+Verificare che l'app sia messa effettivamente nei test chiusi
+Fare promuovi in Produzione
 ___________________________________________________________________
 
 INSTALLATI NUOVI MODULI COMMUNITY:
