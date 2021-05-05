@@ -134,7 +134,7 @@ constructor(props){
 					<TextInput
 						placeholder="Inserisci la tua Email"
 						style={{borderRadius: 25, width:220}}
-						onChangeText={text => { text.trim(); setFieldValue("userEmail", text)}}
+						onChangeText={text => setFieldValue("userEmail", text.trim())}
 						onBlur={() => setFieldTouched("userEmail")}
 					/>
 					</View>

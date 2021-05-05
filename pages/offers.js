@@ -200,12 +200,12 @@ export default class OfferScreen extends Component {
     var backPage=null;
     if (this.state.dataSource == 'EMPTY') {
         offerComponent = (
-          <View style={{justifyContent: 'center', alignItems: 'flex-start'}}>
+          // <View style={{justifyContent: 'center', alignItems: 'flex-start'}}>
             <View style={styles.emptyJob}>
               <Image style={{width: 120, height: 120, margin: 30}} source={require('../components/images/staffextralogo.png')} resizeMode='cover' />  
               <Text style={{fontFamily: 'Abecedary', fontSize: 30}}> Nessun Offerta </Text>
             </View>
-          </View>         
+          // </View>         
         );
         buttonStripe =(
           <View style={styles.footer}>
@@ -409,13 +409,18 @@ const styles = StyleSheet.create({
   },
   emptyJob:
   {
-    width: '82%',
-    height: '76%',
-    marginTop: '18%',    
+    flex:0,
+    position:'absolute',
+    marginTop: '25%',
+    marginLeft: '5%',
+    width: '100%',
+    height: '75%',
+    // marginTop: '18%',    
     backgroundColor: '#e9e9e9',
     borderColor: '#b5b5b5',
-    borderBottomWidth: 2,
+    // borderWidth: 2,
     borderTopWidth: 1,
+    borderBottomWidth: 2,
     // borderStyle: 'dashed',
     // borderRadius: 1,
     justifyContent: 'center',
