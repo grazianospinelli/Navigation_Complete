@@ -183,6 +183,8 @@ Prelevare la bundleRelease da C:\Users\Graziano\ExtraStaff\android\app\build\out
 Caricare la bundleRelease su Google Play Console al link:
 https://play.google.com/console/u/0/developers/5986304918028995690/app/4974245147905713371/tracks/internal-testing
 Crea nuova release in alto a DX
+Caricare e Salvare in basso a DX
+Fare Controllo della release in basso a DX
 Verificare che l'app sia messa effettivamente nei test chiusi
 Fare promuovi in Produzione
 ___________________________________________________________________

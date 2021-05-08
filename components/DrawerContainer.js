@@ -24,6 +24,7 @@ export default class DrawerContainer extends Component {
     render() {
         return (
             <View style={styles.container}>
+                
                 <View style={styles.headerContainer}>
                     <ImageBackground source={require('./images/Background3.jpg')} style={{flex: 1, width: 300, justifyContent: 'center'}} >
                         <View style={styles.ribbon2}>
@@ -38,7 +39,7 @@ export default class DrawerContainer extends Component {
                         </View>
                     </ImageBackground>
                 </View>
-                <View style={{ height: 20 }}><Text>{}</Text></View>
+
                 <ScrollView>
                     <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
                         <DrawerItems {...this.props} labelStyle={{
@@ -85,6 +86,7 @@ const styles = StyleSheet.create({
       },
     headerContainer: {
         height: 150,
+        marginBottom: 10
     },
     greet: {
         margin: 5,

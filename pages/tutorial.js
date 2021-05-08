@@ -8,7 +8,7 @@ const slides = [
   {
     key: 'zero',
     title: 'Benvenuto !',
-    text: 'ExtraStaff è la prima App dedicata\n a chi lavora nella ristorazione\n e cerca un extra o un posto fisso\nL\'App è completamente gratuita\n perchè visualizza Pubblicità\nL\'App riceve le Offerte di Lavoro dai ristoratori\nche sono iscritti al Portale www.ExtraStaff.it',
+    text: 'ExtraStaff è la prima App dedicata\n a chi lavora nella ristorazione\n e cerca un extra o un posto fisso\nL\'App è completamente gratuita\nExtraStaff mette solo in contatto Lavoratori e Datori\n e non preleva percentuali dal compenso degli Extra\nL\'App riceve le Offerte di Lavoro dai ristoratori\nche sono iscritti al Portale www.ExtraStaff.it',
     image: require('../components/images/staffextralogo.png'),
     backgroundColor: Colors.primary,
     // imageStyle: styles.intro,

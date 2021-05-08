@@ -10,6 +10,7 @@ import JobScreen from './pages/impegni';
 import MessNavStack from './pages/messagestack';
 import AgendaScreen from './pages/agenda';
 import LogoutScreen from './pages/logout';
+import ExitScreen from './pages/exit';
 import * as Colors from './components/themes/colors';
 
 const getDrawerItem = navigation => (
@@ -28,18 +29,19 @@ const getDrawerItem = navigation => (
 
 const Drawer = createDrawerNavigator(
   {
-    Profile:  { screen: ProfileScreen },
-    Offers:   { screen: OfferScreen },
-    Job:      { screen: JobScreen },    
-    Agenda:   { screen: AgendaScreen },    
-    Message:  { 
+    Profile: { screen: ProfileScreen },
+    Offers:  { screen: OfferScreen },
+    Job:     { screen: JobScreen },    
+    Agenda:  { screen: AgendaScreen },    
+    Message: { 
       screen: MessNavStack,
       navigationOptions: {
         drawerLabel: "Messaggi",
         drawerIcon: () =>(<Icon  name="bubble" size={20} color={Colors.secondary} />)                  
       }
     },
-    Logout:   { screen: LogoutScreen },
+    Logout:  { screen: LogoutScreen },    
+    Exit:    { screen: ExitScreen },
   },
 
   {

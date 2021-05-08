@@ -1,31 +1,30 @@
 import React, { Component } from 'react';
+import { BackHandler } from 'react-native';
 import Icon from "react-native-vector-icons/SimpleLineIcons";
-import { onSignOut } from '../components/auth';
 import * as Colors from '../components/themes/colors';
 
-export default class LogoutScreen extends Component {
+export default class ExitScreen extends Component {
     constructor(props) {
         super(props);
       }
 
     static navigationOptions = {
-        drawerLabel: "Esci dal Profilo",
+        drawerLabel: "Chiudi",
         drawerIcon: () =>(
-        <Icon  name="user-unfollow" size={20} color={Colors.secondary} />
+        <Icon  name="logout" size={20} color={Colors.secondary} />
         )
     }
 
-
-  logout = () =>{
-    onSignOut();
-    this.props.navigation.navigate('Auth')
+  exit = () =>{
+    BackHandler.exitApp()    
   };
 
   componentWillMount() {
-    this.logout();
+    this.exit();
   }
   
   render() {
-     return (null);
+    // const { navigate } = this.props.navigation;
+    return (null);
   }
 }
