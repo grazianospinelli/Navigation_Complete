@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.7.1",
-    "acorn": "^6.0.0",
+    "acorn": "^6.4.1",
     "buffer": "^5.2.1",
     "formik": "^1.5.1",
     "lottie-react-native": "^2.6.0",
